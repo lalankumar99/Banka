@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Government Polytechnic Banka | Secure Portal Gateway</title>
+    
+    <meta name="theme-color" content="#010205">
+    
+    <!-- Ultra Premium Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Manrope:wght@200;300;400;600;800&family=JetBrains+Mono:wght@100;400;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ==========================================================================
+           1. ADVANCED CSS ARCHITECTURE & VARIABLES
+           ========================================================================== */
+        :root {
+            /* Core Color Palette */
+            --color-space-black: #010205;
+            --color-void: #050811;
+            --color-cyan-glow: #00f0ff;
+            --color-cobalt-deep: #0033aa;
+            --color-cobalt-light: #0051ff;
+            --color-text-pure: #ffffff;
+            --color-text-muted: #6e84a3;
+            --color-text-dark: #3a4b66;
+            
+            /* Glassmorphism Variables */
+            --glass-bg-primary: rgba(6, 9, 17, 0.4);
+            --glass-bg-secondary: rgba(0, 240, 255, 0.03);
+            --glass-border-light: rgba(255, 255, 255, 0.06);
+            --glass-border-glow: rgba(0, 240, 255, 0.15);
+            --glass-blur-heavy: blur(30px) saturate(180%);
+            
+            /* Cinematic Timing Functions */
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --ease-in-out-circ: cubic-bezier(0.85, 0, 0.15, 1);
+            --ease-elastic: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            
+            /* Dimensions */
+            --ui-max-width: 1400px;
+        }
+
+        /* Hardware Acceleration Reset */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            background-color: var(--color-space-black);
+            color: var(--color-text-pure);
+            font-family: 'Manrope', sans-serif;
+            overflow: hidden; 
+            overscroll-behavior: none;
+            perspective: 1000px;
+        }
+
+        /* ==========================================================================
+           2. ENVIRONMENTAL LAYERS & SHADERS
+           ========================================================================== */
+        #particle-engine {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0; /* Starts hidden */
+            transition: opacity 2.5s var(--ease-out-expo), filter 1s ease;
+            will-change: transform, opacity;
+        }
+
+        .ambient-vignette {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 50% 50%, transparent 0%, var(--color-space-black) 90%);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .cinematic-noise {
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+            z-index: 3;
+            pointer-events: none;
+            mix-blend-mode: overlay;
+        }
+
+        .cyber-grid {
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            background-position: center center;
+            z-index: 1;
+            opacity: 0;
+            transform: perspective(500px) rotateX(60deg) translateY(100px) translateZ(-200px);
+            transition: opacity 3s ease, transform 3s var(--ease-out-expo);
+        }
+
+        /* ==========================================================================
+           3. TECHNICAL BOOT SEQUENCE (TERMINAL UI)
+           ========================================================================== */
+        #boot-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 999;
+            background-color: var(--color-space-black);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1.2s var(--ease-in-out-circ), transform 1.2s var(--ease-in-out-circ);
+        }
+
+        .boot-console {
+            width: 90%;
+            max-width: 600px;
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 240, 255, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,240,255,0.02);
+            text-align: left;
+        }
+
+        .console-header {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .console-title {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--color-cyan-glow);
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+        }
+
+        .console-status {
+            font-family: 'JetBrains Mono', monospace;
+            color: #00ff66;
+            font-size: 0.8rem;
+            animation: blink 1s infinite;
+        }
+
+        .console-logs {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--color-text-muted);
+            font-size: 0.85rem;
+            line-height: 1.8;
+            height: 150px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .log-line {
+            opacity: 0;
+            transform: translateX(-10px);
+            animation: logEntry 0.3s ease forwards;
+        }
+        
+        .log-highlight { color: var(--color-cyan-glow); }
+        .log-success { color: #00ff66; }
+        .log-warn { color: #ffcc00; }
+
+        .hardware-loader {
+            width: 100%;
+            height: 2px;
+            background: rgba(255,255,255,0.1);
+            margin-top: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hardware-loader-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 0%;
+            background: var(--color-cyan-glow);
+            box-shadow: 0 0 15px var(--color-cyan-glow);
+            transition: width 0.1s linear;
+        }
+
+        /* ==========================================================================
+           4. MAIN INTERFACE & TYPOGRAPHY
+           ========================================================================== */
+        #main-interface {
+            position: absolute;
+            inset: 0;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none; /* Allows canvas interaction */
+        }
+
+        .ui-wrapper {
+            pointer-events: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 5%;
+            width: 100%;
+            max-width: var(--ui-max-width);
+            transform-style: preserve-3d;
+        }
+
+        /* Formal Institution Name */
+        .header-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(0.65rem, 2vw, 1rem);
+            color: var(--color-text-muted);
+            letter-spacing: clamp(0.3em, 1vw, 0.6em);
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            
+            /* Hide initially */
+            opacity: 0;
+            transform: translateY(20px) translateZ(0);
+        }
+
+        /* The Hero Branding Container */
+        .hero-brand {
+            position: relative;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Premium Letter-by-Letter Flexbox */
+        .brand-text-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: clamp(1rem, 3vw, 3rem);
+            font-family: 'Syncopate', sans-serif;
+            font-weight: 700;
+            font-size: clamp(3rem, 10vw, 8rem);
+            line-height: 1;
+            letter-spacing: -0.02em;
+        }
+
+        .brand-word {
+            display: flex;
+            overflow: visible; /* Prevent shadow clipping */
+        }
+
+        /* Individual Character Styling for 3D Reveal */
+        .char-3d {
+            display: inline-block;
+            background: linear-gradient(180deg, #ffffff 0%, #aab8d1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            
+            /* Initial Hidden State */
+            opacity: 0;
+            transform: translateY(120%) rotateX(-50deg) scale(0.8) translateZ(-50px);
+            filter: blur(15px);
+            will-change: transform, opacity, filter;
+        }
+
+        /* Specialized Cyan Glow for BANKA */
+        .word-accent .char-3d {
+            background: linear-gradient(135deg, #ffffff 0%, var(--color-cyan-glow) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 10px 40px rgba(0, 240, 255, 0.3);
+        }
+
+        /* Tagline */
+        .hero-tagline {
+            font-family: 'Manrope', sans-serif;
+            font-weight: 300;
+            font-size: clamp(0.85rem, 2.5vw, 1.25rem);
+            color: var(--color-text-pure);
+            letter-spacing: clamp(0.15em, 0.4vw, 0.25em);
+            margin-top: clamp(1.5rem, 4vw, 2.5rem);
+            text-align: center;
+            opacity: 0; 
+        }
+
+        .hero-tagline span {
+            color: var(--color-cyan-glow);
+            margin: 0 10px;
+            font-size: 0.8em;
+            vertical-align: middle;
+        }
+
+        /* ==========================================================================
+           5. REDIRECT PORTAL & GLASSMORPHISM MODULE
+           ========================================================================== */
+        .portal-module {
+            margin-top: clamp(3rem, 8vw, 5rem);
+            padding: clamp(2rem, 5vw, 3rem);
+            border-radius: 24px;
+            background: var(--glass-bg-primary);
+            backdrop-filter: var(--glass-blur-heavy);
+            -webkit-backdrop-filter: var(--glass-blur-heavy);
+            border: 1px solid var(--glass-border-light);
+            border-top: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 
+                0 40px 100px rgba(0, 0, 0, 0.9),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                inset 0 -20px 40px rgba(0, 240, 255, 0.05);
+            text-align: center;
+            width: 90%;
+            max-width: 550px;
+            position: relative;
+            overflow: hidden;
+            
+            /* Hidden Initially */
+            opacity: 0;
+            transform: translateY(50px) scale(0.95);
+            transition: all 1.5s var(--ease-out-expo);
+        }
+
+        /* Animated scanner line over the card */
+        .portal-module::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 100%;
+            background: linear-gradient(to bottom, transparent, rgba(0,240,255,0.1), transparent);
+            transform: translateY(-100%);
+            animation: scanner 3s infinite linear;
+            pointer-events: none;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 20px;
+            border-radius: 100px;
+            background: rgba(0, 240, 255, 0.05);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            color: var(--color-cyan-glow);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(0.65rem, 1.5vw, 0.8rem);
+            letter-spacing: 0.15em;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.1);
+            transition: all 0.5s ease;
+        }
+
+        .status-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background-color: var(--color-cyan-glow);
+            box-shadow: 0 0 10px var(--color-cyan-glow);
+            animation: blink 1s infinite;
+        }
+
+        .portal-title {
+            font-size: clamp(1.4rem, 4vw, 2.2rem);
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            transition: color 0.5s ease;
+        }
+
+        .portal-desc {
+            font-size: clamp(0.9rem, 2vw, 1rem);
+            color: var(--color-text-muted);
+            font-weight: 400;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            transition: opacity 0.5s ease;
+        }
+
+        /* Redirect Progress Bar */
+        .redirect-progress-container {
+            width: 100%;
+            height: 4px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .redirect-progress-bar {
+            position: absolute;
+            top: 0; left: 0; height: 100%; width: 0%;
+            background: linear-gradient(90deg, var(--color-cobalt-light), var(--color-cyan-glow));
+            box-shadow: 0 0 15px var(--color-cyan-glow);
+            transition: width 0.2s linear;
+        }
+
+        .destination-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--color-text-muted);
+            margin-top: 10px;
+            letter-spacing: 0.1em;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Footer */
+        .premium-footer {
+            position: absolute;
+            bottom: clamp(20px, 4vw, 40px);
+            width: 100%;
+            text-align: center;
+            font-size: clamp(0.6rem, 1.5vw, 0.75rem);
+            color: rgba(255, 255, 255, 0.2);
+            letter-spacing: 0.15em;
+            font-family: 'JetBrains Mono', monospace;
+            opacity: 0;
+            padding: 0 20px;
+        }
+
+        /* ==========================================================================
+           6. CSS KEYFRAMES & ANIMATION CLASSES
+           ========================================================================== */
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        @keyframes logEntry {
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes scanner {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(500%); }
+        }
+
+        /* The Grand Letter Reveal */
+        .animate-char-reveal {
+            animation: charRise 1.2s cubic-bezier(0.2, 1.1, 0.3, 1) forwards;
+        }
+
+        @keyframes charRise {
+            0% { 
+                opacity: 0; 
+                transform: translateY(120%) rotateX(-50deg) scale(0.8) translateZ(-50px); 
+                filter: blur(15px); 
+            }
+            100% { 
+                opacity: 1; 
+                transform: translateY(0) rotateX(0) scale(1) translateZ(0); 
+                filter: blur(0); 
+            }
+        }
+
+        /* Generic Fade Up */
+        .fade-in-up {
+            animation: fadeInUp 1.5s var(--ease-out-expo) forwards;
+        }
+
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .pop-in {
+            animation: popIn 1.5s var(--ease-out-expo) forwards;
+        }
+
+        @keyframes popIn {
+            0% { opacity: 0; transform: translateY(50px) scale(0.95); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* Warp Flash Effect (When Redirect happens) */
+        .warp-flash {
+            position: absolute;
+            inset: 0;
+            background: #ffffff;
+            z-index: 10000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1.5s var(--ease-in-out-circ);
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- LAYER 1: Deep Environmental Backgrounds -->
+    <canvas id="particle-engine"></canvas>
+    <div class="cyber-grid" id="cyberGrid"></div>
+    <div class="ambient-vignette"></div>
+    <div class="cinematic-noise"></div>
+
+    <!-- LAYER 2: Boot Terminal Sequence -->
+    <div id="boot-overlay">
+        <div class="boot-console">
+            <div class="console-header">
+                <span class="console-title">GP_BANKA // KERNEL_INIT</span>
+                <span class="console-status">SYS_ON</span>
+            </div>
+            <div class="console-logs" id="consoleLogs">
+                <!-- Logs injected via JS -->
+            </div>
+            <div class="hardware-loader">
+                <div class="hardware-loader-fill" id="bootProgress"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LAYER 3: Main Cinematic UI -->
+    <main id="main-interface">
+        <div class="ui-wrapper">
+            
+            <div class="header-title" id="elem-header">Government Polytechnic Banka</div>
+
+            <!-- Highly Engineered Letter-by-Letter DOM Structure -->
+            <div class="hero-brand">
+                <h1 class="brand-text-row">
+                    <!-- GP -->
+                    <span class="brand-word">
+                        <span class="char-3d">G</span>
+                        <span class="char-3d">P</span>
+                    </span>
+                    <!-- BANKA -->
+                    <span class="brand-word word-accent">
+                        <span class="char-3d">B</span>
+                        <span class="char-3d">A</span>
+                        <span class="char-3d">N</span>
+                        <span class="char-3d">K</span>
+                        <span class="char-3d">A</span>
+                    </span>
+                </h1>
+            </div>
+
+            <p class="hero-tagline" id="elem-tagline">
+                Engineering <span>•</span> Education <span>•</span> Innovation
+            </p>
+
+            <!-- Dynamic Portal Module (Starts as Coming Soon, transitions to Redirect) -->
+            <div class="portal-module" id="elem-portal">
+                <div class="status-badge" id="portalBadge">
+                    <div class="status-dot"></div>
+                    <span id="portalBadgeText">SYSTEM STANDBY</span>
+                </div>
+                
+                <h2 class="portal-title" id="portalTitle">Portal Gateway</h2>
+                <p class="portal-desc" id="portalDesc">A state-of-the-art digital infrastructure is currently operating in stealth mode.</p>
+                
+                <div class="redirect-progress-container">
+                    <div class="redirect-progress-bar" id="redirectProgress"></div>
+                </div>
+                <div class="destination-text">
+                    <span id="destLabel">AWAITING_COMMAND</span>
+                    <span id="destPercent">0%</span>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <div class="premium-footer" id="elem-footer">
+        &copy; Government Polytechnic Banka Students
+    </div>
+
+    <!-- White Flash overlay for final redirect -->
+    <div class="warp-flash" id="warpFlash"></div>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            /* ==========================================================================
+               PART 1: ADVANCED OOP PARTICLE NETWORK ENGINE (CANVAS API)
+               ========================================================================== 
+               This engine calculates physics, distances, and connections in real-time.
+               It adapts to screen size and switches to a "Warp Drive" mode upon redirect.
+            */
+            const canvas = document.getElementById('particle-engine');
+            const ctx = canvas.getContext('2d', { alpha: false }); // Optimize performance
+            
+            let particlesArray = [];
+            let w = canvas.width = window.innerWidth;
+            let h = canvas.height = window.innerHeight;
+            let engineMode = 'NETWORK'; // Modes: 'NETWORK', 'WARP'
+            let warpSpeedMultiplier = 1;
+
+            // Interactive Mouse/Touch node
+            let pointer = {
+                x: w / 2,
+                y: h / 2,
+                radius: (w / 80) * (h / 80)
+            };
+
+            // Responsive pointers
+            const updatePointerRadius = () => {
+                pointer.radius = window.innerWidth < 768 ? 3000 : (w / 80) * (h / 80);
+            };
+            updatePointerRadius();
+
+            window.addEventListener('mousemove', (e) => { pointer.x = e.x; pointer.y = e.y; });
+            window.addEventListener('touchmove', (e) => { 
+                pointer.x = e.touches[0].clientX; 
+                pointer.y = e.touches[0].clientY; 
+            }, { passive: true });
+
+            window.addEventListener('resize', () => {
+                w = canvas.width = window.innerWidth;
+                h = canvas.height = window.innerHeight;
+                updatePointerRadius();
+                initEngine();
+            });
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * w;
+                    this.y = Math.random() * h;
+                    // Initial velocity
+                    this.vx = (Math.random() - 0.5) * 0.5;
+                    this.vy = (Math.random() - 0.5) * 0.5;
+                    this.size = Math.random() * 2 + 0.5;
+                    this.baseSize = this.size;
+                    
+                    // Assign colors based on brand palette
+                    const colors = ['#00f0ff', '#0051ff', '#ffffff'];
+                    this.color = colors[Math.floor(Math.random() * colors.length)];
+                    
+                    // 3D parameters for Warp effect
+                    this.z = Math.random() * w;
+                }
+
+                updateNetwork() {
+                    // Bounce off walls
+                    if (this.x > w || this.x < 0) this.vx = -this.vx;
+                    if (this.y > h || this.y < 0) this.vy = -this.vy;
+
+                    // Mouse interaction physics
+                    let dx = pointer.x - this.x;
+                    let dy = pointer.y - this.y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < pointer.radius) {
+                        const forceDirectionX = dx / distance;
+                        const forceDirectionY = dy / distance;
+                        const force = (pointer.radius - distance) / pointer.radius;
+                        // Repel
+                        this.vx -= forceDirectionX * force * 0.05;
+                        this.vy -= forceDirectionY * force * 0.05;
+                    }
+
+                    // Apply friction
+                    this.vx *= 0.99;
+                    this.vy *= 0.99;
+
+                    // Ensure minimum speed
+                    if (Math.abs(this.vx) < 0.1) this.vx += (Math.random() - 0.5) * 0.1;
+                    if (Math.abs(this.vy) < 0.1) this.vy += (Math.random() - 0.5) * 0.1;
+
+                    this.x += this.vx;
+                    this.y += this.vy;
+                }
+
+                updateWarp() {
+                    // In warp mode, move towards the camera (decrease Z)
+                    this.z -= 15 * warpSpeedMultiplier; 
+                    warpSpeedMultiplier += 0.005; // Accelerate
+
+                    if (this.z <= 0) {
+                        this.z = w;
+                        this.x = Math.random() * w;
+                        this.y = Math.random() * h;
+                    }
+                }
+
+                draw() {
+                    if (engineMode === 'NETWORK') {
+                        ctx.beginPath();
+                        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                        ctx.fillStyle = this.color;
+                        ctx.fill();
+                    } else if (engineMode === 'WARP') {
+                        // 3D Projection math
+                        let xProjected = (this.x - w/2) * (w / this.z) + w/2;
+                        let yProjected = (this.y - h/2) * (w / this.z) + h/2;
+                        let sizeProjected = this.size * (w / this.z);
+
+                        // Draw streak
+                        let pastZ = this.z + (20 * warpSpeedMultiplier);
+                        let pastX = (this.x - w/2) * (w / pastZ) + w/2;
+                        let pastY = (this.y - h/2) * (w / pastZ) + h/2;
+
+                        ctx.beginPath();
+                        ctx.moveTo(pastX, pastY);
+                        ctx.lineTo(xProjected, yProjected);
+                        ctx.strokeStyle = this.color;
+                        ctx.lineWidth = sizeProjected;
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            function drawNetworkLines() {
+                let connectionDistance = window.innerWidth < 768 ? 8000 : 15000;
+                for (let a = 0; a < particlesArray.length; a++) {
+                    for (let b = a; b < particlesArray.length; b++) {
+                        let dx = particlesArray[a].x - particlesArray[b].x;
+                        let dy = particlesArray[a].y - particlesArray[b].y;
+                        let distance = dx * dx + dy * dy;
+
+                        if (distance < connectionDistance) {
+                            let opacity = 1 - (distance / connectionDistance);
+                            ctx.strokeStyle = `rgba(0, 240, 255, ${opacity * 0.2})`;
+                            ctx.lineWidth = 1;
+                            ctx.beginPath();
+                            ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                            ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+
+            function initEngine() {
+                particlesArray = [];
+                let density = window.innerWidth < 768 ? 15000 : 9000; 
+                let count = Math.floor((w * h) / density);
+                for (let i = 0; i < count; i++) {
+                    particlesArray.push(new Particle());
+                }
+            }
+
+            function animateEngine() {
+                // Background clear with slight trail effect
+                ctx.fillStyle = engineMode === 'WARP' ? 'rgba(1, 2, 5, 0.3)' : 'rgba(1, 2, 5, 1)';
+                ctx.fillRect(0, 0, w, h);
+
+                for (let i = 0; i < particlesArray.length; i++) {
+                    if (engineMode === 'NETWORK') {
+                        particlesArray[i].updateNetwork();
+                    } else {
+                        particlesArray[i].updateWarp();
+                    }
+                    particlesArray[i].draw();
+                }
+
+                if (engineMode === 'NETWORK') {
+                    drawNetworkLines();
+                }
+                requestAnimationFrame(animateEngine);
+            }
+
+            initEngine();
+            animateEngine();
+
+            /* ==========================================================================
+               PART 2: CINEMATIC SEQUENCE CONTROLLER
+               ========================================================================== 
+               State Machine handles: Boot -> Reveal -> Idle -> Redirect Setup -> Warp Transition.
+            */
+            
+            // DOM References
+            const bootOverlay = document.getElementById('boot-overlay');
+            const consoleLogs = document.getElementById('consoleLogs');
+            const bootProgress = document.getElementById('bootProgress');
+            const canvasEl = document.getElementById('particle-engine');
+            const gridEl = document.getElementById('cyberGrid');
+            
+            const portalBadgeText = document.getElementById('portalBadgeText');
+            const portalTitle = document.getElementById('portalTitle');
+            const portalDesc = document.getElementById('portalDesc');
+            const redirectProgress = document.getElementById('redirectProgress');
+            const destLabel = document.getElementById('destLabel');
+            const destPercent = document.getElementById('destPercent');
+            const warpFlash = document.getElementById('warpFlash');
+
+            // Boot Sequence Data
+            const terminalLogs = [
+                "ALLOCATING_MEMORY_BLOCKS...",
+                "LOADING_UI_COMPONENTS [OK]",
+                "ESTABLISHING_NODE_NETWORK...",
+                "<span class='log-warn'>WARNING: HIGH SECURITY PROTOCOL DETECTED</span>",
+                "BYPASSING_FIREWALL...",
+                "<span class='log-success'>ACCESS_GRANTED</span>",
+                "INITALIZING_GP_BANKA_CORE..."
+            ];
+
+            let logIndex = 0;
+            let bootPercent = 0;
+
+            // Step 1: Run Boot Terminal
+            const bootInterval = setInterval(() => {
+                if (logIndex < terminalLogs.length) {
+                    const p = document.createElement('p');
+                    p.className = 'log-line';
+                    p.innerHTML = `> ${terminalLogs[logIndex]}`;
+                    consoleLogs.appendChild(p);
+                    logIndex++;
+                }
+
+                bootPercent += Math.random() * 20;
+                if (bootPercent > 100) bootPercent = 100;
+                bootProgress.style.width = `${bootPercent}%`;
+
+                if (bootPercent === 100 && logIndex >= terminalLogs.length) {
+                    clearInterval(bootInterval);
+                    setTimeout(initMainReveal, 800);
+                }
+            }, 350);
+
+            // Step 2: Cinematic Reveal
+            function initMainReveal() {
+                // Fade out terminal
+                bootOverlay.style.opacity = '0';
+                bootOverlay.style.transform = 'scale(1.1)';
+                setTimeout(() => bootOverlay.style.display = 'none', 1200);
+
+                // Fade in Canvas & Grid
+                canvasEl.style.opacity = '1';
+                gridEl.style.opacity = '1';
+
+                // Reveal Header
+                setTimeout(() => document.getElementById('elem-header').classList.add('fade-in-up'), 500);
+
+                // Reveal 3D Letters with Stagger
+                setTimeout(() => {
+                    const chars = document.querySelectorAll('.char-3d');
+                    chars.forEach((char, index) => {
+                        char.style.animationDelay = `${index * 0.1}s`;
+                        char.classList.add('animate-char-reveal');
+                    });
+                }, 1000);
+
+                // Reveal Tagline & Footer
+                setTimeout(() => document.getElementById('elem-tagline').classList.add('fade-in-up'), 2500);
+                setTimeout(() => document.getElementById('elem-footer').classList.add('fade-in-up'), 2800);
+                
+                // Pop in Portal UI
+                setTimeout(() => document.getElementById('elem-portal').classList.add('pop-in'), 3200);
+
+                // Trigger Redirect Sequence automatically after user admires the design
+                setTimeout(initiateRedirectSequence, 7000);
+            }
+
+            // Step 3: Initiate Portal Transfer UI
+            function initiateRedirectSequence() {
+                // Update UI visually for transfer
+                const badge = document.getElementById('portalBadge');
+                badge.style.background = 'rgba(0, 255, 102, 0.1)';
+                badge.style.borderColor = 'rgba(0, 255, 102, 0.4)';
+                document.querySelector('.status-dot').style.backgroundColor = '#00ff66';
+                document.querySelector('.status-dot').style.boxShadow = '0 0 10px #00ff66';
+                
+                portalBadgeText.innerText = "TRANSFER AUTHORIZED";
+                portalBadgeText.style.color = '#00ff66';
+
+                portalTitle.innerText = "ESTABLISHING SECURE TUNNEL";
+                portalTitle.style.color = var('--color-cyan-glow', '#00f0ff');
+                portalDesc.innerText = "Rerouting connection to the official Government Polytechnic Banka portal...";
+                
+                destLabel.innerText = "TARGET: www.gpbanka.ac.in";
+                
+                // Progress Bar Animation
+                let transferPercent = 0;
+                const transferInterval = setInterval(() => {
+                    transferPercent += (Math.random() * 5) + 1;
+                    if(transferPercent >= 100) {
+                        transferPercent = 100;
+                        clearInterval(transferInterval);
+                        triggerWarpDrive(); // Engage visual warp
+                    }
+                    redirectProgress.style.width = `${transferPercent}%`;
+                    destPercent.innerText = `${Math.floor(transferPercent)}%`;
+                }, 150);
+            }
+
+            // Step 4: Visual Warp & Actual Navigation
+            function triggerWarpDrive() {
+                destLabel.innerText = "INITIATING HYPER-JUMP...";
+                
+                // Change physics engine mode to warp
+                engineMode = 'WARP';
+                
+                // Hide Grid and UI smoothly
+                gridEl.style.opacity = '0';
+                document.querySelector('.ui-wrapper').style.opacity = '0';
+                document.querySelector('.ui-wrapper').style.transition = 'opacity 1s ease';
+
+                // Screen Flash & Redirect
+                setTimeout(() => {
+                    warpFlash.style.opacity = '1';
+                    
+                    // ACTUAL REDIRECT CODE
+                    setTimeout(() => {
+                        window.location.replace('https://www.gpbanka.ac.in');
+                    }, 500); // Small delay inside the white flash
+                    
+                }, 2000); // 2 seconds of warp visual buildup
+            }
+
+        });
+    </script>
+</body>
+</html>
