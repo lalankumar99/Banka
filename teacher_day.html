@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Premium Media Slider</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:15px;
+
+    font-family:Arial,sans-serif;
+
+    background:
+        radial-gradient(circle at 10% 10%,#172554 0,transparent 35%),
+        radial-gradient(circle at 90% 90%,#075985 0,transparent 35%),
+        #020617;
+}
+
+/* MAIN CARD */
+.slider-wrapper{
+    position:relative;
+    width:100%;
+    max-width:850px;
+
+    overflow:hidden;
+
+    background:#0f172a;
+
+    border:1px solid rgba(255,255,255,.10);
+
+    border-radius:24px;
+
+    box-shadow:
+        0 30px 80px rgba(0,0,0,.60),
+        0 0 40px rgba(14,165,233,.08);
+}
+
+/* SLIDER */
+.slider-container{
+    display:flex;
+
+    width:100%;
+
+    overflow-x:auto;
+
+    scroll-snap-type:x mandatory;
+    scroll-behavior:smooth;
+
+    scrollbar-width:none;
+
+    -webkit-overflow-scrolling:touch;
+}
+
+.slider-container::-webkit-scrollbar{
+    display:none;
+}
+
+/* SLIDE */
+.slide{
+    position:relative;
+
+    flex:0 0 100%;
+
+    width:100%;
+    height:500px;
+
+    scroll-snap-align:center;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    overflow:hidden;
+
+    background:
+        radial-gradient(circle at center,#111827,#020617);
+}
+
+/* IMAGE */
+.slide img{
+    width:100%;
+    height:100%;
+
+    padding:12px;
+
+    object-fit:contain;
+
+    display:block;
+
+    filter:
+        brightness(.95)
+        contrast(1.08)
+        saturate(1.08);
+
+    transition:.5s ease;
+}
+
+.slide:hover img{
+    transform:scale(1.025);
+}
+
+/* IMAGE OVERLAY */
+.slide::after{
+    content:"";
+
+    position:absolute;
+    inset:0;
+
+    pointer-events:none;
+
+    background:
+        linear-gradient(
+            to bottom,
+            rgba(0,0,0,.35),
+            transparent 25%,
+            transparent 70%,
+            rgba(0,0,0,.45)
+        );
+}
+
+/* BADGE */
+.slide-badge{
+    position:absolute;
+
+    top:18px;
+    left:18px;
+
+    z-index:10;
+
+    padding:8px 14px;
+
+    color:#fff;
+
+    font-size:12px;
+    font-weight:bold;
+
+    letter-spacing:.5px;
+
+    border-radius:30px;
+
+    background:rgba(2,6,23,.65);
+
+    border:1px solid rgba(255,255,255,.15);
+
+    backdrop-filter:blur(12px);
+
+    box-shadow:0 8px 25px rgba(0,0,0,.3);
+}
+
+/* VIDEO CARD */
+.video-card{
+    position:relative;
+
+    width:100%;
+    height:100%;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    overflow:hidden;
+
+    background:
+        linear-gradient(
+            135deg,
+            #020617,
+            #0f172a,
+            #082f49
+        );
+}
+
+/* VIDEO BACKGROUND */
+.video-bg{
+    position:absolute;
+    inset:0;
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(14,165,233,.18),
+            transparent 55%
+        );
+}
+
+/* VIDEO ICON */
+.video-icon{
+    position:relative;
+    z-index:2;
+
+    width:110px;
+    height:110px;
+
+    border-radius:50%;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:42px;
+
+    color:white;
+
+    background:
+        rgba(14,165,233,.25);
+
+    border:2px solid rgba(255,255,255,.30);
+
+    box-shadow:
+        0 0 0 15px rgba(14,165,233,.08),
+        0 20px 50px rgba(0,0,0,.45);
+
+    backdrop-filter:blur(15px);
+
+    transition:.3s ease;
+}
+
+.video-card:hover .video-icon{
+    transform:scale(1.08);
+
+    background:
+        rgba(14,165,233,.45);
+
+    box-shadow:
+        0 0 0 20px rgba(14,165,233,.08),
+        0 20px 60px rgba(0,0,0,.55);
+}
+
+/* VIDEO TITLE */
+.video-title{
+    position:absolute;
+
+    bottom:75px;
+
+    left:50%;
+
+    transform:translateX(-50%);
+
+    z-index:3;
+
+    width:90%;
+
+    text-align:center;
+
+    color:white;
+
+    font-size:18px;
+    font-weight:bold;
+}
+
+/* VIDEO SUBTITLE */
+.video-subtitle{
+    position:absolute;
+
+    bottom:45px;
+
+    left:50%;
+
+    transform:translateX(-50%);
+
+    z-index:3;
+
+    color:#94a3b8;
+
+    font-size:12px;
+
+    white-space:nowrap;
+}
+
+/* DRIVE LINK BUTTON */
+.video-open{
+    position:absolute;
+
+    bottom:18px;
+
+    left:50%;
+
+    transform:translateX(-50%);
+
+    z-index:5;
+
+    padding:9px 18px;
+
+    border-radius:30px;
+
+    color:white;
+
+    background:rgba(255,255,255,.08);
+
+    border:1px solid rgba(255,255,255,.16);
+
+    text-decoration:none;
+
+    font-size:12px;
+
+    backdrop-filter:blur(10px);
+
+    transition:.3s ease;
+}
+
+.video-open:hover{
+    background:rgba(14,165,233,.35);
+
+    border-color:rgba(56,189,248,.5);
+}
+
+/* NAV BUTTON */
+.nav-btn{
+    position:absolute;
+
+    top:50%;
+
+    transform:translateY(-50%);
+
+    z-index:20;
+
+    width:48px;
+    height:48px;
+
+    border:none;
+
+    border-radius:50%;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    cursor:pointer;
+
+    color:white;
+
+    font-size:22px;
+
+    background:rgba(2,6,23,.65);
+
+    border:1px solid rgba(255,255,255,.18);
+
+    backdrop-filter:blur(12px);
+
+    box-shadow:0 10px 30px rgba(0,0,0,.4);
+
+    transition:.3s ease;
+}
+
+.nav-btn:hover{
+    transform:translateY(-50%) scale(1.08);
+
+    background:#0284c7;
+
+    box-shadow:
+        0 0 25px rgba(14,165,233,.4);
+}
+
+.prev-btn{
+    left:15px;
+}
+
+.next-btn{
+    right:15px;
+}
+
+/* DOTS */
+.dots-container{
+    height:68px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    gap:8px;
+
+    background:#0f172a;
+
+    border-top:1px solid rgba(255,255,255,.06);
+}
+
+.dot{
+    width:9px;
+    height:9px;
+
+    border-radius:50%;
+
+    cursor:pointer;
+
+    background:#475569;
+
+    transition:.3s ease;
+}
+
+.dot.active{
+    width:28px;
+
+    background:#38bdf8;
+
+    box-shadow:
+        0 0 15px rgba(56,189,248,.65);
+
+    border-radius:20px;
+}
+
+/* MOBILE */
+@media(max-width:600px){
+
+    body{
+        padding:8px;
+    }
+
+    .slider-wrapper{
+        border-radius:18px;
+    }
+
+    .slide{
+        height:390px;
+    }
+
+    .nav-btn{
+        width:40px;
+        height:40px;
+        font-size:18px;
+    }
+
+    .prev-btn{
+        left:9px;
+    }
+
+    .next-btn{
+        right:9px;
+    }
+
+    .video-icon{
+        width:85px;
+        height:85px;
+        font-size:32px;
+    }
+
+    .video-title{
+        font-size:16px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="slider-wrapper">
+
+    <!-- PREVIOUS BUTTON -->
+    <button class="nav-btn prev-btn" onclick="prevSlide()">
+        &#10094;
+    </button>
+
+    <!-- NEXT BUTTON -->
+    <button class="nav-btn next-btn" onclick="nextSlide()">
+        &#10095;
+    </button>
+
+
+    <!-- SLIDER -->
+    <div class="slider-container" id="slider">
+
+        <!-- PHOTO 1 -->
+        <div class="slide">
+            <span class="slide-badge">PHOTO 01</span>
+
+            <img
+                src="https://drive.google.com/thumbnail?id=1SjKIPaL_OoGpVZSBBGT5FQJJWzPu_8Zl&sz=w1600"
+                alt="Photo 1"
+                loading="lazy">
+        </div>
+
+
+        <!-- ================================= -->
+        <!-- NEW PHOTO - SECOND NUMBER -->
+        <!-- ================================= -->
+        <div class="slide">
+            <span class="slide-badge">PHOTO 02</span>
+
+            <img
+                src="https://drive.google.com/thumbnail?id=1pv5a3OJ6vz-6_u0bbh_GTlQFT5licScz&sz=w1600"
+                alt="Photo 2"
+                loading="lazy">
+        </div>
+
+
+        <!-- OLD PHOTO 2 -->
+        <div class="slide">
+            <span class="slide-badge">PHOTO 03</span>
+
+            <img
+                src="https://drive.google.com/thumbnail?id=111K2gb6LcVKRsCeycHRskDAerXYd63xX&sz=w1600"
+                alt="Photo 3"
+                loading="lazy">
+        </div>
+
+
+        <!-- OLD PHOTO 3 -->
+        <div class="slide">
+            <span class="slide-badge">PHOTO 04</span>
+
+            <img
+                src="https://drive.google.com/thumbnail?id=175t3wnxSVTUWI8RtBp292uqopOgj98YV&sz=w1600"
+                alt="Photo 4"
+                loading="lazy">
+        </div>
+
+
+        <!-- OLD PHOTO 4 -->
+        <div class="slide">
+            <span class="slide-badge">PHOTO 05</span>
+
+            <img
+                src="https://drive.google.com/thumbnail?id=1HA9mzvJ86dRjKHXaUdzE0pdC_DnHhEYW&sz=w1600"
+                alt="Photo 5"
+                loading="lazy">
+        </div>
+
+
+        <!-- OLD PHOTO 5 -->
+        <div class="slide">
+            <span class="slide-badge">PHOTO 06</span>
+
+            <img
+                src="https://drive.google.com/thumbnail?id=1IqcrvSziguU64A19w_GISLWWI53fJI7Z&sz=w1600"
+                alt="Photo 6"
+                loading="lazy">
+        </div>
+
+
+        <!-- VIDEO 1 -->
+        <div class="slide">
+
+            <span class="slide-badge">VIDEO 01</span>
+
+            <div class="video-card">
+
+                <div class="video-bg"></div>
+
+                <div class="video-icon">
+                    ▶
+                </div>
+
+                <div class="video-title">
+                    Video 01
+                </div>
+
+                <div class="video-subtitle">
+                    Tap to play video
+                </div>
+
+                <a
+                    class="video-open"
+                    href="https://drive.google.com/file/d/197wWdfVClFgaVce6nFUN5b8BwztHg3vA/preview"
+                    target="_blank"
+                    rel="noopener">
+                    ▶ Play Video
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- VIDEO 2 -->
+        <div class="slide">
+
+            <span class="slide-badge">VIDEO 02</span>
+
+            <div class="video-card">
+
+                <div class="video-bg"></div>
+
+                <div class="video-icon">
+                    ▶
+                </div>
+
+                <div class="video-title">
+                    Video 02
+                </div>
+
+                <div class="video-subtitle">
+                    Tap to play video
+                </div>
+
+                <a
+                    class="video-open"
+                    href="https://drive.google.com/file/d/1MPqrzyp14QP_zfgTBrzwKUUQCrGpVEgv/preview"
+                    target="_blank"
+                    rel="noopener">
+                    ▶ Play Video
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- DOTS -->
+    <div class="dots-container">
+
+        <span class="dot active" onclick="goToSlide(0)"></span>
+        <span class="dot" onclick="goToSlide(1)"></span>
+        <span class="dot" onclick="goToSlide(2)"></span>
+        <span class="dot" onclick="goToSlide(3)"></span>
+        <span class="dot" onclick="goToSlide(4)"></span>
+        <span class="dot" onclick="goToSlide(5)"></span>
+        <span class="dot" onclick="goToSlide(6)"></span>
+        <span class="dot" onclick="goToSlide(7)"></span>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const slider =
+    document.getElementById("slider");
+
+const slides =
+    document.querySelectorAll(".slide");
+
+const dots =
+    document.querySelectorAll(".dot");
+
+
+/* CURRENT SLIDE */
+function getCurrentIndex(){
+
+    const width = slider.clientWidth;
+
+    if(!width) return 0;
+
+    return Math.round(
+        slider.scrollLeft / width
+    );
+}
+
+
+/* UPDATE DOTS */
+function updateDots(index){
+
+    dots.forEach((dot,i)=>{
+
+        dot.classList.toggle(
+            "active",
+            i === index
+        );
+
+    });
+
+}
+
+
+/* GO TO SLIDE */
+function goToSlide(index){
+
+    slider.scrollTo({
+
+        left:slider.clientWidth * index,
+
+        behavior:"smooth"
+
+    });
+
+    updateDots(index);
+}
+
+
+/* NEXT */
+function nextSlide(){
+
+    const current =
+        getCurrentIndex();
+
+    const next =
+        (current + 1) % slides.length;
+
+    goToSlide(next);
+}
+
+
+/* PREVIOUS */
+function prevSlide(){
+
+    const current =
+        getCurrentIndex();
+
+    const previous =
+        (current - 1 + slides.length)
+        % slides.length;
+
+    goToSlide(previous);
+}
+
+
+/* SWIPE */
+let scrollTimer;
+
+slider.addEventListener("scroll",()=>{
+
+    clearTimeout(scrollTimer);
+
+    scrollTimer =
+        setTimeout(()=>{
+
+            updateDots(
+                getCurrentIndex()
+            );
+
+        },80);
+
+});
+
+
+/* KEYBOARD */
+document.addEventListener("keydown",(e)=>{
+
+    if(e.key === "ArrowRight"){
+        nextSlide();
+    }
+
+    if(e.key === "ArrowLeft"){
+        prevSlide();
+    }
+
+});
+
+
+/* RESIZE */
+window.addEventListener("resize",()=>{
+
+    const index =
+        getCurrentIndex();
+
+    slider.scrollLeft =
+        slider.clientWidth * index;
+
+});
+
+</script>
+
+</body>
+</html>
