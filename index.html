@@ -2,484 +2,399 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="google-site-verification" content="d7S6rrdFHaEuQ3f4auDGxt-2dfNrSAMrMRU1nO2YOnc" />
-    <title>Government Polytechnic Banka | System Initialization</title>
-    <style>
-        /* ==========================================================================
-           1. CSS VARIABLES & THEME SETUP
-           ========================================================================== */
-        :root {
-            --bg-color-deep: #02050a;
-            --bg-color-navy: #050f1f;
-            --neon-cyan: #00f3ff;
-            --neon-blue: #0066ff;
-            --neon-purple: #8a2be2;
-            --text-main: #ffffff;
-            --text-muted: rgba(255, 255, 255, 0.6);
-            --grid-color: rgba(0, 243, 255, 0.15);
-            --orb-glow: rgba(0, 102, 255, 0.4);
-            
-            /* Responsive Typography via Clamp */
-            --font-top: clamp(0.6rem, 1.5vw, 1rem);
-            --font-main: clamp(3rem, 12vw, 9rem);
-            --font-tagline: clamp(0.7rem, 2vw, 1.2rem);
-            --font-loader: clamp(0.5rem, 1.2vw, 0.8rem);
-        }
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        /* ==========================================================================
-           2. RESET & BASE STYLES
-           ========================================================================== */
-        *, *::before, *::after {
+    <title>Government Polytechnic Banka</title>
+
+    <style>
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        html, body {
-            width: 100%;
-            height: 100%;
-            overflow: hidden; /* Prevent scrolling during intro */
-            background-color: var(--bg-color-deep);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            perspective: 1000px;
+        html {
+            scroll-behavior: smooth;
         }
 
-        /* ==========================================================================
-           3. BACKGROUND ENVIRONMENT (PURE CSS CYBER-GRID & ORBS)
-           ========================================================================== */
-        
-        /* Dark Ambient Radial Background */
-        .ambient-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at center, var(--bg-color-navy) 0%, var(--bg-color-deep) 100%);
-            z-index: 0;
+        body {
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #ffffff;
+            overflow-x: hidden;
+
+            background:
+                linear-gradient(
+                    rgba(0, 8, 20, 0.72),
+                    rgba(0, 8, 20, 0.85)
+                ),
+                url("GP Banka.png");
+
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
         }
 
-        /* Moving Cyber-Grid Floor */
-        .cyber-grid-wrapper {
-            position: absolute;
-            bottom: -20%;
-            left: -50%;
-            width: 200%;
-            height: 80%;
-            perspective: 600px;
-            z-index: 1;
-            transform-style: preserve-3d;
-        }
-
-        .cyber-grid {
-            position: absolute;
-            width: 100%;
-            height: 200%;
-            bottom: 0;
-            background-image: 
-                linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
-                linear-gradient(to top, var(--grid-color) 1px, transparent 1px);
-            background-size: 50px 50px;
-            transform-origin: bottom center;
-            transform: rotateX(75deg);
-            animation: gridMove 4s linear infinite;
-            /* Fade out grid at the edges */
-            mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 80%);
-            -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 80%);
-        }
-
-        /* Scanline Overlay for Tech Vibe */
-        .scanlines {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2));
-            background-size: 100% 4px;
-            z-index: 10;
-            pointer-events: none;
-            opacity: 0.3;
-        }
-
-        /* Floating Glowing Orbs */
-        .orbs-container {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            z-index: 2;
-            overflow: hidden;
-            pointer-events: none;
-        }
-
-        .orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(60px);
-            opacity: 0.5;
-            mix-blend-mode: screen;
-        }
-
-        .orb-1 {
-            width: 300px;
-            height: 300px;
-            background: var(--neon-cyan);
-            top: -10%;
-            left: 10%;
-            animation: float1 12s ease-in-out infinite alternate;
-        }
-
-        .orb-2 {
-            width: 400px;
-            height: 400px;
-            background: var(--neon-blue);
-            bottom: -20%;
-            right: 5%;
-            animation: float2 15s ease-in-out infinite alternate;
-        }
-
-        .orb-3 {
-            width: 250px;
-            height: 250px;
-            background: var(--neon-purple);
-            top: 40%;
-            left: 60%;
-            animation: float3 10s ease-in-out infinite alternate;
-        }
-
-        /* ==========================================================================
-           4. MAIN CONTENT LAYOUT
-           ========================================================================== */
-        .ui-container {
-            position: relative;
-            z-index: 20;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-            text-align: center;
-        }
-
-        /* Top Monospace Text */
-        .top-text {
-            font-family: 'Courier New', Courier, monospace;
-            font-size: var(--font-top);
-            color: var(--neon-cyan);
-            letter-spacing: 0.6em;
-            text-transform: uppercase;
-            margin-bottom: 2rem;
-            opacity: 0;
-            transform: translateY(-20px);
-            animation: fadeDown 1s cubic-bezier(0.2, 1, 0.3, 1) 2.5s forwards;
-            text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
-        }
-
-        /* ==========================================================================
-           5. 3D TYPOGRAPHY REVEAL (CRITICAL REQUIREMENT)
-           ========================================================================== */
-        .main-title {
-            font-size: var(--font-main);
-            font-weight: 900;
-            color: var(--text-main);
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 1vw; /* Responsive gap */
-            transform-style: preserve-3d;
-            perspective: 800px;
-            line-height: 1;
-        }
-
-        .main-title .char {
-            display: inline-block;
-            opacity: 0;
-            /* Initial state for 3D rise from bottom */
-            transform: translate3d(0, 150%, 100px) rotateX(-90deg) scale(0.8);
-            filter: blur(20px);
-            
-            /* Premium Text Glow Styling */
-            text-shadow: 
-                0 0 10px rgba(255,255,255,0.2),
-                0 0 20px var(--neon-blue),
-                0 0 40px var(--neon-cyan),
-                0 0 80px rgba(0, 102, 255, 0.6);
-            /* Glassmorphic/Metallic feel */
-            -webkit-text-stroke: 1px rgba(255,255,255,0.4);
-        }
-
-        .main-title .spacer {
-            width: clamp(1rem, 3vw, 2.5rem);
-        }
-
-        /* nth-child Animation Delays for G P B A N K A */
-        .main-title .char:nth-child(1) { animation: riseReveal 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.5s forwards; } /* G */
-        .main-title .char:nth-child(2) { animation: riseReveal 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.7s forwards; } /* P */
-        /* child 3 is spacer */
-        .main-title .char:nth-child(4) { animation: riseReveal 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.1s forwards; } /* B */
-        .main-title .char:nth-child(5) { animation: riseReveal 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.3s forwards; } /* A */
-        .main-title .char:nth-child(6) { animation: riseReveal 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.5s forwards; } /* N */
-        .main-title .char:nth-child(7) { animation: riseReveal 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.7s forwards; } /* K */
-        .main-title .char:nth-child(8) { animation: riseReveal 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.9s forwards; } /* A */
-
-        /* Tagline */
-        .tagline {
-            font-size: var(--font-tagline);
-            color: var(--text-muted);
-            letter-spacing: 0.3em;
-            margin-top: 2rem;
-            font-weight: 500;
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeUp 1s cubic-bezier(0.2, 1, 0.3, 1) 3.0s forwards;
-        }
-
-        /* ==========================================================================
-           6. THE BOOT SEQUENCE (PROGRESS BAR)
-           ========================================================================== */
-        .boot-sequence {
-            position: absolute;
-            bottom: 15%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: clamp(250px, 50vw, 500px);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1rem;
-            opacity: 0;
-            animation: fadeIn 1s ease 3.5s forwards;
-        }
-
-        .boot-text {
-            font-family: 'Courier New', Courier, monospace;
-            font-size: var(--font-loader);
-            color: var(--neon-cyan);
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            animation: pulseText 1.5s infinite alternate;
-        }
-
-        .progress-track {
-            width: 100%;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-            overflow: hidden;
-            position: relative;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
-        }
-
-        .progress-bar {
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, var(--neon-blue), var(--neon-cyan));
-            border-radius: 4px;
-            box-shadow: 0 0 15px var(--neon-cyan), 0 0 30px var(--neon-blue);
-            /* Fills up exactly over 4 seconds, triggered at 3.5s mark */
-            animation: fillProgress 4s cubic-bezier(0.4, 0.0, 0.2, 1) 3.5s forwards;
-        }
-
-        /* ==========================================================================
-           7. THE REDIRECT WARP EFFECT (CLIMAX)
-           ========================================================================== */
-        .warp-flash {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            width: 10vw;
-            height: 10vw;
-            border-radius: 50%;
-            background: #ffffff;
-            box-shadow: 0 0 100px 50px #ffffff, 0 0 200px 100px var(--neon-cyan);
-            z-index: 9999;
-            pointer-events: none;
-            mix-blend-mode: screen;
-            /* Triggers right around 7.5s - 8s mark for the final transition */
-            animation: warpExplosion 0.8s cubic-bezier(0.7, 0, 0.84, 0) 7.5s forwards;
-        }
-
-        /* Pure white overlay fallback to ensure complete screen covering */
-        .white-out {
+        body::before {
+            content: "";
             position: fixed;
             inset: 0;
-            background: #ffffff;
-            z-index: 10000;
-            opacity: 0;
+
+            background:
+                radial-gradient(
+                    circle at top,
+                    rgba(0, 160, 255, 0.20),
+                    transparent 45%
+                );
+
             pointer-events: none;
-            animation: whiteOutFinal 0.2s linear 7.9s forwards;
+            z-index: -1;
         }
 
-        /* ==========================================================================
-           8. CSS KEYFRAMES & ANIMATIONS
-           ========================================================================== */
+        .container {
+            min-height: 100vh;
 
-        /* Grid Movement */
-        @keyframes gridMove {
-            0% { background-position: 0 0; }
-            100% { background-position: 0 50px; }
-        }
+            display: flex;
+            justify-content: center;
+            align-items: center;
 
-        /* Orb Floating Logic */
-        @keyframes float1 {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(10vw, 5vh) scale(1.2); }
-        }
-        @keyframes float2 {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(-10vw, -10vh) scale(0.9); }
-        }
-        @keyframes float3 {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(-5vw, 15vh) scale(1.1); }
+            padding: 20px;
         }
 
-        /* 3D Typography Reveal */
-        @keyframes riseReveal {
-            0% {
-                opacity: 0;
-                transform: translate3d(0, 150%, 100px) rotateX(-90deg) scale(0.8);
-                filter: blur(20px);
-            }
-            100% {
-                opacity: 1;
-                transform: translate3d(0, 0, 0) rotateX(0deg) scale(1);
-                filter: blur(0);
-            }
+        .hero {
+            width: 100%;
+            max-width: 950px;
+
+            padding: 55px 30px;
+
+            text-align: center;
+
+            background: rgba(255, 255, 255, 0.08);
+
+            border: 1px solid rgba(255, 255, 255, 0.22);
+
+            border-radius: 30px;
+
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+
+            box-shadow:
+                0 30px 70px rgba(0, 0, 0, 0.50),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15);
+
+            animation: fadeUp 1s ease;
         }
 
-        /* Fade Down for Top Text */
-        @keyframes fadeDown {
-            0% { opacity: 0; transform: translateY(-20px); filter: blur(10px); }
-            100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+        .tag {
+            display: inline-block;
+
+            padding: 9px 20px;
+            margin-bottom: 22px;
+
+            border-radius: 50px;
+
+            background: rgba(0, 140, 255, 0.18);
+
+            border: 1px solid rgba(100, 200, 255, 0.45);
+
+            color: #c9ecff;
+
+            font-size: 13px;
+            font-weight: 700;
+
+            letter-spacing: 2px;
+
+            box-shadow:
+                0 0 25px rgba(0, 140, 255, 0.20);
         }
 
-        /* Fade Up for Tagline */
+        h1 {
+            font-size: clamp(38px, 7vw, 72px);
+
+            line-height: 1.05;
+
+            font-weight: 900;
+
+            letter-spacing: -2px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #ffffff,
+                    #8bdcff,
+                    #ffffff
+                );
+
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            margin-top: 18px;
+
+            font-size: clamp(17px, 3vw, 24px);
+
+            font-weight: 600;
+
+            color: #d9efff;
+        }
+
+        .description {
+            max-width: 680px;
+
+            margin: 20px auto 0;
+
+            color: #c5d8e8;
+
+            font-size: 15px;
+
+            line-height: 1.7;
+        }
+
+        .divider {
+            width: 100px;
+            height: 4px;
+
+            margin: 30px auto;
+
+            border-radius: 50px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    #55c9ff,
+                    transparent
+                );
+        }
+
+        .event-section {
+            margin-top: 30px;
+        }
+
+        .event-label {
+            margin-bottom: 14px;
+
+            color: #b9d5e8;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            letter-spacing: 3px;
+
+            text-transform: uppercase;
+        }
+
+        .teacher-btn {
+            position: relative;
+
+            display: inline-flex;
+
+            align-items: center;
+            justify-content: center;
+
+            gap: 12px;
+
+            min-width: 240px;
+
+            padding: 16px 30px;
+
+            color: #ffffff;
+
+            text-decoration: none;
+
+            font-size: 18px;
+
+            font-weight: 800;
+
+            border-radius: 16px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #087cff,
+                    #00baff
+                );
+
+            border: 1px solid rgba(255, 255, 255, 0.35);
+
+            box-shadow:
+                0 15px 35px rgba(0, 120, 255, 0.35),
+                inset 0 1px 0 rgba(255, 255, 255, 0.35);
+
+            overflow: hidden;
+
+            transition: all 0.3s ease;
+        }
+
+        .teacher-btn::before {
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            left: -130%;
+
+            width: 80%;
+            height: 100%;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.40),
+                    transparent
+                );
+
+            transform: skewX(-20deg);
+
+            transition: 0.7s;
+        }
+
+        .teacher-btn:hover::before {
+            left: 140%;
+        }
+
+        .teacher-btn:hover {
+            transform: translateY(-5px) scale(1.03);
+
+            box-shadow:
+                0 20px 45px rgba(0, 150, 255, 0.45),
+                inset 0 1px 0 rgba(255, 255, 255, 0.45);
+        }
+
+        .teacher-btn:active {
+            transform: scale(0.97);
+        }
+
+        .arrow {
+            font-size: 22px;
+
+            transition: transform 0.3s ease;
+        }
+
+        .teacher-btn:hover .arrow {
+            transform: translateX(5px);
+        }
+
+        footer {
+            margin-top: 38px;
+
+            color: #91aabd;
+
+            font-size: 13px;
+
+            line-height: 1.7;
+        }
+
+        footer strong {
+            color: #d9efff;
+        }
+
         @keyframes fadeUp {
-            0% { opacity: 0; transform: translateY(20px); filter: blur(10px); }
-            100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+            from {
+                opacity: 0;
+                transform: translateY(35px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        /* General Fade In */
-        @keyframes fadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
-        }
+        @media (max-width: 600px) {
 
-        /* Pulse Text for Loader */
-        @keyframes pulseText {
-            0% { opacity: 0.6; text-shadow: none; }
-            100% { opacity: 1; text-shadow: 0 0 10px var(--neon-cyan); }
-        }
+            .container {
+                padding: 15px;
+            }
 
-        /* Progress Bar Fill */
-        @keyframes fillProgress {
-            0% { width: 0%; }
-            20% { width: 15%; }
-            50% { width: 60%; }
-            80% { width: 85%; }
-            100% { width: 100%; box-shadow: 0 0 30px var(--neon-cyan), 0 0 60px var(--text-main); }
-        }
+            .hero {
+                padding: 40px 18px;
 
-        /* The Climactic Warp Explosion */
-        @keyframes warpExplosion {
-            0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
-            50% { opacity: 1; }
-            100% { transform: translate(-50%, -50%) scale(100); opacity: 1; }
-        }
+                border-radius: 24px;
+            }
 
-        /* Final White Out for Smooth JS Redirect Transition */
-        @keyframes whiteOutFinal {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
-        }
+            h1 {
+                font-size: 42px;
 
-        /* Responsive height adjustments for smaller devices */
-        @media (max-height: 600px) {
-            .boot-sequence { bottom: 5%; }
-            .top-text { margin-bottom: 1rem; }
-            .tagline { margin-top: 1rem; }
+                letter-spacing: -1px;
+            }
+
+            .subtitle {
+                font-size: 17px;
+            }
+
+            .description {
+                font-size: 14px;
+            }
+
+            .teacher-btn {
+                width: 100%;
+
+                max-width: 300px;
+
+                padding: 15px 20px;
+
+                font-size: 17px;
+            }
         }
     </style>
 </head>
+
 <body>
 
-    <!-- Ambient Space Background Layer -->
-    <div class="ambient-bg"></div>
-    
-    <!-- 3D Cyber Grid Floor Layer -->
-    <div class="cyber-grid-wrapper">
-        <div class="cyber-grid"></div>
-    </div>
+    <main class="container">
 
-    <!-- Floating Glowing Orbs -->
-    <div class="orbs-container">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-        <div class="orb orb-3"></div>
-    </div>
+        <section class="hero">
 
-    <!-- Cinematic Scanline Overlay -->
-    <div class="scanlines"></div>
-
-    <!-- Main Content -->
-    <div class="ui-container">
-        
-        <!-- Top Institution Identifier -->
-        <div class="top-text">Government Polytechnic</div>
-        
-        <!-- Main 3D Animated Title -->
-        <h1 class="main-title">
-            <span class="char">G</span>
-            <span class="char">P</span>
-            <span class="spacer">&nbsp;</span>
-            <span class="char">B</span>
-            <span class="char">A</span>
-            <span class="char">N</span>
-            <span class="char">K</span>
-            <span class="char">A</span>
-        </h1>
-        
-        <!-- Tagline below Title -->
-        <div class="tagline">ENGINEERING &bull; EDUCATION &bull; INNOVATION</div>
-
-        <!-- The Boot Sequence Loader (Fills over 4s) -->
-        <div class="boot-sequence">
-            <div class="boot-text">Establishing Secure Tunnel...</div>
-            <div class="progress-track">
-                <div class="progress-bar"></div>
+            <div class="tag">
+                GOVERNMENT POLYTECHNIC • BANKA
             </div>
-        </div>
 
-    </div>
+            <h1>
+                Government<br>
+                Polytechnic Banka
+            </h1>
 
-    <!-- Climactic Flash Elements -->
-    <div class="warp-flash"></div>
-    <div class="white-out"></div>
+            <p class="subtitle">
+                Education • Technology • Innovation • Excellence
+            </p>
 
-    <!-- MINIMAL JS: Strictly for Redirect Logic -->
-    <script>
-        // Redirect precisely at 8 seconds after the CSS white-out animation triggers
-        document.addEventListener("DOMContentLoaded", () => {
-            setTimeout(() => {
-                // Perform the final redirect
-                window.location.href = "https://www.gpbanka.ac.in";
-            }, 8000); // 8000ms = 8 seconds
-        });
-    </script>
+            <div class="divider"></div>
+
+            <p class="description">
+                Welcome to Government Polytechnic Banka.
+                Empowering students with quality technical education,
+                practical knowledge, skills and opportunities for a
+                brighter future.
+            </p>
+
+            <div class="event-section">
+
+                <div class="event-label">
+                    Special Event
+                </div>
+
+                <a href="Teacher Day.html" class="teacher-btn">
+                    <span>🍎</span>
+                    <span>Teacher Day</span>
+                    <span class="arrow">→</span>
+                </a>
+
+            </div>
+
+            <footer>
+                © 2026 <strong>Government Polytechnic Banka</strong>
+                <br>
+                Designed for Students
+            </footer>
+
+        </section>
+
+    </main>
+
 </body>
 </html>
