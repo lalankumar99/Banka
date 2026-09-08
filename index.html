@@ -13,10 +13,6 @@
             box-sizing: border-box;
         }
 
-        html {
-            scroll-behavior: smooth;
-        }
-
         body {
             min-height: 100vh;
             font-family: Arial, Helvetica, sans-serif;
@@ -25,10 +21,10 @@
 
             background:
                 linear-gradient(
-                    rgba(0, 8, 20, 0.72),
-                    rgba(0, 8, 20, 0.85)
+                    rgba(0, 8, 20, 0.68),
+                    rgba(0, 8, 20, 0.82)
                 ),
-                url("GP Banka.png");
+                url("gp_banka.png");
 
             background-size: cover;
             background-position: center;
@@ -36,28 +32,12 @@
             background-attachment: fixed;
         }
 
-        body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-
-            background:
-                radial-gradient(
-                    circle at top,
-                    rgba(0, 160, 255, 0.20),
-                    transparent 45%
-                );
-
-            pointer-events: none;
-            z-index: -1;
-        }
-
         .container {
             min-height: 100vh;
 
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
 
             padding: 20px;
         }
@@ -70,7 +50,7 @@
 
             text-align: center;
 
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.09);
 
             border: 1px solid rgba(255, 255, 255, 0.22);
 
@@ -80,10 +60,10 @@
             -webkit-backdrop-filter: blur(14px);
 
             box-shadow:
-                0 30px 70px rgba(0, 0, 0, 0.50),
+                0 30px 70px rgba(0, 0, 0, 0.5),
                 inset 0 1px 0 rgba(255, 255, 255, 0.15);
 
-            animation: fadeUp 1s ease;
+            animation: fadeup 1s ease;
         }
 
         .tag {
@@ -104,9 +84,6 @@
             font-weight: 700;
 
             letter-spacing: 2px;
-
-            box-shadow:
-                0 0 25px rgba(0, 140, 255, 0.20);
         }
 
         h1 {
@@ -140,18 +117,6 @@
             color: #d9efff;
         }
 
-        .description {
-            max-width: 680px;
-
-            margin: 20px auto 0;
-
-            color: #c5d8e8;
-
-            font-size: 15px;
-
-            line-height: 1.7;
-        }
-
         .divider {
             width: 100px;
             height: 4px;
@@ -169,8 +134,20 @@
                 );
         }
 
+        .description {
+            max-width: 680px;
+
+            margin: 0 auto;
+
+            color: #c5d8e8;
+
+            font-size: 15px;
+
+            line-height: 1.7;
+        }
+
         .event-section {
-            margin-top: 30px;
+            margin-top: 32px;
         }
 
         .event-label {
@@ -226,7 +203,7 @@
 
             overflow: hidden;
 
-            transition: all 0.3s ease;
+            transition: 0.3s ease;
         }
 
         .teacher-btn::before {
@@ -244,7 +221,7 @@
                 linear-gradient(
                     90deg,
                     transparent,
-                    rgba(255, 255, 255, 0.40),
+                    rgba(255, 255, 255, 0.4),
                     transparent
                 );
 
@@ -293,7 +270,7 @@
             color: #d9efff;
         }
 
-        @keyframes fadeUp {
+        @keyframes fadeup {
             from {
                 opacity: 0;
                 transform: translateY(35px);
@@ -378,7 +355,7 @@
                     Special Event
                 </div>
 
-                <a href="Teacher Day.html" class="teacher-btn">
+                <a href="teacher_day.html" class="teacher-btn">
                     <span>🍎</span>
                     <span>Teacher Day</span>
                     <span class="arrow">→</span>
