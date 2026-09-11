@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Printing Industrial Training Presentation Maker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        :root {
+            --bg-dark: #0A111D;
+            --grid-line: rgba(0, 229, 255, 0.05);
+            --tech-cyan: #00E5FF;
+            --tech-cyan-dark: #0097A7;
+            --text-main: #F8FAFC;
+            --text-muted: #94A3B8;
+        }
+
+        body {
+            background-color: #050911;
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Engineering CAD Background Grid */
+        .cad-grid {
+            background-color: var(--bg-dark);
+            background-image: 
+                linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+                linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+            background-size: 20mm 20mm;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Exact A4 Portrait Dimensions (210mm x 297mm) */
+        .a4-page {
+            width: 210mm;
+            height: 297mm;
+            min-width: 210mm;
+            min-height: 297mm;
+            max-width: 210mm;
+            max-height: 297mm;
+            position: relative;
+            margin: 0 auto 30px auto;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(0, 229, 255, 0.15);
+            page-break-after: always;
+            break-after: page;
+        }
+
+        /* Technical Corner Borders */
+        .cad-corner-tl {
+            position: absolute;
+            top: 8mm;
+            left: 8mm;
+            width: 15mm;
+            height: 15mm;
+            border-top: 2px solid var(--tech-cyan);
+            border-left: 2px solid var(--tech-cyan);
+            pointer-events: none;
+        }
+        .cad-corner-br {
+            position: absolute;
+            bottom: 8mm;
+            right: 8mm;
+            width: 15mm;
+            height: 15mm;
+            border-bottom: 2px solid var(--tech-cyan);
+            border-right: 2px solid var(--tech-cyan);
+            pointer-events: none;
+        }
+
+        /* Top Cyan Accent Strip */
+        .top-accent {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #00E5FF, #0077b6, #00E5FF);
+        }
+
+        /* --- EDITABLE STYLES --- */
+        [contenteditable="true"] {
+            outline: none;
+            transition: all 0.2s ease;
+            border-bottom: 1px dashed transparent;
+            padding: 2px 4px;
+            margin: -2px -4px;
+            border-radius: 4px;
+        }
+        [contenteditable="true"]:hover {
+            border-bottom: 1px dashed rgba(0, 229, 255, 0.5);
+            background-color: rgba(255, 255, 255, 0.03);
+            cursor: text;
+        }
+        [contenteditable="true"]:focus {
+            border-bottom: 1px solid #00E5FF;
+            background-color: rgba(0, 229, 255, 0.05);
+        }
+        
+        /* Auto-numbering for editable Index list */
+        ol.index-list {
+            counter-reset: index-counter;
+            padding-left: 0;
+            list-style: none;
+        }
+        ol.index-list li {
+            counter-increment: index-counter;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+            font-size: 1.25rem; /* text-xl */
+            color: #e2e8f0; /* text-slate-200 */
+            font-weight: 500;
+        }
+        ol.index-list li::before {
+            content: counter(index-counter, decimal-leading-zero);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 0.25rem;
+            background-color: rgba(8, 51, 68, 0.7);
+            border: 1px solid rgba(6, 182, 212, 0.4);
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--tech-cyan);
+            font-size: 0.75rem;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        /* Custom square bullets for editable lists */
+        ul.bullet-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        ul.bullet-list li {
+            position: relative;
+            padding-left: 1.75rem;
+            margin-bottom: 1rem;
+            color: #e2e8f0;
+        }
+        ul.bullet-list li::before {
+            content: "■";
+            position: absolute;
+            left: 0;
+            top: 0.2rem;
+            color: var(--tech-cyan);
+            font-size: 0.875rem;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #070d18;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00E5FF;
+        }
+
+        /* PRINT MEDIA QUERY FOR HIGH RESOLUTION PDF EXPORT */
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 0;
+            }
+            body {
+                background: #0A111D !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            /* Hide edit outlines on print */
+            [contenteditable="true"] {
+                border: none !important;
+                background: transparent !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            .print-container {
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            .a4-page {
+                box-shadow: none !important;
+                margin: 0 !important;
+                border: none !important;
+                width: 210mm !important;
+                height: 297mm !important;
+                page-break-after: always !important;
+                break-after: page !important;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+<header class="no-print sticky top-0 z-50 bg-[#070E1A]/95 backdrop-blur-md border-b border-cyan-500/20 px-4 py-3 shadow-xl">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+        <!-- Title and Logo -->
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-cyan-950/80 border border-cyan-400 flex items-center justify-center text-cyan-400">
+                <i class="fa-solid fa-cube text-lg"></i>
+            </div>
+            <div>
+                <h1 class="font-bold text-sm md:text-base text-white tracking-wide">3D Printing Industrial Training Presentation Maker</h1>
+                <p class="text-xs text-cyan-400/80">
+                    <i class="fa-solid fa-pen-to-square"></i> Click any text on the pages below to edit or add new lines
+                </p>
+            </div>
+        </div>
+
+        <!-- Quick Editing Inputs in Header -->
+        <div class="flex flex-wrap items-center gap-2 md:gap-4 text-xs">
+            <div class="flex items-center gap-1.5 bg-slate-900/90 px-2.5 py-1.5 rounded-md border border-slate-700">
+                <span class="text-slate-400">Name:</span>
+                <input id="headerNameInput" type="text" value="Lalan Kumar" 
+                    class="bg-transparent text-cyan-300 font-semibold focus:outline-none w-28 md:w-36" 
+                    placeholder="Enter Name" />
+            </div>
+
+            <div class="flex items-center gap-1.5 bg-slate-900/90 px-2.5 py-1.5 rounded-md border border-slate-700">
+                <span class="text-slate-400">College:</span>
+                <input id="headerCollegeInput" type="text" value="Government Polytechnic Banka" 
+                    class="bg-transparent text-cyan-300 font-semibold focus:outline-none w-36 md:w-56" 
+                    placeholder="Enter College Name" />
+            </div>
+
+            <!-- Add Cover Page Shortcut (New First Page) -->
+            <label class="cursor-pointer bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white border border-emerald-400/50 px-3 py-1.5 rounded-md flex items-center gap-1.5 transition shadow-lg shadow-emerald-500/20 font-medium">
+                <i class="fa-solid fa-image"></i>
+                <span>Add Cover Page</span>
+                <input type="file" id="coverInputGlobal" accept="image/*" class="hidden">
+            </label>
+
+            <!-- Upload Shortcuts -->
+            <label class="cursor-pointer bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-600 px-3 py-1.5 rounded-md flex items-center gap-1.5 transition">
+                <i class="fa-solid fa-file-arrow-up text-cyan-400"></i>
+                <span>Upload Cert</span>
+                <input type="file" id="certInputGlobal" accept="image/*" class="hidden">
+            </label>
+
+            <label class="cursor-pointer bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-600 px-3 py-1.5 rounded-md flex items-center gap-1.5 transition">
+                <i class="fa-solid fa-file-arrow-up text-cyan-400"></i>
+                <span>Upload NOC</span>
+                <input type="file" id="nocInputGlobal" accept="image/*" class="hidden">
+            </label>
+
+            <!-- Download Button -->
+            <button onclick="triggerPrintPDF()" class="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold px-4 py-2 rounded-md flex items-center gap-2 shadow-lg shadow-cyan-500/20 transition-all hover:scale-[1.02] active:scale-95">
+                <i class="fa-solid fa-file-pdf text-sm"></i>
+                <span class="text-sm">Download PDF</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<main class="print-container py-8 px-2 md:px-0 flex flex-col items-center">
+
+    <!-- PAGE 0: DYNAMIC COVER PAGE (Initially Hidden) -->
+    <section class="a4-page hidden bg-[#050911] justify-center items-center relative overflow-hidden" id="pageCover">
+        <!-- Delete Button for Cover Page (Hidden on print) -->
+        <button onclick="removeCoverPage()" class="no-print absolute top-6 right-6 bg-rose-900/90 hover:bg-rose-700 text-white font-bold px-4 py-2 rounded-lg text-sm shadow-xl flex items-center gap-2 z-50 transition border border-rose-500/30">
+            <i class="fa-solid fa-trash"></i> Remove Cover
+        </button>
+        <!-- Full Cover Image -->
+        <img id="coverImageDisplay" src="" alt="Cover Page" class="w-full h-full object-contain" />
+    </section>
+
+    <!-- PAGE 1: TITLE -->
+    <section class="a4-page cad-grid p-14 justify-between" id="page1">
+        <div class="top-accent"></div>
+        <div class="cad-corner-tl"></div>
+        <div class="cad-corner-br"></div>
+
+        <!-- Technical Header Info -->
+        <div class="flex justify-between items-center text-[10px] text-cyan-400/60 font-mono tracking-widest uppercase">
+            <span>[ CAD-AM // SPEC-2026 ]</span>
+            <span>SYSTEM READY • LAYER RES: 0.12mm</span>
+        </div>
+
+        <!-- Center Content -->
+        <div class="flex flex-col items-center text-center my-auto">
+            <span class="text-slate-400 uppercase tracking-[0.3em] font-semibold text-sm mb-4" contenteditable="true">
+                INDUSTRIAL TRAINING PRESENTATION
+            </span>
+
+            <div class="w-20 h-1 bg-cyan-400 mb-8 rounded-full"></div>
+
+            <h1 class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-cyan-400 tracking-tight leading-tight mb-8" contenteditable="true">
+                3D PRINTING &amp;<br>ADDITIVE MANUFACTURING
+            </h1>
+
+            <!-- 3D Printer Extruder Isometric Graphic -->
+            <div class="relative my-6 opacity-85">
+                <svg width="140" height="90" viewBox="0 0 140 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <polygon points="70,10 110,32 70,54 30,32" fill="#00E5FF" fill-opacity="0.15" stroke="#00E5FF" stroke-width="1.5"/>
+                    <polygon points="70,25 110,47 70,69 30,47" fill="#00E5FF" fill-opacity="0.25" stroke="#00E5FF" stroke-width="1.5"/>
+                    <polygon points="70,40 110,62 70,84 30,62" fill="#00E5FF" fill-opacity="0.4" stroke="#00E5FF" stroke-width="2"/>
+                    <!-- Nozzle -->
+                    <line x1="70" y1="0" x2="70" y2="28" stroke="#00E5FF" stroke-width="2" stroke-dasharray="3 3"/>
+                    <circle cx="70" cy="30" r="3" fill="#00E5FF" />
+                </svg>
+            </div>
+
+            <!-- Divider with coordinates -->
+            <div class="flex items-center gap-3 w-64 my-6">
+                <div class="h-[1px] bg-gradient-to-r from-transparent via-cyan-500 to-transparent flex-1"></div>
+                <div class="w-2 h-2 rounded-full border border-cyan-400 bg-slate-900"></div>
+                <div class="h-[1px] bg-gradient-to-r from-transparent via-cyan-500 to-transparent flex-1"></div>
+            </div>
+
+            <!-- Presenter Details (Editable in real-time) -->
+            <div class="mt-4">
+                <p class="text-slate-400 text-sm font-medium tracking-wide">Presented By:</p>
+                <div class="group relative inline-block mt-1">
+                    <h2 id="displayPresenterName" contenteditable="true" class="text-2xl font-bold text-white tracking-wide transition cursor-text px-2 py-0.5 min-w-[150px]" title="Click to edit">
+                        Lalan Kumar
+                    </h2>
+                </div>
+                
+                <div class="mt-2">
+                    <p id="displayCollegeName" contenteditable="true" class="text-sm text-cyan-300/90 font-medium tracking-wide transition cursor-text px-2 py-0.5 inline-block min-w-[200px]" title="Click to edit">
+                        Government Polytechnic Banka
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Technical Footer -->
+        <div class="flex justify-between items-center text-[10px] text-slate-500 font-mono border-t border-slate-800 pt-3">
+            <span>PROJECT ID: AM-TRAIN-89</span>
+            <span class="text-cyan-400/80">PAGE 01</span>
+        </div>
+    </section>
+
+    <!-- PAGE 2: CONTENT -->
+    <section class="a4-page cad-grid p-14 justify-between" id="page2">
+        <div class="top-accent"></div>
+        <div class="cad-corner-tl"></div>
+        <div class="cad-corner-br"></div>
+
+        <div>
+            <!-- Section Header -->
+            <div class="mt-4 mb-10">
+                <h2 class="text-3xl font-bold text-cyan-400 tracking-wider" contenteditable="true">CONTENT</h2>
+                <div class="w-full h-[1px] bg-cyan-900 mt-3 relative">
+                    <div class="w-24 h-[2px] bg-cyan-400 absolute left-0 top-0"></div>
+                </div>
+            </div>
+
+            <!-- Content Items List (Editable - hit enter to add new) -->
+            <div class="pl-2 max-w-lg mt-8">
+                <ol class="index-list" contenteditable="true">
+                    <li>Certificate</li>
+                    <li>NOC</li>
+                    <li>Acknowledgement</li>
+                    <li>Introduction</li>
+                    <li>Work Performed</li>
+                    <li>Learning Outcomes</li>
+                    <li>Conclusion</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="flex justify-between items-center text-[10px] text-slate-500 font-mono border-t border-slate-800 pt-3">
+            <span>INDEX // OVERVIEW</span>
+            <span class="text-cyan-400/80">PAGE 02</span>
+        </div>
+    </section>
+
+    <!-- PAGE 3: CERTIFICATE -->
+    <section class="a4-page cad-grid p-14 justify-between" id="page3">
+        <div class="top-accent"></div>
+        <div class="cad-corner-tl"></div>
+        <div class="cad-corner-br"></div>
+
+        <div class="flex-1 flex flex-col">
+            <!-- Header -->
+            <div class="mt-4 mb-6">
+                <h2 class="text-3xl font-bold text-cyan-400 tracking-wider" contenteditable="true">CERTIFICATE</h2>
+                <div class="w-full h-[1px] bg-cyan-900 mt-3 relative">
+                    <div class="w-24 h-[2px] bg-cyan-400 absolute left-0 top-0"></div>
+                </div>
+            </div>
+
+            <!-- Dynamic Certificate Placement Area -->
+            <div class="flex-1 w-full flex flex-col items-center justify-center relative my-2">
+                <!-- Dropzone / Empty State Placeholder -->
+                <div id="certPlaceholder" class="w-full h-full min-h-[170mm] rounded-xl border-2 border-dashed border-cyan-500/40 bg-slate-900/40 hover:bg-slate-900/60 transition flex flex-col items-center justify-center p-6 text-center cursor-pointer group">
+                    <div class="w-16 h-16 rounded-full bg-cyan-950/80 border border-cyan-400/50 flex items-center justify-center text-cyan-400 mb-4 group-hover:scale-110 transition duration-300 no-print">
+                        <i class="fa-solid fa-award text-2xl"></i>
+                    </div>
+                    <p class="text-lg text-slate-300 font-medium tracking-wide">
+                        Original Certificate will be inserted here.
+                    </p>
+                    <p class="text-xs text-cyan-400/80 mt-2 font-mono no-print">
+                        <i class="fa-solid fa-cloud-arrow-up mr-1"></i> Click to upload Certificate image (JPG, PNG)
+                    </p>
+                </div>
+
+                <!-- Preview Image (Auto-fit, respects exact A4 proportions without clipping) -->
+                <div id="certPreviewContainer" class="hidden w-full h-full min-h-[170mm] flex items-center justify-center relative">
+                    <img id="certImageDisplay" src="" alt="Certificate" class="max-h-[185mm] max-w-full object-contain rounded-lg shadow-2xl border border-cyan-500/30" />
+                    <!-- Action buttons (Hidden in Print) -->
+                    <div class="no-print absolute top-3 right-3 flex items-center gap-2">
+                        <label class="bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold px-3 py-1.5 rounded text-xs cursor-pointer shadow flex items-center gap-1">
+                            <i class="fa-solid fa-arrows-rotate"></i> Replace
+                            <input type="file" id="certInputInline" accept="image/*" class="hidden">
+                        </label>
+                        <button onclick="removeCertificateImage()" class="bg-rose-900/80 hover:bg-rose-800 text-white font-bold px-3 py-1.5 rounded text-xs shadow flex items-center gap-1">
+                            <i class="fa-solid fa-trash"></i> Remove
+                        </button>
+                    </div>
+                </div>
+
+                <input type="file" id="certFileDrop" accept="image/*" class="hidden">
+            </div>
+        </div>
+
+        <div class="flex justify-between items-center text-[10px] text-slate-500 font-mono border-t border-slate-800 pt-3">
+            <span>DOCUMENT VERIFICATION</span>
+            <span class="text-cyan-400/80">PAGE 03</span>
+        </div>
+    </section>
+
+    <!-- PAGE 4: NOC -->
+    <section class="a4-page cad-grid p-14 justify-between" id="page4">
+        <div class="top-accent"></div>
+        <div class="cad-corner-tl"></div>
+        <div class="cad-corner-br"></div>
+
+        <div class="flex-1 flex flex-col">
+            <!-- Header -->
+            <div class="mt-4 mb-6">
+                <h2 class="text-3xl font-bold text-cyan-400 tracking-wider" contenteditable="true">NO OBJECTION CERTIFICATE</h2>
+                <div class="w-full h-[1px] bg-cyan-900 mt-3 relative">
+                    <div class="w-24 h-[2px] bg-cyan-400 absolute left-0 top-0"></div>
+                </div>
+            </div>
+
+            <!-- Dynamic NOC Placement Area -->
+            <div class="flex-1 w-full flex flex-col items-center justify-center relative my-2">
+                <!-- Dropzone / Empty State Placeholder -->
+                <div id="nocPlaceholder" class="w-full h-full min-h-[170mm] rounded-xl border-2 border-dashed border-cyan-500/40 bg-slate-900/40 hover:bg-slate-900/60 transition flex flex-col items-center justify-center p-6 text-center cursor-pointer group">
+                    <div class="w-16 h-16 rounded-full bg-cyan-950/80 border border-cyan-400/50 flex items-center justify-center text-cyan-400 mb-4 group-hover:scale-110 transition duration-300 no-print">
+                        <i class="fa-solid fa-file-contract text-2xl"></i>
+                    </div>
+                    <p class="text-lg text-slate-300 font-medium tracking-wide">
+                        Original NOC will be inserted here.
+                    </p>
+                    <p class="text-xs text-cyan-400/80 mt-2 font-mono no-print">
+                        <i class="fa-solid fa-cloud-arrow-up mr-1"></i> Click to upload NOC image (JPG, PNG)
+                    </p>
+                </div>
+
+                <!-- Preview Image (Auto-fit) -->
+                <div id="nocPreviewContainer" class="hidden w-full h-full min-h-[170mm] flex items-center justify-center relative">
+                    <img id="nocImageDisplay" src="" alt="NOC" class="max-h-[185mm] max-w-full object-contain rounded-lg shadow-2xl border border-cyan-500/30" />
+                    <!-- Action buttons (Hidden in Print) -->
+                    <div class="no-print absolute top-3 right-3 flex items-center gap-2">
+                        <label class="bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold px-3 py-1.5 rounded text-xs cursor-pointer shadow flex items-center gap-1">
+                            <i class="fa-solid fa-arrows-rotate"></i> Replace
+                            <input type="file" id="nocInputInline" accept="image/*" class="hidden">
+                        </label>
+                        <button onclick="removeNocImage()" class="bg-rose-900/80 hover:bg-rose-800 text-white font-bold px-3 py-1.5 rounded text-xs shadow flex items-center gap-1">
+                            <i class="fa-solid fa-trash"></i> Remove
+                        </button>
+                    </div>
+                </div>
+
+                <input type="file" id="nocFileDrop" accept="image/*" class="hidden">
+            </div>
+        </div>
+
+        <div class="flex justify-between items-center text-[10px] text-slate-500 font-mono border-t border-slate-800 pt-3">
+            <span>INSTITUTIONAL CLEARANCE</span>
+            <span class="text-cyan-400/80">PAGE 04</span>
+        </div>
+    </section>
+
+    <!-- PAGE 5: ACKNOWLEDGEMENT -->
+    <section class="a4-page cad-grid p-14 justify-between" id="page5">
+        <div class="top-accent"></div>
+        <div class="cad-corner-tl"></div>
+        <div class="cad-corner-br"></div>
+
+        <div>
+            <div class="mt-4 mb-12">
+                <h2 class="text-3xl font-bold text-cyan-400 tracking-wider" contenteditable="true">ACKNOWLEDGEMENT</h2>
+                <div class="w-full h-[1px] bg-cyan-900 mt-3 relative">
+                    <div class="w-24 h-[2px] bg-cyan-400 absolute left-0 top-0"></div>
+                </div>
+            </div>
+
+            <div class="text-xl text-slate-200 leading-relaxed space-y-8 pr-6" contenteditable="true">
+                <p>
+                    I sincerely thank C-DAC for providing me the opportunity to attend the 3D Printing and Additive Manufacturing Training Program.
+                </p>
+                <p>
+                    I am grateful to the trainers and coordinators for their guidance and support during the training.
+                </p>
+            </div>
+        </div>
+
+        <div class="flex justify-between items-center text-[10px] text-slate-500 font-mono border-t border-slate-800 pt-3">
+            <span>FORMAL APPRECIATION</span>
+            <span class="text-cyan-400/80">PAGE 05</span>
+        </div>
+    </section>
+
+    <!-- PAGE 6: INTRODUCTION -->
+    <section class="a4-page cad-grid p-14 justify-between" id="page6">
+        <div class="top-accent"></div>
+        <div class="cad-corner-tl"></div>
+        <div class="cad-corner-br"></div>
+
+        <div>
+            <div class="mt-4 mb-12">
+                <h2 class="text-3xl font-bold text-cyan-400 tracking-wider" contenteditable="true">INTRODUCTION</h2>
+                <div class="w-full h-[1px] bg-cyan-900 mt-3 relative">
+                    <div class="w-24 h-[2px] bg-cyan-400 absolute left-0 top-0"></div>
+                </div>
+            </div>
+
+            <div class="text-xl text-slate-200 leading-relaxed space-y-8 pr-6" contenteditable="true">
+                <p>
+                    3D Printing, also known as Additive Manufacturing, is a process of creating three-dimensional objects by adding material layer by layer from a digital model.
+                </p>
+                <p>
+                    The training introduced us to basic concepts of CAD design, STL files, slicing, 3D printing and post-processing.
+                </p>
+            </div>
+        </div>
+
+        <div class="flex justify-between items-center text-[10px] text-slate-500 font-mono border-t border-slate-800 pt-3">
+            <span>DOMAIN FOUNDATIONS</span>
+            <span class="text-cyan-400/80">PAGE 06</span>
+        </div>
+    </section>
+
+    <!-- PAGE 7: WORK PERFORMED -->
+    <section class="a4-page cad-grid p-14 justify-between" id="page7">
+        <div class="top-accent"></div>
+        <div class="cad-corner-tl"></div>
+        <div class="cad-corner-br"></div>
+
+        <div>
+            <div class="mt-4 mb-8">
+                <h2 class="text-3xl font-bold text-cyan-400 tracking-wider" contenteditable="true">WORK PERFORMED</h2>
+                <div class="w-full h-[1px] bg-cyan-900 mt-3 relative">
+                    <div class="w-24 h-[2px] bg-cyan-400 absolute left-0 top-0"></div>
+                </div>
+            </div>
+
+            <p class="text-lg text-slate-300 font-medium mb-6" contenteditable="true">
+                During the training, I got basic practical exposure to:
+            </p>
+
+            <ul class="bullet-list text-base md:text-lg" contenteditable="true">
+                <li>3D CAD modelling and part design</li>
+                <li>STL file preparation</li>
+                <li>Slicing process</li>
+                <li>3D printer operation</li>
+                <li>Basic product modelling</li>
+                <li>Nut &amp; Bolt, Gear, Screw Jack and other components</li>
+                <li>Basic understanding of reverse engineering and 3D scanning</li>
+            </ul>
+        </div>
+
+        <div class="flex justify-between items-center text-[10px] text-slate-500 font-mono border-t border-slate-800 pt-3">
+            <span>PRACTICAL MODULES</span>
+            <span class="text-cyan-400/80">PAGE 07</span>
+        </div>
+    </section>
+
+    <!-- PAGE 8: LEARNING OUTCOMES -->
+    <section class="a4-page cad-grid p-14 justify-between" id="page8">
+        <div class="top-accent"></div>
+        <div class="cad-corner-tl"></div>
+        <div class="cad-corner-br"></div>
+
+        <div>
+            <div class="mt-4 mb-8">
+                <h2 class="text-3xl font-bold text-cyan-400 tracking-wider" contenteditable="true">LEARNING OUTCOMES</h2>
+                <div class="w-full h-[1px] bg-cyan-900 mt-3 relative">
+                    <div class="w-24 h-[2px] bg-cyan-400 absolute left-0 top-0"></div>
+                </div>
+            </div>
+
+            <p class="text-lg text-slate-300 font-medium mb-6" contenteditable="true">
+                Through this training, I gained basic knowledge and practical exposure to:
+            </p>
+
+            <ul class="bullet-list text-base md:text-lg" contenteditable="true">
+                <li>Fundamentals of 3D Printing</li>
+                <li>CAD-based 3D modelling</li>
+                <li>STL conversion and slicing</li>
+                <li>Basic 3D printer workflow</li>
+                <li>Product design and prototyping</li>
+                <li>Different Additive Manufacturing techniques</li>
+                <li>Basic concept of reverse engineering and 3D scanning</li>
+            </ul>
+        </div>
+
+        <div class="flex justify-between items-center text-[10px] text-slate-500 font-mono border-t border-slate-800 pt-3">
+            <span>COMPETENCIES ACQUIRED</span>
+            <span class="text-cyan-400/80">PAGE 08</span>
+        </div>
+    </section>
+
+    <!-- PAGE 9: CONCLUSION -->
+    <section class="a4-page cad-grid p-14 justify-between" id="page9">
+        <div class="top-accent"></div>
+        <div class="cad-corner-tl"></div>
+        <div class="cad-corner-br"></div>
+
+        <div>
+            <div class="mt-4 mb-10">
+                <h2 class="text-3xl font-bold text-cyan-400 tracking-wider" contenteditable="true">CONCLUSION</h2>
+                <div class="w-full h-[1px] bg-cyan-900 mt-3 relative">
+                    <div class="w-24 h-[2px] bg-cyan-400 absolute left-0 top-0"></div>
+                </div>
+            </div>
+
+            <div class="text-xl text-slate-200 leading-relaxed space-y-8 pr-6" contenteditable="true">
+                <p>
+                    The training gave me a basic understanding of 3D Printing and Additive Manufacturing.
+                </p>
+                <p>
+                    It provided practical exposure to CAD modelling, slicing, 3D printing and product development and helped me understand the applications of modern manufacturing technology.
+                </p>
+            </div>
+        </div>
+
+        <!-- THANK YOU -->
+        <div class="flex flex-col items-center justify-center my-auto">
+            <h3 class="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-cyan-400 to-blue-500 tracking-widest uppercase" contenteditable="true">
+                THANK YOU
+            </h3>
+            <div class="w-16 h-1 bg-cyan-400 mt-4 rounded-full"></div>
+        </div>
+
+        <div class="flex justify-between items-center text-[10px] text-slate-500 font-mono border-t border-slate-800 pt-3">
+            <span>END OF PRESENTATION</span>
+            <span class="text-cyan-400/80">PAGE 09</span>
+        </div>
+    </section>
+</main>
+
+<div id="toastNotification" class="no-print fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 bg-slate-900 border border-cyan-500/50 text-white px-5 py-3 rounded-lg shadow-2xl flex items-center gap-3">
+    <i id="toastIcon" class="fa-solid fa-circle-check text-cyan-400 text-lg"></i>
+    <span id="toastMessage" class="text-sm font-medium">Ready</span>
+</div>
+
+<script>
+    const headerNameInput = document.getElementById('headerNameInput');
+    const headerCollegeInput = document.getElementById('headerCollegeInput');
+    const displayPresenterName = document.getElementById('displayPresenterName');
+    const displayCollegeName = document.getElementById('displayCollegeName');
+
+    // Sync header inputs with page display
+    headerNameInput.addEventListener('input', (e) => {
+        const val = e.target.value.trim();
+        displayPresenterName.textContent = val || 'Your Name';
+    });
+
+    headerCollegeInput.addEventListener('input', (e) => {
+        const val = e.target.value.trim();
+        displayCollegeName.textContent = val || 'Your College / Polytechnic';
+    });
+
+    // Sync page display back to header inputs (Bi-directional editing)
+    displayPresenterName.addEventListener('input', (e) => {
+        headerNameInput.value = e.target.textContent;
+    });
+
+    displayCollegeName.addEventListener('input', (e) => {
+        headerCollegeInput.value = e.target.textContent;
+    });
+
+    function setupImageUploader(triggerElementId, inputElementId, placeholderId, containerId, imgElementId) {
+        const trigger = document.getElementById(triggerElementId);
+        const input = document.getElementById(inputElementId);
+        const placeholder = document.getElementById(placeholderId);
+        const container = document.getElementById(containerId);
+        const img = document.getElementById(imgElementId);
+
+        if (trigger && input) {
+            trigger.addEventListener('click', () => input.click());
+        }
+
+        if (input) {
+            input.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    if (!file.type.startsWith('image/')) {
+                        showToast('Please select a valid image file (JPG, PNG, WebP)', 'error');
+                        return;
+                    }
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        img.src = event.target.result;
+                        placeholder.classList.add('hidden');
+                        container.classList.remove('hidden');
+                        showToast('Image uploaded and fitted perfectly!', 'success');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+    }
+
+    // Set up Certificate uploads (from page placeholder, header shortcut, or inline replace)
+    setupImageUploader('certPlaceholder', 'certFileDrop', 'certPlaceholder', 'certPreviewContainer', 'certImageDisplay');
+    setupImageUploader(null, 'certInputGlobal', 'certPlaceholder', 'certPreviewContainer', 'certImageDisplay');
+    setupImageUploader(null, 'certInputInline', 'certPlaceholder', 'certPreviewContainer', 'certImageDisplay');
+
+    // Set up NOC uploads (from page placeholder, header shortcut, or inline replace)
+    setupImageUploader('nocPlaceholder', 'nocFileDrop', 'nocPlaceholder', 'nocPreviewContainer', 'nocImageDisplay');
+    setupImageUploader(null, 'nocInputGlobal', 'nocPlaceholder', 'nocPreviewContainer', 'nocImageDisplay');
+    setupImageUploader(null, 'nocInputInline', 'nocPlaceholder', 'nocPreviewContainer', 'nocImageDisplay');
+
+    // Setup Cover Page Upload (New First Page)
+    const coverInputGlobal = document.getElementById('coverInputGlobal');
+    const pageCover = document.getElementById('pageCover');
+    const coverImageDisplay = document.getElementById('coverImageDisplay');
+
+    if (coverInputGlobal) {
+        coverInputGlobal.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                if (!file.type.startsWith('image/')) {
+                    showToast('Please select a valid image file', 'error');
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    coverImageDisplay.src = event.target.result;
+                    pageCover.classList.remove('hidden');
+                    pageCover.classList.add('flex'); // Display as flex box
+                    showToast('Cover page added successfully as Page 1!', 'success');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    // Function to remove the Cover Page
+    window.removeCoverPage = function() {
+        coverImageDisplay.src = '';
+        pageCover.classList.add('hidden');
+        pageCover.classList.remove('flex');
+        coverInputGlobal.value = '';
+        showToast('Cover page removed', 'info');
+    };
+
+    // Remove handlers
+    window.removeCertificateImage = function() {
+        document.getElementById('certImageDisplay').src = '';
+        document.getElementById('certPreviewContainer').classList.add('hidden');
+        document.getElementById('certPlaceholder').classList.remove('hidden');
+        document.getElementById('certFileDrop').value = '';
+        document.getElementById('certInputGlobal').value = '';
+        showToast('Certificate removed', 'info');
+    };
+
+    window.removeNocImage = function() {
+        document.getElementById('nocImageDisplay').src = '';
+        document.getElementById('nocPreviewContainer').classList.add('hidden');
+        document.getElementById('nocPlaceholder').classList.remove('hidden');
+        document.getElementById('nocFileDrop').value = '';
+        document.getElementById('nocInputGlobal').value = '';
+        showToast('NOC removed', 'info');
+    };
+
+    window.triggerPrintPDF = function() {
+        showToast('Opening PDF Print Window... Choose "Save as PDF" & "Background graphics" on.', 'info');
+        setTimeout(() => {
+            window.print();
+        }, 300);
+    };
+
+    // Toast message helper (no alert())
+    function showToast(message, type = 'success') {
+        const toast = document.getElementById('toastNotification');
+        const msg = document.getElementById('toastMessage');
+        const icon = document.getElementById('toastIcon');
+
+        msg.textContent = message;
+
+        if (type === 'error') {
+            icon.className = 'fa-solid fa-circle-exclamation text-rose-400 text-lg';
+            toast.className = 'no-print fixed bottom-6 right-6 z-50 transition-all duration-300 bg-slate-900 border border-rose-500/50 text-white px-5 py-3 rounded-lg shadow-2xl flex items-center gap-3 opacity-100 translate-y-0';
+        } else if (type === 'info') {
+            icon.className = 'fa-solid fa-circle-info text-cyan-400 text-lg';
+            toast.className = 'no-print fixed bottom-6 right-6 z-50 transition-all duration-300 bg-slate-900 border border-cyan-500/50 text-white px-5 py-3 rounded-lg shadow-2xl flex items-center gap-3 opacity-100 translate-y-0';
+        } else {
+            icon.className = 'fa-solid fa-circle-check text-emerald-400 text-lg';
+            toast.className = 'no-print fixed bottom-6 right-6 z-50 transition-all duration-300 bg-slate-900 border border-emerald-500/50 text-white px-5 py-3 rounded-lg shadow-2xl flex items-center gap-3 opacity-100 translate-y-0';
+        }
+
+        setTimeout(() => {
+            toast.classList.add('opacity-0', 'translate-y-24');
+            toast.classList.remove('opacity-100', 'translate-y-0');
+        }, 3500);
+    }
+</script>
+</body>
+</html>
