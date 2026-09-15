@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#050816">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="Electrical Engineering Department - GP BANKA">
+    
+    <title>Electrical Engineering | GP BANKA</title>
+
+    <link rel="apple-touch-icon" href="../logo.png">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-main: #030510;
+            --bg-card: rgba(255, 255, 255, 0.03);
+            --bg-card-hover: rgba(255, 255, 255, 0.06);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(96, 165, 250, 0.4);
+            
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            
+            --accent-blue: #3b82f6;
+            --accent-yellow: #eab308;
+            --gradient-primary: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            --gradient-text: linear-gradient(90deg, #ffffff, #60a5fa, #c084fc);
+            
+            --shadow-card: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-main); color: var(--text-primary);
+            min-height: 100vh; padding-bottom: 90px; overflow-x: hidden; position: relative;
+        }
+
+        /* Ambient Glow & Grid */
+        .ambient-glow { position: fixed; border-radius: 50%; filter: blur(140px); z-index: -2; pointer-events: none; animation: pulseGlow 8s infinite alternate; }
+        .glow-top-left { width: 400px; height: 400px; background: rgba(59, 130, 246, 0.15); top: -150px; left: -150px; }
+        .glow-bottom-right { width: 450px; height: 450px; background: rgba(139, 92, 246, 0.1); bottom: -200px; right: -150px; animation-delay: 2s; }
+        
+        .bg-grid {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background-image: linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 40px 40px; z-index: -3; pointer-events: none;
+        }
+
+        @keyframes pulseGlow { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(1.1); opacity: 1; } }
+
+        /* Header */
+        header {
+            position: sticky; top: 0; z-index: 1000; padding: 15px 5%; display: flex; align-items: center; justify-content: space-between;
+            background: rgba(3, 5, 16, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .back-btn {
+            display: flex; align-items: center; gap: 8px; color: var(--text-secondary); text-decoration: none;
+            font-size: 14px; font-weight: 600; padding: 8px 16px; border-radius: 12px; background: var(--bg-card);
+            border: 1px solid var(--border-color); transition: all 0.3s ease;
+        }
+        .back-btn:hover { color: #fff; background: rgba(255,255,255,0.1); transform: translateX(-3px); }
+
+        .logo-text h2 { font-size: 18px; font-weight: 800; color: var(--text-primary); margin-bottom: 2px; text-align: right; }
+        .logo-text small { color: var(--accent-blue); font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; display: block; text-align: right; }
+
+        /* Department Banner */
+        .dept-banner {
+            max-width: 1200px; margin: 40px auto; padding: 0 5%;
+        }
+        
+        .banner-container {
+            width: 100%; aspect-ratio: 21 / 9; border-radius: 24px; overflow: hidden; position: relative;
+            background: linear-gradient(135deg, rgba(30, 58, 138, 0.2), rgba(17, 24, 39, 0.8));
+            border: 1px solid var(--border-color); display: flex; align-items: flex-end; padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        .banner-bg-img {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;
+            opacity: 0.4; mix-blend-mode: overlay;
+        }
+
+        .banner-content { position: relative; z-index: 1; }
+        .banner-content .tag { 
+            display: inline-block; background: rgba(59, 130, 246, 0.2); color: #93c5fd; padding: 6px 14px; 
+            border-radius: 50px; font-size: 12px; font-weight: 700; border: 1px solid rgba(59, 130, 246, 0.3); margin-bottom: 15px; 
+        }
+        .banner-content h1 { font-size: clamp(32px, 5vw, 56px); font-weight: 800; color: #fff; margin-bottom: 10px; text-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+        .banner-content p { color: #cbd5e1; font-size: 16px; max-width: 600px; line-height: 1.6; }
+
+        /* Faculties Section */
+        .section-container { max-width: 1200px; margin: 0 auto; padding: 60px 5%; }
+        .section-header { margin-bottom: 40px; text-align: center; }
+        .section-header h2 { font-size: 32px; font-weight: 800; background: var(--gradient-text); -webkit-background-clip: text; color: transparent; margin-bottom: 10px; }
+        .section-header p { color: var(--text-secondary); font-size: 15px; }
+
+        .faculty-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px;
+        }
+
+        .faculty-card {
+            background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 24px;
+            padding: 30px; position: relative; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: var(--shadow-card);
+            display: flex; flex-direction: column; align-items: center; text-align: center; overflow: hidden;
+        }
+
+        .faculty-card:hover {
+            transform: translateY(-10px); border-color: var(--border-hover); background: var(--bg-card-hover);
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5), 0 0 20px rgba(59, 130, 246, 0.1) inset;
+        }
+
+        /* HOD Highlight Style */
+        .faculty-card.hod {
+            background: linear-gradient(145deg, rgba(59, 130, 246, 0.05), rgba(139, 92, 246, 0.05));
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+        .faculty-card.hod::before {
+            content: 'HOD'; position: absolute; top: 20px; right: 20px; background: rgba(59, 130, 246, 0.2);
+            color: #93c5fd; font-size: 10px; font-weight: 800; padding: 4px 10px; border-radius: 8px; border: 1px solid rgba(59, 130, 246, 0.4);
+        }
+
+        .profile-img-box {
+            width: 110px; height: 110px; border-radius: 50%; padding: 4px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02));
+            margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1); position: relative;
+        }
+        
+        .faculty-card.hod .profile-img-box { background: var(--gradient-primary); padding: 3px; }
+
+        .profile-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; background: #0f172a; }
+        .img-placeholder { position: absolute; top:0; left:0; width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,0.2); font-size: 40px; }
+
+        .faculty-info h3 { font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 5px; text-transform: capitalize; }
+        .faculty-info .designation { color: var(--accent-blue); font-size: 13px; font-weight: 600; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .contact-details { width: 100%; display: flex; flex-direction: column; gap: 12px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px; }
+        
+        .contact-item {
+            display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--text-secondary);
+            font-size: 13px; font-weight: 500; transition: color 0.3s ease; padding: 8px; border-radius: 12px; background: rgba(0,0,0,0.2); border: 1px solid transparent;
+        }
+        
+        .contact-item:hover { color: #fff; background: rgba(59, 130, 246, 0.1); border-color: rgba(59, 130, 246, 0.2); }
+        .contact-icon { width: 32px; height: 32px; border-radius: 8px; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; font-size: 14px; color: var(--text-primary); }
+        .contact-item:hover .contact-icon { background: var(--accent-blue); color: #fff; }
+        
+        .contact-text { text-align: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+        /* Mobile Nav */
+        .mobile-nav {
+            position: fixed; bottom: 0; left: 0; right: 0; height: 75px; background: rgba(5, 8, 22, 0.85);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-top: 1px solid rgba(255,255,255,0.08);
+            display: none; justify-content: space-around; align-items: center; z-index: 1000; padding-bottom: env(safe-area-inset-bottom);
+        }
+        .mobile-nav a { display: flex; flex-direction: column; align-items: center; gap: 6px; color: var(--text-muted); text-decoration: none; font-size: 10px; font-weight: 600; transition: all 0.3s ease; width: 25%; position: relative; }
+        .nav-img-icon { width: 24px; height: 24px; object-fit: contain; filter: grayscale(100%) opacity(0.6); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .mobile-nav a.active { color: var(--accent-blue); }
+        .mobile-nav a.active .nav-img-icon, .mobile-nav a:hover .nav-img-icon { filter: grayscale(0%) opacity(1); transform: translateY(-4px) scale(1.1); }
+        .mobile-nav a.active::after { content: ''; width: 4px; height: 4px; background: var(--accent-blue); border-radius: 50%; position: absolute; bottom: 8px; box-shadow: 0 0 8px var(--accent-blue); }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-up { animation: slideUp 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; opacity: 0; }
+        .delay-1 { animation-delay: 0.1s; } .delay-2 { animation-delay: 0.2s; } .delay-3 { animation-delay: 0.3s; } .delay-4 { animation-delay: 0.4s; } .delay-5 { animation-delay: 0.5s; }
+
+        @media (max-width: 900px) { .mobile-nav { display: flex; } .banner-container { aspect-ratio: 16/9; padding: 30px; } }
+        @media (max-width: 600px) { .banner-container { aspect-ratio: 1/1; padding: 25px; justify-content: flex-start; flex-direction: column; } .banner-content h1 { font-size: 32px; } .faculty-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <div class="bg-grid"></div>
+    <div class="ambient-glow glow-top-left"></div>
+    <div class="ambient-glow glow-bottom-right"></div>
+
+    <header>
+        <a href="../courses.html" class="back-btn">
+            <span>←</span> Back to Courses
+        </a>
+        <div class="logo-text">
+            <h2>GP BANKA</h2>
+            <small>Student Portal</small>
+        </div>
+    </header>
+
+    <section class="dept-banner">
+        <div class="banner-container animate-up">
+            <!-- Background Banner Image Placeholder -->
+            <img src="../images/electrical_banner.png" alt="Electrical Engg Banner" class="banner-bg-img" onerror="this.style.display='none'">
+            <div class="banner-content">
+                <span class="tag">Branch Code: 111</span>
+                <h1>Electrical Engineering</h1>
+                <p>Empowering the future with innovation in power systems, electronics, and sustainable energy technologies.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-container">
+        <div class="section-header animate-up">
+            <h2>List of Faculties</h2>
+            <p>Meet our experienced and dedicated teaching staff.</p>
+        </div>
+
+        <div class="faculty-grid">
+            
+            <!-- Faculty 1: Rakesh Kumar (HOD) -->
+            <div class="faculty-card hod animate-up delay-1">
+                <div class="profile-img-box">
+                    <div class="img-placeholder">👨‍🏫</div>
+                    <img src="../images/rk.png" alt="Rakesh Kumar" class="profile-img" style="position:relative; z-index:1;" onerror="this.style.opacity='0'">
+                </div>
+                <div class="faculty-info">
+                    <h3>Rakesh Kumar</h3>
+                    <div class="designation">LECTURER Cum Hod</div>
+                </div>
+                <div class="contact-details">
+                    <a href="tel:+919467851185" class="contact-item">
+                        <div class="contact-icon">📞</div>
+                        <div class="contact-text">+91 94678 51185</div>
+                    </a>
+                    <a href="mailto:rakeshkelectrical@gmail.com" class="contact-item">
+                        <div class="contact-icon">✉️</div>
+                        <div class="contact-text">rakeshkelectrical@gmail.com</div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Faculty 2: Gourabh Kumar -->
+            <div class="faculty-card animate-up delay-2">
+                <div class="profile-img-box">
+                    <div class="img-placeholder">👨‍🏫</div>
+                    <img src="../images/gk.png" alt="Gourabh Kumar" class="profile-img" style="position:relative; z-index:1;" onerror="this.style.opacity='0'">
+                </div>
+                <div class="faculty-info">
+                    <h3>Gourabh Kumar</h3>
+                    <div class="designation">Lecturer</div>
+                </div>
+                <div class="contact-details">
+                    <a href="tel:7488597569" class="contact-item">
+                        <div class="contact-icon">📞</div>
+                        <div class="contact-text">7488597569</div>
+                    </a>
+                    <a href="mailto:g4gourabh@gmail.com" class="contact-item">
+                        <div class="contact-icon">✉️</div>
+                        <div class="contact-text">g4gourabh@gmail.com</div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Faculty 3: NEELMANI SAROJ -->
+            <div class="faculty-card animate-up delay-3">
+                <div class="profile-img-box">
+                    <div class="img-placeholder">👨‍🏫</div>
+                    <img src="../images/ns.png" alt="NEELMANI SAROJ" class="profile-img" style="position:relative; z-index:1;" onerror="this.style.opacity='0'">
+                </div>
+                <div class="faculty-info">
+                    <h3>Neelmani Saroj</h3>
+                    <div class="designation">LECTURER (ELECTRICAL ENGG.)</div>
+                </div>
+                <div class="contact-details">
+                    <a href="tel:8969891448" class="contact-item">
+                        <div class="contact-icon">📞</div>
+                        <div class="contact-text">8969891448</div>
+                    </a>
+                    <a href="mailto:saroj.sanny@gmail.com" class="contact-item">
+                        <div class="contact-icon">✉️</div>
+                        <div class="contact-text">saroj.sanny@gmail.com</div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Faculty 4: Md Asif Raza -->
+            <div class="faculty-card animate-up delay-4">
+                <div class="profile-img-box">
+                    <div class="img-placeholder">👨‍🏫</div>
+                    <img src="../images/mar.png" alt="Md Asif Raza" class="profile-img" style="position:relative; z-index:1;" onerror="this.style.opacity='0'">
+                </div>
+                <div class="faculty-info">
+                    <h3>Md Asif Raza</h3>
+                    <div class="designation">Lecturer</div>
+                </div>
+                <div class="contact-details">
+                    <a href="tel:8877171415" class="contact-item">
+                        <div class="contact-icon">📞</div>
+                        <div class="contact-text">8877171415</div>
+                    </a>
+                    <a href="mailto:asif08.dstte@bihar.gov.in" class="contact-item">
+                        <div class="contact-icon">✉️</div>
+                        <div class="contact-text">asif08.dstte@bihar.gov.in</div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Faculty 5: RAJESH KUMAR -->
+            <div class="faculty-card animate-up delay-5">
+                <div class="profile-img-box">
+                    <div class="img-placeholder">👨‍🏫</div>
+                    <img src="../images/rk2.png" alt="Rajesh Kumar" class="profile-img" style="position:relative; z-index:1;" onerror="this.style.opacity='0'">
+                </div>
+                <div class="faculty-info">
+                    <h3>Rajesh Kumar</h3>
+                    <div class="designation">Lecturer</div>
+                </div>
+                <div class="contact-details">
+                    <a href="tel:8294596682" class="contact-item">
+                        <div class="contact-icon">📞</div>
+                        <div class="contact-text">8294596682</div>
+                    </a>
+                    <a href="mailto:rajesh@gmail.com" class="contact-item">
+                        <div class="contact-icon">✉️</div>
+                        <div class="contact-text">rajesh@gmail.com</div>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Mobile Navigation (Paths adjusted to go back to root directory) -->
+    <nav class="mobile-nav">
+        <a href="../index.html">
+            <img src="../home.png" alt="Home" class="nav-img-icon" onerror="this.style.display='none'">
+            <span>Home</span>
+        </a>
+        <a href="../courses.html" class="active">
+            <img src="../courses.png" alt="Courses" class="nav-img-icon" onerror="this.style.display='none'">
+            <span>Courses</span>
+        </a>
+        <a href="../download.html">
+            <img src="../download.png" alt="Download" class="nav-img-icon" onerror="this.style.display='none'">
+            <span>Download</span>
+        </a>
+        <a href="../help.html">
+            <img src="../help.png" alt="Help" class="nav-img-icon" onerror="this.style.display='none'">
+            <span>Help</span>
+        </a>
+    </nav>
+
+</body>
+</html>
