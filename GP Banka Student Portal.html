@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#050816">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="GP BANKA - Unofficial Student Portal for study resources, notes, and internship opportunities.">
+    
+    <title>GP BANKA | Premium Student Portal</title>
+
+    <link id="pwa-manifest" rel="manifest" href="">
+    <link rel="apple-touch-icon" href="logo.png">
+
+    <!-- Google Fonts for Professional Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-main: #030510;
+            --bg-card: rgba(255, 255, 255, 0.04);
+            --bg-card-hover: rgba(255, 255, 255, 0.08);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --border-hover: rgba(96, 165, 250, 0.5);
+            
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --gradient-primary: linear-gradient(135deg, #3b82f6, #8b5cf6, #d946ef);
+            --gradient-text: linear-gradient(90deg, #ffffff, #93c5fd, #d8b4fe);
+            
+            --shadow-primary: 0 10px 30px -10px rgba(59, 130, 246, 0.6);
+            --shadow-card: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding-bottom: 90px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Ambient Glow Effects */
+        .ambient-glow {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(140px);
+            z-index: -2;
+            pointer-events: none;
+            animation: pulseGlow 8s infinite alternate;
+        }
+
+        .glow-top-left {
+            width: 400px;
+            height: 400px;
+            background: rgba(59, 130, 246, 0.2);
+            top: -150px;
+            left: -150px;
+        }
+
+        .glow-bottom-right {
+            width: 450px;
+            height: 450px;
+            background: rgba(139, 92, 246, 0.15);
+            bottom: -200px;
+            right: -150px;
+            animation-delay: 2s;
+        }
+
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image: 
+                linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: -3;
+            pointer-events: none;
+        }
+
+        @keyframes pulseGlow {
+            0% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(1.1); opacity: 1; }
+        }
+
+        /* Header & Navigation */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 15px 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(3, 5, 16, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .logo-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-decoration: none;
+        }
+
+        .logo-img-container {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .logo-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            color: transparent; 
+        }
+
+        .logo-fallback {
+            position: absolute;
+            font-weight: 800;
+            font-size: 16px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            color: transparent;
+            z-index: -1;
+        }
+
+        .logo-text h2 {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--text-primary);
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+        }
+
+        .logo-text small {
+            color: var(--accent-blue);
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: var(--gradient-primary);
+            transition: width 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hamburger Menu Icon */
+        .menu-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            padding: 5px;
+            z-index: 1001;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: var(--text-primary);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle:hover span {
+            background: var(--accent-blue);
+        }
+
+        /* Stylish Side Drawer (Menu) */
+        .drawer-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+
+        .drawer-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .side-drawer {
+            position: fixed;
+            top: 0; right: -320px;
+            width: 300px; height: 100vh;
+            background: rgba(7, 11, 28, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-left: 1px solid var(--border-color);
+            z-index: 2001;
+            padding: 30px 25px;
+            transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1);
+            box-shadow: -15px 0 40px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .side-drawer.open {
+            right: 0;
+        }
+
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .drawer-header h3 {
+            background: var(--gradient-text);
+            -webkit-background-clip: text;
+            color: transparent;
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .close-drawer {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            width: 35px; height: 35px;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .close-drawer:hover {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border-color: rgba(239, 68, 68, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .drawer-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .drawer-nav a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 15px;
+            font-weight: 500;
+            padding: 12px 18px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+            background: transparent;
+            border: 1px solid transparent;
+        }
+
+        .drawer-nav a:hover {
+            color: var(--text-primary);
+            background: rgba(59, 130, 246, 0.08);
+            border-color: rgba(59, 130, 246, 0.2);
+            transform: translateX(5px);
+        }
+
+        .drawer-nav a span {
+            font-size: 18px;
+        }
+
+        /* Hero Section */
+        .hero {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 120px 5% 80px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 20px;
+            border-radius: 50px;
+            color: var(--accent-blue);
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            animation: slideDown 0.6s ease-out forwards;
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        .hero-badge span {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-blue);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent-blue);
+            animation: blink 2s infinite;
+        }
+
+        .hero h1 {
+            font-size: clamp(48px, 8vw, 85px);
+            line-height: 1.1;
+            font-weight: 800;
+            background: var(--gradient-text);
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideUp 0.8s ease-out 0.2s forwards;
+        }
+
+        .hero h3 {
+            font-size: clamp(20px, 4vw, 32px);
+            font-weight: 500;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideUp 0.8s ease-out 0.4s forwards;
+        }
+
+        .hero p {
+            max-width: 700px;
+            color: var(--text-secondary);
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 40px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideUp 0.8s ease-out 0.6s forwards;
+        }
+
+        /* Buttons */
+        .btn-group {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 0.8s forwards;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 16px 32px;
+            border-radius: 16px;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn-primary {
+            color: #fff;
+            background: var(--gradient-primary);
+            box-shadow: var(--shadow-primary);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            z-index: -1;
+            transition: opacity 0.3s ease;
+            opacity: 0;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px -5px rgba(59, 130, 246, 0.6);
+        }
+
+        .btn-primary:hover::before {
+            opacity: 1;
+        }
+
+        .btn-secondary {
+            color: var(--text-primary);
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-card-hover);
+            border-color: rgba(255,255,255,0.2);
+            transform: translateY(-5px);
+        }
+
+        /* Sections & Grids */
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 5%;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-header h2 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: linear-gradient(to right, #fff, #cbd5e1);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .section-header p {
+            color: var(--text-muted);
+            font-size: 15px;
+        }
+
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 30px;
+            text-decoration: none;
+            color: var(--text-primary);
+            position: relative;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: var(--shadow-card);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+            transition: all 0.6s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-12px);
+            border-color: var(--border-hover);
+            background: var(--bg-card-hover);
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.6), 0 0 20px rgba(59, 130, 246, 0.15) inset;
+        }
+
+        .card:hover::before {
+            left: 100%;
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover .card-icon {
+            transform: scale(1.1) rotate(5deg);
+            background: rgba(59, 130, 246, 0.2);
+        }
+
+        .card h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            letter-spacing: 0.3px;
+        }
+
+        .card p {
+            color: var(--text-secondary);
+            font-size: 13px;
+            line-height: 1.6;
+            flex-grow: 1;
+        }
+
+        .card-feature {
+            background: linear-gradient(145deg, rgba(59,130,246,0.1), rgba(139,92,246,0.1));
+            border-color: rgba(139, 92, 246, 0.3);
+        }
+
+        /* Highlight Banner */
+        .highlight-banner {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.15), rgba(124, 58, 237, 0.15));
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 30px;
+            padding: 60px 40px;
+            text-align: center;
+            margin: 40px auto;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(15px);
+        }
+
+        .highlight-banner::after {
+            content: '';
+            position: absolute;
+            top: -50%; right: -50%;
+            width: 100%; height: 200%;
+            background: radial-gradient(circle, rgba(139,92,246,0.2) 0%, transparent 60%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .highlight-banner h2 {
+            font-size: 36px;
+            margin-bottom: 15px;
+            font-weight: 800;
+        }
+
+        .highlight-banner p {
+            color: var(--text-secondary);
+            font-size: 15px;
+            max-width: 600px;
+            margin: 0 auto 30px;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 50px 20px 40px;
+            border-top: 1px solid var(--border-color);
+            background: rgba(3, 5, 16, 0.5);
+        }
+
+        footer h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+
+        footer p {
+            color: var(--text-muted);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .copyright {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            font-size: 12px;
+        }
+
+        /* Mobile Bottom Navigation (4 Items) */
+        .mobile-nav {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            height: 75px;
+            background: rgba(5, 8, 22, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255,255,255,0.08);
+            display: none;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 1000;
+            padding-bottom: env(safe-area-inset-bottom);
+            box-shadow: 0 -5px 25px rgba(0,0,0,0.5);
+        }
+
+        .mobile-nav a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 11px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 25%;
+        }
+
+        .nav-img-icon {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+            filter: grayscale(100%) opacity(0.6);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .mobile-nav a.active {
+            color: var(--accent-blue);
+        }
+
+        .mobile-nav a.active .nav-img-icon,
+        .mobile-nav a:hover .nav-img-icon {
+            filter: grayscale(0%) opacity(1);
+            transform: translateY(-4px) scale(1.1);
+        }
+        
+        .mobile-nav a.active::after {
+            content: '';
+            width: 4px;
+            height: 4px;
+            background: var(--accent-blue);
+            border-radius: 50%;
+            position: absolute;
+            bottom: 8px;
+            box-shadow: 0 0 8px var(--accent-blue);
+        }
+
+        /* Animations */
+        @keyframes slideDown { to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { to { opacity: 1; } }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            .nav-links { display: none; }
+            .mobile-nav { display: flex; }
+            .hero h1 { font-size: clamp(40px, 9vw, 60px); }
+            .grid-cards { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
+        }
+
+        @media (max-width: 600px) {
+            .hero { padding-top: 80px; }
+            .grid-cards { grid-template-columns: 1fr; }
+            .btn-group { flex-direction: column; width: 100%; padding: 0 20px; }
+            .btn { width: 100%; }
+            .highlight-banner { padding: 40px 20px; border-radius: 20px; }
+            .highlight-banner h2 { font-size: 28px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Ambient Backgrounds -->
+    <div class="bg-grid"></div>
+    <div class="ambient-glow glow-top-left"></div>
+    <div class="ambient-glow glow-bottom-right"></div>
+
+    <!-- Stylish Side Drawer (Menu) -->
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+    <aside class="side-drawer" id="sideDrawer">
+        <div class="drawer-header">
+            <h3>Menu</h3>
+            <button class="close-drawer" id="closeDrawerBtn">✕</button>
+        </div>
+        <nav class="drawer-nav">
+            <a href="index.html"><span>🏠</span> Home</a>
+            <a href="#services"><span>📚</span> Academic Services</a>
+            <a href="#opportunities"><span>💼</span> Career & Growth</a>
+            <a href="notice.html"><span>📢</span> Notice Board</a>
+            <a href="downloads.html"><span>📥</span> Resource Center</a>
+            <a href="contact.html"><span>✉️</span> Contact Support</a>
+        </nav>
+    </aside>
+
+    <!-- Header -->
+    <header id="header">
+        <a href="index.html" class="logo-wrapper">
+            <div class="logo-img-container">
+                <span class="logo-fallback">GP</span>
+                <img src="logo.png" alt="GP Banka Logo" class="logo-img" onerror="this.style.display='none'">
+            </div>
+            <div class="logo-text">
+                <h2>GP BANKA</h2>
+                <small>Student Portal</small>
+            </div>
+        </a>
+
+        <div class="header-right">
+            <nav class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="#services">Services</a>
+                <a href="#opportunities">Career</a>
+            </nav>
+            
+            <!-- Hamburger Toggle Button -->
+            <button class="menu-toggle" id="menuToggleBtn" aria-label="Open Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-badge">
+            <span></span> UNOFFICIAL STUDENT PLATFORM
+        </div>
+        
+        <h1>Government Polytechnic Banka</h1>
+        <h3>Empowering Students with Digital Resources</h3>
+        
+        <p>
+            An advanced, independent digital hub designed exclusively for GP Banka students. 
+            Access study materials, academic updates, previous year papers, and premium internship opportunities all in one place.
+        </p>
+
+        <div class="btn-group">
+            <a href="#services" class="btn btn-primary">
+                🚀 Explore Resources
+            </a>
+            <a href="intership.html" class="btn btn-secondary">
+                💼 View Internships
+            </a>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="section-container" id="services">
+        <div class="section-header reveal">
+            <h2>Academic Services</h2>
+            <p>Everything you need to excel in your semester exams</p>
+        </div>
+
+        <div class="grid-cards">
+            <a href="notes.html" class="card reveal">
+                <div class="card-icon">📚</div>
+                <h3>Study Notes</h3>
+                <p>Comprehensive subject-wise notes, handwritten materials, and digital PDFs tailored to the syllabus.</p>
+            </a>
+
+            <a href="syllabus.html" class="card reveal">
+                <div class="card-icon">📖</div>
+                <h3>Official Syllabus</h3>
+                <p>Detailed semester and branch-wise curriculum to keep your preparation on the right track.</p>
+            </a>
+
+            <a href="pyq.html" class="card reveal">
+                <div class="card-icon">📝</div>
+                <h3>Previous Papers</h3>
+                <p>Extensive collection of PYQs to help you understand exam patterns and important topics.</p>
+            </a>
+
+            <a href="notice.html" class="card reveal">
+                <div class="card-icon">📢</div>
+                <h3>Notice Board</h3>
+                <p>Instant updates on college notices, exam forms, practicals, and essential announcements.</p>
+            </a>
+
+            <a href="routine.html" class="card reveal">
+                <div class="card-icon">📅</div>
+                <h3>Exam Routine</h3>
+                <p>Stay updated with the latest mid-semester and final examination schedules.</p>
+            </a>
+
+            <a href="downloads.html" class="card reveal">
+                <div class="card-icon">📥</div>
+                <h3>Resource Center</h3>
+                <p>Download lab manuals, assignment formats, cover pages, and utility software.</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- Career & Opportunities -->
+    <section class="section-container" id="opportunities">
+        <div class="section-header reveal">
+            <h2>Career & Growth</h2>
+            <p>Explore opportunities beyond traditional academics</p>
+        </div>
+
+        <div class="grid-cards">
+            <a href="intership.html" class="card card-feature reveal">
+                <div class="card-icon">🎓</div>
+                <h3>Internship Portal</h3>
+                <p>Discover handpicked technical and non-technical internship opportunities suited for diploma students.</p>
+            </a>
+
+            <a href="placement.html" class="card reveal">
+                <div class="card-icon">💼</div>
+                <h3>Placement Guide</h3>
+                <p>Resume building tips, interview preparation guides, and campus drive updates.</p>
+            </a>
+
+            <a href="scholarship.html" class="card reveal">
+                <div class="card-icon">💰</div>
+                <h3>Scholarships</h3>
+                <p>Details and application links for state and national level scholarship schemes.</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- Highlight Banner -->
+    <section class="section-container" style="padding-top:0;">
+        <div class="highlight-banner reveal">
+            <h2>Ready to kickstart your career?</h2>
+            <p>Our dedicated internship portal is continuously updated with the latest opportunities from AICTE and private organizations specifically for polytechnic students.</p>
+            <a href="intership.html" class="btn btn-primary" style="margin-top: 10px;">
+                Access Internship Portal →
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <h3>GP BANKA</h3>
+        <p>Government Polytechnic Banka<br>The Unofficial Digital Hub for Students</p>
+        <p class="copyright">
+            © 2026 GP BANKA Student Portal. Built with passion.<br>
+            All Rights Reserved.
+        </p>
+    </footer>
+
+    <!-- Mobile Bottom Navigation (4 Items) -->
+    <nav class="mobile-nav">
+        <a href="index.html" class="active">
+            <img src="home.png" alt="Home" class="nav-img-icon" onerror="this.style.display='none'">
+            <span>Home</span>
+        </a>
+        <a href="courses.html">
+            <img src="courses.png" alt="Courses" class="nav-img-icon" onerror="this.style.display='none'">
+            <span>Courses</span>
+        </a>
+        <a href="download.html">
+            <img src="download.png" alt="Download" class="nav-img-icon" onerror="this.style.display='none'">
+            <span>Download</span>
+        </a>
+        <a href="help.html">
+            <img src="help.png" alt="Help" class="nav-img-icon" onerror="this.style.display='none'">
+            <span>Help</span>
+        </a>
+    </nav>
+
+    <script>
+        // --- 1. SIDE DRAWER LOGIC ---
+        const menuBtn = document.getElementById('menuToggleBtn');
+        const closeBtn = document.getElementById('closeDrawerBtn');
+        const drawer = document.getElementById('sideDrawer');
+        const overlay = document.getElementById('drawerOverlay');
+
+        function openDrawer() {
+            drawer.classList.add('open');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent scrolling in background
+        }
+
+        function closeDrawer() {
+            drawer.classList.remove('open');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        menuBtn.addEventListener('click', openDrawer);
+        closeBtn.addEventListener('click', closeDrawer);
+        overlay.addEventListener('click', closeDrawer);
+
+        // --- 2. SCROLL ANIMATIONS (Intersection Observer) ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const reveals = document.querySelectorAll('.reveal');
+            
+            const revealOptions = {
+                threshold: 0.15,
+                rootMargin: "0px 0px -50px 0px"
+            };
+
+            const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) return;
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                });
+            }, revealOptions);
+
+            reveals.forEach(reveal => {
+                revealOnScroll.observe(reveal);
+            });
+            
+            // Header blur effect on scroll
+            const header = document.getElementById('header');
+            window.addEventListener('scroll', () => {
+                if(window.scrollY > 50) {
+                    header.style.boxShadow = '0 10px 30px -10px rgba(0,0,0,0.5)';
+                    header.style.background = 'rgba(3, 5, 16, 0.9)';
+                } else {
+                    header.style.boxShadow = 'none';
+                    header.style.background = 'rgba(3, 5, 16, 0.7)';
+                }
+            });
+        });
+
+        // --- 3. DYNAMIC PWA SETUP (MANIFEST & SERVICE WORKER) ---
+        const appManifest = {
+            "name": "GP BANKA Student Portal",
+            "short_name": "GP BANKA",
+            "description": "Premium Unofficial Student Platform for Government Polytechnic Banka",
+            "start_url": "./index.html",
+            "display": "standalone",
+            "background_color": "#030510",
+            "theme_color": "#030510",
+            "icons": [
+                { "src": "logo.png", "sizes": "192x192", "type": "image/png" },
+                { "src": "logo.png", "sizes": "512x512", "type": "image/png" }
+            ]
+        };
+
+        const manifestString = JSON.stringify(appManifest);
+        const manifestBlob = new Blob([manifestString], {type: 'application/json'});
+        const manifestURL = URL.createObjectURL(manifestBlob);
+        document.getElementById('pwa-manifest').setAttribute('href', manifestURL);
+
+        const serviceWorkerCode = `
+            const CACHE_NAME = 'gp-banka-portal-v1';
+            const ASSETS_TO_CACHE = [
+                '/', '/index.html', '/logo.png',
+                '/home.png', '/courses.png', '/download.png', '/help.png'
+            ];
+
+            self.addEventListener('install', (event) => {
+                event.waitUntil(
+                    caches.open(CACHE_NAME)
+                    .then((cache) => cache.addAll(ASSETS_TO_CACHE))
+                    .then(() => self.skipWaiting())
+                );
+            });
+
+            self.addEventListener('activate', (event) => {
+                event.waitUntil(
+                    caches.keys().then((cacheNames) => {
+                        return Promise.all(
+                            cacheNames.map((cache) => {
+                                if (cache !== CACHE_NAME) return caches.delete(cache);
+                            })
+                        );
+                    })
+                );
+                return self.clients.claim();
+            });
+
+            self.addEventListener('fetch', (event) => {
+                if (!event.request.url.startsWith(self.location.origin)) return;
+                event.respondWith(
+                    fetch(event.request).catch(() => caches.match(event.request))
+                );
+            });
+        `;
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                try {
+                    const swBlob = new Blob([serviceWorkerCode], { type: 'text/javascript' });
+                    const swURL = URL.createObjectURL(swBlob);
+                    
+                    navigator.serviceWorker.register(swURL)
+                        .then((reg) => console.log('Dynamic SW registered.', reg.scope))
+                        .catch((err) => console.log('SW registration failed.', err));
+                } catch (e) { console.log('PWA SW skipped.'); }
+            });
+        }
+    </script>
+</body>
+</html>
