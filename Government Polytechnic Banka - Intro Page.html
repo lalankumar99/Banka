@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Government Polytechnic Banka | राजकीय पॉलिटेक्निक बांका</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800&family=Noto+Sans+Devanagari:wght@500;700&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <!-- अलग फाइल के लिए: नीचे के स्टाइल को "assets/css/intro.css" में रखें -->
+  <style>
+    :root {
+      --navy-dark: #050b1a;
+      --navy-mid: #0b1938;
+      --electric-blue: #00d2ff;
+      --royal-blue: #1e6bff;
+      --gold: #f5c542;
+      --gold-dark: #c9971c;
+      --white: #ffffff;
+      --text-light: #e2e8f0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      min-height: 100dvh;
+      width: 100%;
+      overflow-x: hidden;
+      background-color: var(--navy-dark);
+      color: var(--white);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .campus-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .campus-bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      transform: scale(1.02);
+      animation: slowZoom 18s ease-in-out infinite alternate;
+      filter: brightness(0.85) contrast(1.08);
+    }
+
+    /* Dark Navy Blue, Electric Blue & Gold Overlay */
+    .campus-overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 50% 35%, rgba(0, 210, 255, 0.18) 0%, transparent 60%),
+        linear-gradient(180deg, rgba(5, 11, 26, 0.82) 0%, rgba(11, 25, 56, 0.72) 50%, rgba(5, 11, 26, 0.94) 100%);
+    }
+
+    .intro-wrapper {
+      position: relative;
+      z-index: 2;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .hero-box {
+      max-width: 780px;
+      width: 100%;
+      padding: clamp(1.75rem, 4vw, 3rem) clamp(1.25rem, 3.5vw, 2.75rem);
+      background: rgba(8, 18, 42, 0.62);
+      border: 1px solid rgba(245, 197, 66, 0.35);
+      border-top: 3px solid var(--gold);
+      border-radius: 24px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 24px 50px rgba(0, 0, 0, 0.65), 0 0 30px rgba(0, 210, 255, 0.15);
+      animation: fadeUp 0.7s ease-out both;
+    }
+
+    .college-logo {
+      width: 92px;
+      height: 92px;
+      margin: 0 auto 1.1rem;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--navy-mid), var(--navy-dark));
+      border: 2.5px solid var(--gold);
+      box-shadow: 0 0 22px rgba(245, 197, 66, 0.35), 0 0 12px rgba(0, 210, 255, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.6rem;
+    }
+
+    .college-logo svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .govt-tag {
+      display: inline-block;
+      font-size: clamp(0.75rem, 1.6vw, 0.88rem);
+      color: var(--electric-blue);
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .title-en {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.6rem, 4.5vw, 2.8rem);
+      font-weight: 800;
+      line-height: 1.18;
+      background: linear-gradient(135deg, #ffffff 20%, #fde68a 60%, var(--gold) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 0.35rem;
+    }
+
+    .title-hi {
+      font-family: 'Noto Sans Devanagari', sans-serif;
+      font-size: clamp(1.2rem, 3vw, 1.7rem);
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 1rem;
+    }
+
+    .gold-line {
+      width: 120px;
+      height: 3px;
+      margin: 0 auto 1.1rem;
+      border-radius: 99px;
+      background: linear-gradient(90deg, transparent, var(--electric-blue), var(--gold), var(--electric-blue), transparent);
+    }
+
+    .subtitle {
+      font-size: clamp(0.88rem, 1.8vw, 1.02rem);
+      color: var(--text-light);
+      margin-bottom: 1.8rem;
+      line-height: 1.6;
+    }
+
+    .enter-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.7rem;
+      padding: 0.95rem 2.4rem;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--royal-blue), #093894);
+      color: var(--white);
+      font-size: clamp(0.95rem, 2vw, 1.08rem);
+      font-weight: 700;
+      text-decoration: none;
+      border: 1.5px solid var(--gold);
+      box-shadow: 0 10px 25px rgba(0, 210, 255, 0.35);
+      transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    }
+
+    .enter-btn:hover,
+    .enter-btn:focus-visible {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 32px rgba(0, 210, 255, 0.55), 0 0 18px rgba(245, 197, 66, 0.45);
+      outline: none;
+    }
+
+    .intro-footer {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 0.9rem 1rem;
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.7);
+      background: rgba(5, 11, 26, 0.65);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    body.fade-out {
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    @keyframes slowZoom {
+      from { transform: scale(1.02); }
+      to { transform: scale(1.1); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 576px) {
+      .hero-box {
+        padding: 1.5rem 1.1rem;
+        border-radius: 18px;
+      }
+      .enter-btn {
+        width: 100%;
+        padding: 0.9rem 1.2rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Full-Screen College Campus Background Image -->
+  <div class="campus-bg" aria-hidden="true">
+    <img
+      src="https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=1920&q=85"
+      alt="Government Polytechnic Banka Campus View"
+      onerror="this.src='https://placehold.co/1920x1080/050b1a/f5c542?text=Government+Polytechnic+Banka'"
+    />
+    <div class="campus-overlay"></div>
+  </div>
+
+  <!-- Main Center Intro Content -->
+  <main class="intro-wrapper">
+    <section class="hero-box" aria-labelledby="college-name">
+      <!-- Official Style Emblem / Logo Placeholder -->
+      <div class="college-logo" role="img" aria-label="Government Polytechnic Banka Logo">
+        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="50" r="42" stroke="#f5c542" stroke-width="3" stroke-dasharray="6 3" />
+          <circle cx="50" cy="50" r="34" stroke="#00d2ff" stroke-width="1.5" />
+          <path d="M50 20 L55 32 L50 38 L45 32 Z" fill="#f5c542" />
+          <path d="M32 62 C38 58, 45 59, 50 63 C55 59, 62 58, 68 62 L68 72 C62 68, 55 69, 50 73 C45 69, 38 68, 32 72 Z" fill="rgba(0,210,255,0.25)" stroke="#f5c542" stroke-width="2" />
+          <text x="50" y="54" text-anchor="middle" fill="#ffffff" font-family="Cinzel, serif" font-weight="800" font-size="13">GPB</text>
+        </svg>
+      </div>
+
+      <span class="govt-tag">Dept. of Science, Technology &amp; Technical Education, Govt. of Bihar</span>
+
+      <h1 class="title-en" id="college-name">GOVERNMENT POLYTECHNIC BANKA</h1>
+      <h2 class="title-hi" lang="hi">राजकीय पॉलिटेक्निक बांका</h2>
+
+      <div class="gold-line" aria-hidden="true"></div>
+
+      <p class="subtitle">
+        AICTE Approved &bull; Affiliated to SBTE, Patna (Bihar)<br />
+        <span lang="hi">उत्कृष्ट तकनीकी शिक्षा एवं कौशल विकास के प्रति समर्पित राजकीय संस्थान</span>
+      </p>
+
+      <a href="home.html" id="enterBtn" class="enter-btn">
+        <span>Enter Website &bull; प्रवेश करें</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f5c542" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </a>
+    </section>
+  </main>
+
+  <footer class="intro-footer">
+    Government Polytechnic Banka, Bihar &bull; Official Portal
+  </footer>
+
+  <!-- अलग फाइल के लिए: नीचे के स्क्रिप्ट को "assets/js/intro.js" में रखें -->
+  <script>
+    (function () {
+      const enterBtn = document.getElementById('enterBtn');
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (enterBtn) {
+        enterBtn.addEventListener('click', function (e) {
+          if (prefersReducedMotion) return;
+          e.preventDefault();
+          const target = this.getAttribute('href');
+          document.body.classList.add('fade-out');
+          setTimeout(function () {
+            window.location.href = target;
+          }, 250);
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
