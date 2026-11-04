@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Q&A HTML to PDF Studio</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts for Font Selector -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Merriweather:ital,wght@0,400;0,700;1,400&family=Poppins:wght@400;500;600;700&family=Roboto:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- html2pdf.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <style>
+        /* Curated Font Families */
+        .font-inter { font-family: 'Inter', sans-serif; }
+        .font-roboto { font-family: 'Roboto', sans-serif; }
+        .font-poppins { font-family: 'Poppins', sans-serif; }
+        .font-merriweather { font-family: 'Merriweather', serif; }
+        .font-lora { font-family: 'Lora', serif; }
+        .font-baskerville { font-family: 'Libre Baskerville', serif; }
+        .font-crimson { font-family: 'Crimson Pro', serif; }
+        .font-mono-code { font-family: 'JetBrains Mono', monospace; }
+
+        /* Screen Preview A4 Sheet Container */
+        #pdf-document {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+            box-sizing: border-box;
+            width: 100%;
+            max-width: 210mm;
+            min-height: 297mm;
+            margin: 0 auto;
+            padding: 12mm 14mm;
+            overflow-x: hidden;
+        }
+
+        /* When capturing for html2pdf, remove internal padding so html2pdf margins don't double up or clip right edge */
+        #pdf-document.pdf-capture-mode {
+            width: 710px !important;
+            max-width: 710px !important;
+            min-height: auto !important;
+            padding: 2px 4px !important;
+            margin: 0 !important;
+            border: none !important;
+            box-shadow: none !important;
+        }
+
+        /* Safe Pure-White Mode: Keeps background white & text black WITHOUT destroying SVGs, Diagrams, or <hr> lines */
+        .pure-white-mode,
+        .pure-white-mode div:not(.preserve-diagram *),
+        .pure-white-mode section,
+        .pure-white-mode article,
+        .pure-white-mode main,
+        .pure-white-mode header,
+        .pure-white-mode footer,
+        .pure-white-mode p,
+        .pure-white-mode ul,
+        .pure-white-mode ol,
+        .pure-white-mode li,
+        .pure-white-mode dl,
+        .pure-white-mode dt,
+        .pure-white-mode dd,
+        .pure-white-mode table,
+        .pure-white-mode thead,
+        .pure-white-mode tbody,
+        .pure-white-mode tfoot,
+        .pure-white-mode tr,
+        .pure-white-mode th,
+        .pure-white-mode td,
+        .pure-white-mode pre,
+        .pure-white-mode code,
+        .pure-white-mode blockquote,
+        .pure-white-mode figure,
+        .pure-white-mode figcaption,
+        .pure-white-mode h1,
+        .pure-white-mode h2,
+        .pure-white-mode h3,
+        .pure-white-mode h4,
+        .pure-white-mode h5,
+        .pure-white-mode h6,
+        .pure-white-mode span {
+            background-color: #ffffff !important;
+            background-image: none !important;
+            color: #000000 !important;
+            box-shadow: none !important;
+            text-shadow: none !important;
+        }
+
+        /* Ensure <hr> is always a clean visible line */
+        .html-answer-content hr {
+            border: 0 !important;
+            border-top: 1.5px solid #222222 !important;
+            height: 0 !important;
+            margin: 14px 0 !important;
+            background: transparent !important;
+        }
+
+        /* Clean Typography & Spacing inside HTML Answers */
+        .html-answer-content {
+            line-height: 1.6;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .html-answer-content * {
+            box-sizing: border-box;
+            max-width: 100%;
+        }
+        .html-answer-content p {
+            margin-top: 0;
+            margin-bottom: 0.6em;
+        }
+        .html-answer-content ul {
+            list-style-type: disc;
+            padding-left: 1.4rem;
+            margin-top: 0.25em;
+            margin-bottom: 0.7em;
+        }
+        .html-answer-content ol {
+            list-style-type: decimal;
+            padding-left: 1.4rem;
+            margin-top: 0.25em;
+            margin-bottom: 0.7em;
+        }
+        .html-answer-content li {
+            margin-bottom: 0.3em;
+        }
+        .html-answer-content table {
+            width: 100% !important;
+            border-collapse: collapse !important;
+            margin: 0.75em 0 !important;
+            table-layout: auto;
+        }
+        .html-answer-content th,
+        .html-answer-content td {
+            border: 1px solid #000000 !important;
+            padding: 7px 10px !important;
+            vertical-align: middle;
+        }
+        .html-answer-content th {
+            font-weight: 700;
+            border-bottom: 1.5px solid #000000 !important;
+        }
+        .html-answer-content pre,
+        .html-answer-content code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9em;
+        }
+        .html-answer-content pre {
+            border: 1px solid #000000 !important;
+            padding: 10px 12px;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            word-break: break-word;
+            margin: 0.7em 0;
+        }
+        .html-answer-content blockquote {
+            border-left: 3px solid #000000 !important;
+            padding-left: 12px;
+            margin: 0.7em 0;
+        }
+        .html-answer-content h1, 
+        .html-answer-content h2, 
+        .html-answer-content h3, 
+        .html-answer-content h4 {
+            font-weight: 700;
+            margin-top: 0.85em;
+            margin-bottom: 0.35em;
+            page-break-after: avoid !important;
+            break-after: avoid !important;
+        }
+        .html-answer-content img,
+        .html-answer-content svg {
+            max-width: 100% !important;
+            height: auto !important;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Question Block: MUST ALLOW breaking inside so Q1 starts right on Page 1! */
+        .qa-block {
+            page-break-inside: auto !important;
+            break-inside: auto !important;
+            margin-bottom: 1.4rem;
+            padding-bottom: 1rem;
+            border-bottom: 1.5px solid #d1d5db;
+        }
+        .qa-block:last-child {
+            border-bottom: none;
+        }
+
+        /* Keep Question Title glued to the start of its answer */
+        .qa-question-header {
+            page-break-after: avoid !important;
+            break-after: avoid !important;
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+        }
+
+        /* Keep atomic blocks from getting sliced in half across page breaks */
+        .atomic-keep-together,
+        .html-answer-content tr,
+        .html-answer-content li,
+        .html-answer-content pre,
+        .html-answer-content blockquote,
+        .html-answer-content figure,
+        .html-answer-content svg,
+        .html-answer-content img {
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+        }
+
+        .force-page-break {
+            page-break-after: always !important;
+            break-after: page !important;
+        }
+
+        /* Visual Page Break Guide on Screen Preview */
+        .page-break-badge {
+            border-top: 2px dashed #9ca3af;
+            text-align: center;
+            margin: 16px 0;
+            position: relative;
+        }
+
+        /* Native Print Engine Rules (Zero Cut-off Vector PDF) */
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 12mm 12mm 12mm 12mm;
+            }
+            html, body {
+                background: #ffffff !important;
+                color: #000000 !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                width: 100% !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            main {
+                display: block !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                max-width: 100% !important;
+            }
+            #preview-wrapper {
+                display: block !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                background: #ffffff !important;
+                overflow: visible !important;
+                width: 100% !important;
+            }
+            #pdf-document {
+                box-shadow: none !important;
+                border: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                max-width: 100% !important;
+                width: 100% !important;
+                min-height: auto !important;
+            }
+            .screen-only-indicator {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-900 min-h-screen flex flex-col font-inter">
+
+    <!-- Top Control Bar (Hidden in Print) -->
+    <header class="no-print bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-[1600px] mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+            
+            <!-- Brand Title -->
+            <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-lg bg-slate-900 text-white flex items-center justify-center font-bold text-lg">
+                    <i class="fa-solid fa-file-pdf"></i>
+                </div>
+                <div>
+                    <h1 class="text-base font-bold text-slate-900 leading-tight">Q&A HTML to PDF Studio <span class="text-[11px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-semibold ml-1">v2.0 Fixed</span></h1>
+                    <p class="text-xs text-slate-500">No Blank Page 1 • Preserves Styles & Diagrams • Smart Page-Break Guard</p>
+                </div>
+            </div>
+
+            <!-- Typography & Layout Controls -->
+            <div class="flex flex-wrap items-center gap-2.5 bg-slate-50 p-1.5 rounded-xl border border-slate-200">
+                
+                <!-- Font Selector -->
+                <div class="flex items-center gap-1.5 px-2">
+                    <label for="fontSelector" class="text-xs font-semibold text-slate-600 whitespace-nowrap">
+                        <i class="fa-solid fa-font mr-1"></i>Font:
+                    </label>
+                    <select id="fontSelector" onchange="updateDocumentTypography()" class="bg-white border border-slate-300 text-slate-800 text-xs font-medium rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-slate-900">
+                        <option value="font-poppins">Poppins (Modern Clean)</option>
+                        <option value="font-inter" selected>Inter (Crisp Sans)</option>
+                        <option value="font-merriweather">Merriweather (Book Serif)</option>
+                        <option value="font-lora">Lora (Exam / Academic Serif)</option>
+                        <option value="font-roboto">Roboto (Standard Sans)</option>
+                        <option value="font-baskerville">Libre Baskerville (Classic Print)</option>
+                        <option value="font-crimson">Crimson Pro (Editorial)</option>
+                        <option value="font-mono-code">JetBrains Mono (Technical)</option>
+                    </select>
+                </div>
+
+                <!-- Font Size Selector -->
+                <div class="flex items-center gap-1.5 px-2 border-l border-slate-200">
+                    <label for="fontSizeSelector" class="text-xs font-semibold text-slate-600 whitespace-nowrap">Size:</label>
+                    <select id="fontSizeSelector" onchange="updateDocumentTypography()" class="bg-white border border-slate-300 text-slate-800 text-xs font-medium rounded-lg px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-slate-900">
+                        <option value="12px">12px (Compact)</option>
+                        <option value="13px">13px (Standard)</option>
+                        <option value="14px" selected>14px (Readable)</option>
+                        <option value="15px">15px (Medium)</option>
+                        <option value="16px">16px (Large)</option>
+                    </select>
+                </div>
+
+                <!-- Pure White Enforcer Toggle -->
+                <label class="flex items-center gap-1.5 px-2.5 py-1 border-l border-slate-200 cursor-pointer select-none" title="Keeps paper pure white & black while keeping SVG diagrams and layouts intact">
+                    <input type="checkbox" id="pureWhiteToggle" checked onchange="updateDocumentTypography()" class="rounded text-slate-900 focus:ring-slate-900 w-3.5 h-3.5">
+                    <span class="text-xs font-semibold text-slate-700">Pure White Paper</span>
+                </label>
+
+                <!-- Prevent Cut-Off Smart Guard -->
+                <label class="flex items-center gap-1.5 px-2.5 py-1 border-l border-slate-200 cursor-pointer select-none" title="Prevents headings, formulas, diagrams, and table rows from getting cut in half">
+                    <input type="checkbox" id="keepTogetherToggle" checked onchange="renderPreview()" class="rounded text-slate-900 focus:ring-slate-900 w-3.5 h-3.5">
+                    <span class="text-xs font-semibold text-slate-700">Smart Anti-Cutoff</span>
+                </label>
+            </div>
+
+            <!-- Export PDF Actions -->
+            <div class="flex items-center gap-2">
+                <button onclick="printVectorPDF()" class="px-3.5 py-2 rounded-lg border-2 border-slate-900 bg-white hover:bg-slate-100 text-slate-900 text-xs font-bold flex items-center gap-1.5 shadow-sm transition" title="Best Quality: Uses native vector PDF engine (Select 'Save as PDF' in print dialog)">
+                    <i class="fa-solid fa-print"></i>
+                    <span>Sharp Vector PDF (Print)</span>
+                </button>
+                <button id="downloadPdfBtn" onclick="downloadDirectPDF()" class="px-4 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold flex items-center gap-2 shadow-sm transition">
+                    <i class="fa-solid fa-download"></i>
+                    <span>Direct Download PDF</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Split Workspace -->
+    <main class="flex-1 max-w-[1600px] w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 p-4 md:p-6">
+        
+        <!-- LEFT PANEL: Question & Raw HTML Input Editor (5 cols on large screens) -->
+        <section class="no-print lg:col-span-5 flex flex-col gap-4">
+            
+            <!-- Document Header Card -->
+            <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+                <div class="flex items-center justify-between mb-3">
+                    <h2 class="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+                        <i class="fa-solid fa-heading"></i> Document Header (Starts directly with Q1 on Page 1)
+                    </h2>
+                    <label class="flex items-center gap-1.5 text-xs text-slate-600 cursor-pointer">
+                        <input type="checkbox" id="showHeaderToggle" checked onchange="renderPreview()" class="rounded text-slate-900">
+                        <span>Show Header</span>
+                    </label>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    <input type="text" id="docTitleInput" value="Assignment" oninput="renderPreview()" placeholder="Document Title (e.g., Assignment)" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900">
+                    <input type="text" id="docSubtitleInput" value="Subject: Electrical Power Generation And Transmission" oninput="renderPreview()" placeholder="Subtitle / Subject" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900">
+                </div>
+            </div>
+
+            <!-- Action Bar for Questions -->
+            <div class="flex flex-wrap items-center justify-between gap-2 bg-white rounded-xl border border-slate-200 p-3 shadow-sm">
+                <div class="flex items-center gap-2">
+                    <button onclick="addNewQuestion()" class="px-3.5 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold flex items-center gap-1.5 transition">
+                        <i class="fa-solid fa-plus"></i> Add Question
+                    </button>
+                    <button onclick="loadThermalPowerSample()" class="px-3 py-2 rounded-lg border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-medium transition" title="Loads the fixed Thermal Power Plant Q1 example">
+                        Load Thermal Plant Example
+                    </button>
+                </div>
+                <button onclick="clearAllQuestions()" class="px-2.5 py-1.5 rounded-lg text-red-600 hover:bg-red-50 text-xs font-medium transition">
+                    <i class="fa-regular fa-trash-can mr-1"></i>Clear All
+                </button>
+            </div>
+
+            <!-- Dynamic Questions List Container -->
+            <div id="questionsEditorList" class="flex flex-col gap-4">
+                <!-- Populated by JavaScript -->
+            </div>
+
+            <!-- Bottom Add Question Button -->
+            <button onclick="addNewQuestion()" class="w-full py-3 rounded-xl border-2 border-dashed border-slate-300 hover:border-slate-900 text-slate-600 hover:text-slate-900 font-semibold text-xs flex items-center justify-center gap-2 transition bg-white/60 hover:bg-white">
+                <i class="fa-solid fa-circle-plus"></i> Add Another Question & HTML Answer
+            </button>
+        </section>
+
+        <!-- RIGHT PANEL: Live Pure-White PDF Page Preview (7 cols on large screens) -->
+        <section id="preview-wrapper" class="lg:col-span-7 flex flex-col items-center">
+            
+            <!-- Preview Info Banner (Hidden in Print) -->
+            <div class="no-print w-full max-w-[210mm] mb-3 flex flex-wrap items-center justify-between gap-2 px-3 py-2 bg-white rounded-lg border border-slate-200 text-xs text-slate-600 shadow-sm">
+                <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                    <span class="font-semibold text-slate-800">Live White A4 Preview</span>
+                    <span id="questionCountBadge" class="bg-slate-100 text-slate-700 px-2 py-0.5 rounded font-medium">1 Question</span>
+                </div>
+                <div class="text-slate-500 text-[11px]">
+                    <i class="fa-solid fa-check-double text-emerald-600 mr-1"></i>Supports full HTML (`&lt;style&gt;`, `&lt;svg&gt;`, `&lt;table&gt;`, formulas)
+                </div>
+            </div>
+
+            <!-- Dynamic Scoped Styles extracted from pasted HTML -->
+            <style id="extracted-user-styles"></style>
+
+            <!-- The Printable White Document Sheet -->
+            <div id="pdf-document" class="font-inter pure-white-mode shadow-lg rounded-sm border border-slate-300" style="font-size: 14px;">
+                <!-- Rendered dynamically via JavaScript -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Status Toast Notification -->
+    <div id="toastMessage" class="no-print fixed bottom-5 right-5 z-50 hidden bg-slate-900 text-white text-xs font-medium px-4 py-3 rounded-xl shadow-xl items-center gap-2.5">
+        <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400"></i>
+        <span id="toastText">Action completed</span>
+    </div>
+
+    <script>
+        // Default Fixed Sample: The exact Thermal Power Plant Q1 from the user's PDF, now fixed with a crisp SVG diagram, centered Energy Conversion flowchart, and unified Formulae block
+        function getThermalPowerPlantHTML() {
+            return `<style>
+    .tp-title-banner {
+        text-align: center;
+        border: 1.5px solid #000;
+        padding: 10px 14px;
+        margin-bottom: 14px;
+    }
+    .tp-title-banner h2 {
+        margin: 0;
+        font-size: 1.2em;
+        letter-spacing: 0.5px;
+    }
+    .tp-title-banner p {
+        margin: 4px 0 0 0;
+        font-size: 0.9em;
+    }
+    .tp-section-heading {
+        font-size: 1.05em;
+        font-weight: 700;
+        border-bottom: 1.5px solid #000;
+        padding-bottom: 4px;
+        margin-top: 14px;
+        margin-bottom: 8px;
+    }
+    .tp-diagram-box {
+        border: 1px solid #000;
+        padding: 12px;
+        margin: 10px 0;
+        text-align: center;
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+    .tp-parts-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px 14px;
+        margin-top: 8px;
+    }
+    .tp-part-item {
+        border: 1px solid #000;
+        padding: 7px 10px;
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+    .tp-part-item strong {
+        display: block;
+        margin-bottom: 2px;
+    }
+    .energy-flow-table th,
+    .energy-flow-table td {
+        text-align: center !important;
+        padding: 8px !important;
+    }
+    .formula-card {
+        border: 1px solid #000;
+        padding: 12px 14px;
+        margin: 10px 0;
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+    .formula-math {
+        text-align: center;
+        font-weight: 700;
+        font-size: 1.05em;
+        margin: 6px 0 10px 0;
+        padding: 4px;
+        border-bottom: 1px dashed #ccc;
+    }
+</style>
+
+<div class="tp-title-banner">
+    <h2>THERMAL POWER PLANT</h2>
+    <p>Layout Diagram, Main Parts and Their Working</p>
+</div>
+
+<div class="tp-section-heading">1. Introduction</div>
+<p>A <strong>thermal power plant</strong> is a generating station in which electrical energy is produced by converting the heat energy of fuel into mechanical energy and then into electrical energy. Coal is commonly used as the primary fuel in a conventional thermal power plant.</p>
+<p>Coal is burnt in a boiler to produce high-pressure steam. This steam rotates a turbine, which drives an alternator to generate electricity. The plant generally works on the <strong>Rankine Cycle</strong>.</p>
+
+<div class="tp-section-heading">2. Layout Diagram of Thermal Power Plant</div>
+<div class="tp-diagram-box preserve-diagram">
+    <svg viewBox="0 0 760 310" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg" style="font-family: Arial, sans-serif; background: #fff;">
+        <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 1 L 10 5 L 0 9 z" fill="#000"/>
+            </marker>
+        </defs>
+
+        <!-- Row 1: Coal -> Pulverizer -> Boiler -> Superheater -> Turbine -> Alternator -->
+        <rect x="15" y="30" width="95" height="46" fill="#fff" stroke="#000" stroke-width="1.8" rx="4"/>
+        <text x="62" y="50" text-anchor="middle" font-size="11" font-weight="bold" fill="#000">Coal Storage</text>
+        <text x="62" y="64" text-anchor="middle" font-size="10" fill="#000">&amp; Handling</text>
+
+        <line x1="110" y1="53" x2="140" y2="53" stroke="#000" stroke-width="1.8" marker-end="url(#arrow)"/>
+
+        <rect x="142" y="30" width="90" height="46" fill="#fff" stroke="#000" stroke-width="1.8" rx="4"/>
+        <text x="187" y="50" text-anchor="middle" font-size="11" font-weight="bold" fill="#000">Pulverizer</text>
+        <text x="187" y="64" text-anchor="middle" font-size="10" fill="#000">(Coal Mill)</text>
+
+        <line x1="232" y1="53" x2="262" y2="53" stroke="#000" stroke-width="1.8" marker-end="url(#arrow)"/>
+
+        <rect x="264" y="22" width="105" height="62" fill="#fff" stroke="#000" stroke-width="2" rx="4"/>
+        <text x="316" y="48" text-anchor="middle" font-size="12" font-weight="bold" fill="#000">BOILER</text>
+        <text x="316" y="64" text-anchor="middle" font-size="10" fill="#000">(Steam Furnace)</text>
+
+        <line x1="369" y1="53" x2="402" y2="53" stroke="#000" stroke-width="1.8" marker-end="url(#arrow)"/>
+
+        <rect x="404" y="30" width="95" height="46" fill="#fff" stroke="#000" stroke-width="1.8" rx="4"/>
+        <text x="451" y="50" text-anchor="middle" font-size="11" font-weight="bold" fill="#000">Superheater</text>
+        <text x="451" y="64" text-anchor="middle" font-size="9.5" fill="#000">High Temp Steam</text>
+
+        <line x1="499" y1="53" x2="532" y2="53" stroke="#000" stroke-width="1.8" marker-end="url(#arrow)"/>
+
+        <rect x="534" y="30" width="95" height="46" fill="#fff" stroke="#000" stroke-width="1.8" rx="4"/>
+        <text x="581" y="50" text-anchor="middle" font-size="11" font-weight="bold" fill="#000">Steam Turbine</text>
+        <text x="581" y="64" text-anchor="middle" font-size="9.5" fill="#000">Shaft Rotation</text>
+
+        <line x1="629" y1="53" x2="658" y2="53" stroke="#000" stroke-width="1.8" marker-end="url(#arrow)"/>
+
+        <rect x="660" y="26" width="85" height="54" fill="#fff" stroke="#000" stroke-width="2" rx="4"/>
+        <text x="702" y="48" text-anchor="middle" font-size="11" font-weight="bold" fill="#000">Alternator</text>
+        <text x="702" y="63" text-anchor="middle" font-size="9.5" fill="#000">(3-Phase Grid)</text>
+
+        <!-- Row 2: Flue Gas Path (Economiser -> Air Preheater -> ESP -> Chimney) -->
+        <line x1="316" y1="84" x2="316" y2="122" stroke="#000" stroke-width="1.6" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+        <text x="276" y="108" font-size="9.5" fill="#000">Flue Gases</text>
+
+        <rect x="264" y="125" width="105" height="44" fill="#fff" stroke="#000" stroke-width="1.6" rx="4"/>
+        <text x="316" y="145" text-anchor="middle" font-size="11" font-weight="bold" fill="#000">Economiser</text>
+        <text x="316" y="159" text-anchor="middle" font-size="9.5" fill="#000">Heats Feed Water</text>
+
+        <line x1="264" y1="147" x2="234" y2="147" stroke="#000" stroke-width="1.6" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+
+        <rect x="135" y="125" width="97" height="44" fill="#fff" stroke="#000" stroke-width="1.6" rx="4"/>
+        <text x="183" y="145" text-anchor="middle" font-size="11" font-weight="bold" fill="#000">Air Preheater</text>
+        <text x="183" y="159" text-anchor="middle" font-size="9.5" fill="#000">ESP / Dust Filter</text>
+
+        <line x1="135" y1="147" x2="105" y2="147" stroke="#000" stroke-width="1.6" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+
+        <rect x="15" y="120" width="88" height="54" fill="#fff" stroke="#000" stroke-width="1.8" rx="4"/>
+        <text x="59" y="144" text-anchor="middle" font-size="11" font-weight="bold" fill="#000">Chimney</text>
+        <text x="59" y="159" text-anchor="middle" font-size="9.5" fill="#000">(Clean Flue Out)</text>
+
+        <!-- Row 3: Steam Condenser -> Cooling Tower & Feed Water Pump loop -->
+        <line x1="581" y1="76" x2="581" y2="130" stroke="#000" stroke-width="1.8" marker-end="url(#arrow)"/>
+        <text x="618" y="108" text-anchor="middle" font-size="9.5" fill="#000">Exhaust Steam</text>
+
+        <rect x="530" y="132" width="102" height="48" fill="#fff" stroke="#000" stroke-width="1.8" rx="4"/>
+        <text x="581" y="154" text-anchor="middle" font-size="11" font-weight="bold" fill="#000">Condenser</text>
+        <text x="581" y="168" text-anchor="middle" font-size="9.5" fill="#000">Steam to Water</text>
+
+        <!-- Cooling Tower Connected to Condenser -->
+        <line x1="632" y1="156" x2="660" y2="156" stroke="#000" stroke-width="1.6" marker-end="url(#arrow)"/>
+        <rect x="662" y="130" width="85" height="52" fill="#fff" stroke="#000" stroke-width="1.8" rx="4"/>
+        <text x="704" y="152" text-anchor="middle" font-size="11" font-weight="bold" fill="#000">Cooling</text>
+        <text x="704" y="166" text-anchor="middle" font-size="11" font-weight="bold" fill="#000">Tower</text>
+
+        <!-- Condensate to Feed Water Pump -->
+        <line x1="581" y1="180" x2="581" y2="235" stroke="#000" stroke-width="1.8"/>
+        <line x1="581" y1="235" x2="485" y2="235" stroke="#000" stroke-width="1.8" marker-end="url(#arrow)"/>
+
+        <rect x="370" y="212" width="113" height="46" fill="#fff" stroke="#000" stroke-width="1.8" rx="4"/>
+        <text x="426" y="233" text-anchor="middle" font-size="11" font-weight="bold" fill="#000">Feed Water Pump</text>
+        <text x="426" y="247" text-anchor="middle" font-size="9.5" fill="#000">High Pressure Water</text>
+
+        <!-- Feed Water Pump to Economiser to Boiler -->
+        <line x1="370" y1="235" x2="316" y2="235" stroke="#000" stroke-width="1.8"/>
+        <line x1="316" y1="235" x2="316" y2="171" stroke="#000" stroke-width="1.8" marker-end="url(#arrow)"/>
+        <text x="342" y="205" font-size="9.5" fill="#000">Feed Water</text>
+    </svg>
+    <p style="font-size: 0.88em; margin-top: 8px; margin-bottom: 0;"><strong>Figure:</strong> Schematic Layout Diagram of a Coal-Fired Thermal Power Plant</p>
+</div>
+
+<div class="tp-section-heading">3. Main Parts and Their Working</div>
+<div class="tp-parts-grid">
+    <div class="tp-part-item">
+        <strong>1. Coal Handling System</strong>
+        Receives, stores and transports coal to the boiler after crushing it into smaller pieces.
+    </div>
+    <div class="tp-part-item">
+        <strong>2. Pulverizer</strong>
+        Converts crushed coal into fine powder so it mixes easily with air and burns efficiently.
+    </div>
+    <div class="tp-part-item">
+        <strong>3. Boiler</strong>
+        Closed vessel in which water is heated by burning coal to produce high-pressure steam.
+    </div>
+    <div class="tp-part-item">
+        <strong>4. Superheater</strong>
+        Increases the temperature of saturated steam into superheated steam for higher efficiency.
+    </div>
+    <div class="tp-part-item">
+        <strong>5. Steam Turbine</strong>
+        Converts high-pressure steam energy into mechanical shaft rotation through expansion.
+    </div>
+    <div class="tp-part-item">
+        <strong>6. Alternator (Generator)</strong>
+        Coupled to the turbine shaft; converts mechanical energy into 3-phase electrical energy.
+    </div>
+    <div class="tp-part-item">
+        <strong>7. Condenser</strong>
+        Condenses exhaust steam from the turbine back into water for recirculation.
+    </div>
+    <div class="tp-part-item">
+        <strong>8. Feed Water Pump</strong>
+        Increases pressure of condensed water and supplies it back to the boiler via economiser.
+    </div>
+    <div class="tp-part-item">
+        <strong>9. Economiser</strong>
+        Uses waste heat from flue gases to preheat feed water before entering the boiler.
+    </div>
+    <div class="tp-part-item">
+        <strong>10. Air Preheater &amp; ESP</strong>
+        Preheats combustion air and removes fly ash/dust particles before releasing gas via Chimney.
+    </div>
+</div>
+
+<div class="tp-section-heading">4. Working Principle</div>
+<ol>
+    <li>Coal is crushed and converted into fine powder by the pulverizer.</li>
+    <li>Powdered coal is mixed with pre-heated air and burnt in the boiler furnace.</li>
+    <li>Heat converts boiler water into high-pressure steam, which is further heated by the superheater.</li>
+    <li>Superheated steam expands inside the steam turbine and rotates its shaft.</li>
+    <li>The turbine drives the coupled alternator to generate electrical power.</li>
+    <li>Exhaust steam enters the condenser, cools into water, and is pumped back by the feed water pump.</li>
+</ol>
+
+<div class="tp-section-heading">5. Energy Conversion Process</div>
+<table class="energy-flow-table atomic-keep-together">
+    <thead>
+        <tr>
+            <th>Energy Conversion Stages in a Thermal Power Plant</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>CHEMICAL ENERGY</strong> (Energy stored in coal)</td>
+        </tr>
+        <tr>
+            <td><strong>&darr;</strong></td>
+        </tr>
+        <tr>
+            <td><strong>HEAT ENERGY</strong> (Produced by burning coal in the boiler)</td>
+        </tr>
+        <tr>
+            <td><strong>&darr;</strong></td>
+        </tr>
+        <tr>
+            <td><strong>MECHANICAL ENERGY</strong> (Produced by rotation of the steam turbine)</td>
+        </tr>
+        <tr>
+            <td><strong>&darr;</strong></td>
+        </tr>
+        <tr>
+            <td><strong>ELECTRICAL ENERGY</strong> (Generated by the alternator)</td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="tp-section-heading">6. Important Formulae</div>
+<div class="formula-card atomic-keep-together">
+    <div><strong>1. Single-Phase Electrical Power:</strong></div>
+    <div class="formula-math">P = V &times; I &times; cos &phi;</div>
+
+    <div><strong>2. Three-Phase Electrical Power:</strong></div>
+    <div class="formula-math">P = &radic;3 &times; V<sub>L</sub> &times; I<sub>L</sub> &times; cos &phi;</div>
+
+    <div><strong>3. Thermal Efficiency:</strong></div>
+    <div class="formula-math">&eta;<sub>thermal</sub> = (W<sub>net</sub> / Q<sub>in</sub>) &times; 100%</div>
+
+    <div><strong>4. Mechanical Efficiency:</strong></div>
+    <div class="formula-math">&eta;<sub>m</sub> = (P<sub>shaft</sub> / P<sub>turbine</sub>) &times; 100%</div>
+
+    <div><strong>5. Overall Efficiency:</strong></div>
+    <div class="formula-math" style="border-bottom: none; margin-bottom: 4px;">&eta;<sub>overall</sub> = (P<sub>electrical</sub> / Q<sub>fuel</sub>) &times; 100%</div>
+
+    <p style="font-size: 0.9em; margin-top: 6px; margin-bottom: 0;">
+        <strong>Where:</strong> P = Electrical Power (W), V = Voltage (V), I = Current (A), cos &phi; = Power Factor, &eta; = Efficiency, W<sub>net</sub> = Net Work Output, Q<sub>in</sub> = Heat Supplied.
+    </p>
+</div>
+
+<div class="tp-section-heading">7. Advantages &amp; Disadvantages</div>
+<table class="atomic-keep-together">
+    <thead>
+        <tr>
+            <th style="width: 50%;">Advantages</th>
+            <th style="width: 50%;">Disadvantages</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <ul style="margin: 0;">
+                    <li>Can generate a large base-load electrical power.</li>
+                    <li>Not dependent on weather or monsoon conditions.</li>
+                    <li>Lower initial setup cost compared to hydro/nuclear plants.</li>
+                </ul>
+            </td>
+            <td>
+                <ul style="margin: 0;">
+                    <li>Requires huge quantities of coal and cooling water.</li>
+                    <li>Produces smoke, fumes, and greenhouse emissions.</li>
+                    <li>High maintenance and ash disposal requirement.</li>
+                </ul>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="tp-section-heading">8. Conclusion</div>
+<p>A thermal power plant is a backbone of electrical power generation. By integrating the boiler, superheater, turbine, condenser, economiser, and alternator on the Rankine cycle, it reliably converts the chemical energy of coal into continuous electrical energy.</p>`;
+        }
+
+        // Application State
+        let questionsData = [
+            {
+                id: 'q_' + Date.now() + '_1',
+                qNumber: 'Q1.',
+                questionText: 'Draw the layout of a thermal power plant and explain the working of its main parts.',
+                htmlContent: getThermalPowerPlantHTML(),
+                pageBreakAfter: false
+            }
+        ];
+
+        // Toast Helper
+        function showToast(message, isLoading = false) {
+            const toast = document.getElementById('toastMessage');
+            const text = document.getElementById('toastText');
+            const icon = document.getElementById('toastIcon');
+
+            text.textContent = message;
+            if (isLoading) {
+                icon.className = 'fa-solid fa-spinner fa-spin text-sky-400';
+            } else {
+                icon.className = 'fa-solid fa-circle-check text-emerald-400';
+            }
+
+            toast.classList.remove('hidden');
+            toast.classList.add('flex');
+
+            if (!isLoading) {
+                setTimeout(() => {
+                    toast.classList.add('hidden');
+                    toast.classList.remove('flex');
+                }, 3200);
+            }
+        }
+
+        function escapeAttr(str) {
+            return String(str || '')
+                .replace(/&/g, '&amp;')
+                .replace(/"/g, '&quot;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+        }
+
+        // Render Left Editor Cards
+        function renderEditorCards() {
+            const listEl = document.getElementById('questionsEditorList');
+            if (questionsData.length === 0) {
+                listEl.innerHTML = `
+                    <div class="bg-white rounded-xl border border-slate-200 p-8 text-center">
+                        <p class="text-sm font-semibold text-slate-700 mb-1">No Questions Added Yet</p>
+                        <p class="text-xs text-slate-500 mb-4">Click "Add Question" below to paste your Question and raw HTML answer.</p>
+                        <button onclick="addNewQuestion()" class="px-4 py-2 bg-slate-900 text-white text-xs font-semibold rounded-lg">
+                            + Add First Question
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            listEl.innerHTML = questionsData.map((item, index) => `
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden transition">
+                    <!-- Card Top Bar -->
+                    <div class="bg-slate-50 px-4 py-2.5 border-b border-slate-200 flex items-center justify-between gap-2">
+                        <div class="flex items-center gap-2">
+                            <span class="px-2 py-0.5 bg-slate-900 text-white rounded text-xs font-bold">#${index + 1}</span>
+                            <span class="text-xs font-semibold text-slate-700">Question & Direct HTML Input</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <button onclick="moveQuestion(${index}, -1)" ${index === 0 ? 'disabled' : ''} class="p-1.5 text-slate-500 hover:text-slate-900 disabled:opacity-30 rounded" title="Move Up">
+                                <i class="fa-solid fa-arrow-up text-xs"></i>
+                            </button>
+                            <button onclick="moveQuestion(${index}, 1)" ${index === questionsData.length - 1 ? 'disabled' : ''} class="p-1.5 text-slate-500 hover:text-slate-900 disabled:opacity-30 rounded" title="Move Down">
+                                <i class="fa-solid fa-arrow-down text-xs"></i>
+                            </button>
+                            <button onclick="removeQuestion(${index})" class="p-1.5 text-red-500 hover:bg-red-50 rounded ml-1" title="Delete Question">
+                                <i class="fa-regular fa-trash-can text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Card Body -->
+                    <div class="p-4 flex flex-col gap-3">
+                        <!-- Question Number & Question Text -->
+                        <div class="flex gap-2">
+                            <div class="w-20 shrink-0">
+                                <label class="block text-[11px] font-semibold text-slate-500 mb-1">Q. No</label>
+                                <input type="text" value="${escapeAttr(item.qNumber)}" oninput="updateQuestionField(${index}, 'qNumber', this.value)" placeholder="Q1." class="w-full px-2.5 py-2 text-xs font-bold border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900">
+                            </div>
+                            <div class="flex-1">
+                                <label class="block text-[11px] font-semibold text-slate-500 mb-1">Question Title / Statement</label>
+                                <input type="text" value="${escapeAttr(item.questionText)}" oninput="updateQuestionField(${index}, 'questionText', this.value)" placeholder="Write your question here..." class="w-full px-3 py-2 text-xs font-medium border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900">
+                            </div>
+                        </div>
+
+                        <!-- Raw HTML Answer Editor -->
+                        <div>
+                            <div class="flex flex-wrap items-center justify-between gap-1 mb-1.5">
+                                <label class="text-[11px] font-semibold text-slate-600 flex items-center gap-1">
+                                    <i class="fa-solid fa-code text-slate-500"></i> Direct HTML Answer (Supports full &lt;html&gt;, &lt;style&gt;, &lt;svg&gt;, &lt;table&gt;)
+                                </label>
+                                <!-- Quick HTML Tag Helpers -->
+                                <div class="flex items-center gap-1">
+                                    <button type="button" onclick="insertSnippet(${index}, 'p')" class="px-2 py-0.5 text-[11px] bg-slate-100 hover:bg-slate-200 text-slate-700 rounded font-mono" title="Insert Paragraph">&lt;p&gt;</button>
+                                    <button type="button" onclick="insertSnippet(${index}, 'ul')" class="px-2 py-0.5 text-[11px] bg-slate-100 hover:bg-slate-200 text-slate-700 rounded font-mono" title="Insert List">&lt;ul&gt;</button>
+                                    <button type="button" onclick="insertSnippet(${index}, 'table')" class="px-2 py-0.5 text-[11px] bg-slate-100 hover:bg-slate-200 text-slate-700 rounded font-mono" title="Insert Table">&lt;table&gt;</button>
+                                    <button type="button" onclick="insertSnippet(${index}, 'formula')" class="px-2 py-0.5 text-[11px] bg-slate-100 hover:bg-slate-200 text-slate-700 rounded font-mono" title="Insert Formula Box">Formula Box</button>
+                                </div>
+                            </div>
+                            <textarea id="htmlInput_${index}" rows="9" oninput="updateQuestionField(${index}, 'htmlContent', this.value)" placeholder="Paste your complete HTML code or snippets here..." class="w-full p-3 text-xs font-mono bg-slate-50 border border-slate-300 rounded-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 leading-relaxed">${escapeAttr(item.htmlContent)}</textarea>
+                        </div>
+
+                        <!-- Manual Page Break Option -->
+                        <div class="pt-1 flex items-center justify-between border-t border-slate-100">
+                            <label class="flex items-center gap-2 text-xs text-slate-600 cursor-pointer select-none">
+                                <input type="checkbox" ${item.pageBreakAfter ? 'checked' : ''} onchange="updateQuestionField(${index}, 'pageBreakAfter', this.checked)" class="rounded text-slate-900">
+                                <span>Start next question on a new PDF page</span>
+                            </label>
+                            <span class="text-[11px] text-emerald-700 font-medium"><i class="fa-solid fa-check mr-1"></i>Starts on Page 1</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateQuestionField(index, field, value) {
+            if (!questionsData[index]) return;
+            questionsData[index][field] = value;
+            renderPreview();
+        }
+
+        function insertSnippet(index, type) {
+            const textarea = document.getElementById(`htmlInput_${index}`);
+            if (!textarea) return;
+
+            let snippet = '';
+            if (type === 'p') {
+                snippet = `\n<p>Write your paragraph explanation here...</p>`;
+            } else if (type === 'ul') {
+                snippet = `\n<ul>\n  <li><strong>Point 1:</strong> Description here</li>\n  <li><strong>Point 2:</strong> Description here</li>\n</ul>`;
+            } else if (type === 'table') {
+                snippet = `\n<table class="atomic-keep-together">\n  <thead>\n    <tr>\n      <th>Parameter</th>\n      <th>Description</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td>Item 1</td>\n      <td>Details</td>\n    </tr>\n  </tbody>\n</table>`;
+            } else if (type === 'formula') {
+                snippet = `\n<div class="formula-card atomic-keep-together" style="border:1px solid #000; padding:10px; margin:8px 0;">\n  <strong>Formula Title:</strong>\n  <div style="text-align:center; font-weight:bold; margin:6px 0;">P = V &times; I &times; cos &phi;</div>\n</div>`;
+            }
+
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const currentVal = questionsData[index].htmlContent || '';
+            const updatedVal = currentVal.substring(0, start) + snippet + currentVal.substring(end);
+
+            questionsData[index].htmlContent = updatedVal;
+            textarea.value = updatedVal;
+            renderPreview();
+            textarea.focus();
+        }
+
+        function addNewQuestion() {
+            const nextNum = questionsData.length + 1;
+            questionsData.push({
+                id: 'q_' + Date.now() + '_' + nextNum,
+                qNumber: `Q${nextNum}.`,
+                questionText: '',
+                htmlContent: '<p>Paste or write your HTML answer here...</p>',
+                pageBreakAfter: false
+            });
+            renderEditorCards();
+            renderPreview();
+            showToast(`Added Question #${nextNum}`);
+        }
+
+        function removeQuestion(index) {
+            questionsData.splice(index, 1);
+            renderEditorCards();
+            renderPreview();
+            showToast('Question removed');
+        }
+
+        function moveQuestion(index, direction) {
+            const targetIndex = index + direction;
+            if (targetIndex < 0 || targetIndex >= questionsData.length) return;
+            const temp = questionsData[index];
+            questionsData[index] = questionsData[targetIndex];
+            questionsData[targetIndex] = temp;
+            renderEditorCards();
+            renderPreview();
+        }
+
+        function clearAllQuestions() {
+            questionsData = [
+                {
+                    id: 'q_' + Date.now(),
+                    qNumber: 'Q1.',
+                    questionText: '',
+                    htmlContent: '',
+                    pageBreakAfter: false
+                }
+            ];
+            renderEditorCards();
+            renderPreview();
+            showToast('Cleared all questions');
+        }
+
+        function loadThermalPowerSample() {
+            document.getElementById('docTitleInput').value = 'Assignment';
+            document.getElementById('docSubtitleInput').value = 'Subject: Electrical Power Generation And Transmission';
+            questionsData = [
+                {
+                    id: 'q_' + Date.now() + '_1',
+                    qNumber: 'Q1.',
+                    questionText: 'Draw the layout of a thermal power plant and explain the working of its main parts.',
+                    htmlContent: getThermalPowerPlantHTML(),
+                    pageBreakAfter: false
+                }
+            ];
+            renderEditorCards();
+            renderPreview();
+            showToast('Loaded Fixed Thermal Power Plant Q1 Example');
+        }
+
+        /**
+         * Smart HTML & Style Extractor:
+         * 1. Preserves <style> blocks from full HTML documents pasted by the user!
+         * 2. Scopes `body` CSS rules to `.html-answer-content` so layout, centering, and borders work properly.
+         * 3. Strips unwanted colors from non-diagram elements if Pure White Mode is enabled, WITHOUT breaking SVGs or diagrams.
+         */
+        function parseAndCleanQuestionHTML(rawHtml, stripInlineColors, scopeId) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(rawHtml || '', 'text/html');
+
+            // Remove dangerous executable tags
+            doc.querySelectorAll('script, iframe, object, embed').forEach(el => el.remove());
+
+            // Extract any <style> tags from <head> or <body> so user's custom classes/tables/centering aren't lost!
+            let extractedCSS = '';
+            doc.querySelectorAll('style').forEach(styleEl => {
+                let cssText = styleEl.textContent || '';
+                // Replace `body` or `html` selectors with our scoped answer container
+                cssText = cssText.replace(/\b(html|body)\b/gi, `#${scopeId}`);
+                extractedCSS += `\n/* Scoped CSS for ${scopeId} */\n` + cssText;
+                styleEl.remove();
+            });
+
+            // Clean inline background/text colors on regular text/table elements while leaving <svg> and diagrams intact
+            if (stripInlineColors) {
+                doc.body.querySelectorAll('*').forEach(el => {
+                    const tag = el.tagName.toLowerCase();
+                    // Never strip attributes inside <svg> elements
+                    if (tag === 'svg' || el.closest('svg')) return;
+
+                    el.removeAttribute('bgcolor');
+                    el.removeAttribute('color');
+                    if (el.hasAttribute('style')) {
+                        el.style.backgroundColor = '';
+                        el.style.backgroundImage = '';
+                        el.style.color = '';
+                        el.style.boxShadow = '';
+                        if (!el.getAttribute('style').trim()) {
+                            el.removeAttribute('style');
+                        }
+                    }
+                });
+            }
+
+            // Ensure external images have crossOrigin set so html2canvas doesn't taint or skip them
+            doc.body.querySelectorAll('img').forEach(img => {
+                img.setAttribute('crossorigin', 'anonymous');
+            });
+
+            return {
+                cleanBodyHTML: doc.body.innerHTML,
+                extractedCSS: extractedCSS
+            };
+        }
+
+        function updateDocumentTypography() {
+            const pdfDoc = document.getElementById('pdf-document');
+            const selectedFont = document.getElementById('fontSelector').value;
+            const selectedSize = document.getElementById('fontSizeSelector').value;
+            const pureWhite = document.getElementById('pureWhiteToggle').checked;
+
+            const fontClasses = [
+                'font-inter', 'font-roboto', 'font-poppins', 'font-merriweather',
+                'font-lora', 'font-baskerville', 'font-crimson', 'font-mono-code'
+            ];
+            pdfDoc.classList.remove(...fontClasses);
+            pdfDoc.classList.add(selectedFont);
+
+            pdfDoc.style.fontSize = selectedSize;
+
+            if (pureWhite) {
+                pdfDoc.classList.add('pure-white-mode');
+            } else {
+                pdfDoc.classList.remove('pure-white-mode');
+            }
+
+            renderPreview();
+        }
+
+        // Group Headings with their immediate next element so headings never get stranded at the bottom of a page
+        function applySmartHeadingAndBlockProtection(container) {
+            const keepTogether = document.getElementById('keepTogetherToggle').checked;
+            if (!keepTogether) return;
+
+            // Mark small-to-medium tables, formula cards, and figures as atomic so they don't split across pages
+            container.querySelectorAll('table, figure, pre, blockquote, .formula-card, .tp-diagram-box, .tp-part-item').forEach(el => {
+                el.classList.add('atomic-keep-together');
+            });
+        }
+
+        // Render Live White A4 Preview
+        function renderPreview() {
+            const pdfDoc = document.getElementById('pdf-document');
+            const styleBucket = document.getElementById('extracted-user-styles');
+            const showHeader = document.getElementById('showHeaderToggle').checked;
+            const docTitle = document.getElementById('docTitleInput').value.trim();
+            const docSubtitle = document.getElementById('docSubtitleInput').value.trim();
+            const pureWhite = document.getElementById('pureWhiteToggle').checked;
+
+            document.getElementById('questionCountBadge').textContent = `${questionsData.length} Question${questionsData.length === 1 ? '' : 's'}`;
+
+            let htmlParts = [];
+            let allExtractedCSS = '';
+
+            // Compact Document Header (Glued to Q1 so Page 1 is NEVER blank!)
+            if (showHeader && (docTitle || docSubtitle)) {
+                htmlParts.push(`
+                    <header class="border-b-2 border-black pb-2.5 mb-4" style="page-break-after: avoid; break-after: avoid;">
+                        ${docTitle ? `<h1 class="text-xl font-bold tracking-tight text-black leading-snug">${escapeAttr(docTitle)}</h1>` : ''}
+                        ${docSubtitle ? `<p class="text-xs font-semibold text-black mt-0.5">${escapeAttr(docSubtitle)}</p>` : ''}
+                    </header>
+                `);
+            }
+
+            // Render each Question & Raw HTML Answer (Flows naturally from Page 1!)
+            questionsData.forEach((item, idx) => {
+                const scopeId = `qa_scope_${idx}`;
+                const parsed = parseAndCleanQuestionHTML(item.htmlContent, pureWhite, scopeId);
+                allExtractedCSS += parsed.extractedCSS;
+
+                const pageBreakClass = item.pageBreakAfter ? 'force-page-break' : '';
+
+                htmlParts.push(`
+                    <section id="${scopeId}" class="qa-block ${pageBreakClass}">
+                        <div class="qa-question-header flex items-baseline gap-2 mb-2.5">
+                            <span class="font-bold text-black shrink-0 text-[1.05em]">${escapeAttr(item.qNumber || `Q${idx + 1}.`)}</span>
+                            <h2 class="font-bold text-black leading-snug text-[1.05em]">${escapeAttr(item.questionText || 'Untitled Question')}</h2>
+                        </div>
+                        <div class="html-answer-content text-black">
+                            ${parsed.cleanBodyHTML}
+                        </div>
+                    </section>
+                `);
+
+                if (item.pageBreakAfter) {
+                    htmlParts.push(`
+                        <div class="screen-only-indicator page-break-badge no-print">
+                            <span class="bg-white px-2 text-[10px] font-mono uppercase tracking-wider text-slate-400">--- Manual Page Break ---</span>
+                        </div>
+                    `);
+                }
+            });
+
+            styleBucket.textContent = allExtractedCSS;
+            pdfDoc.innerHTML = htmlParts.join('');
+            applySmartHeadingAndBlockProtection(pdfDoc);
+        }
+
+        // Method 1: Native Vector Print-to-PDF (100% Razor-Sharp Vector Text, Zero Blank Page, Perfect SVG/Formulas)
+        function printVectorPDF() {
+            window.print();
+        }
+
+        // Method 2: Fixed Direct Download PDF via html2pdf.js
+        async function downloadDirectPDF() {
+            const pdfDoc = document.getElementById('pdf-document');
+            const downloadBtn = document.getElementById('downloadPdfBtn');
+            const keepTogether = document.getElementById('keepTogetherToggle').checked;
+            const docTitle = (document.getElementById('docTitleInput').value.trim() || 'QA_Document')
+                .replace(/[^a-zA-Z0-9_-]/g, '_');
+
+            // Hide screen-only page-break indicators
+            const indicators = pdfDoc.querySelectorAll('.screen-only-indicator');
+            indicators.forEach(el => el.style.display = 'none');
+
+            // Enter exact printable width capture mode so right borders never clip and margins don't double up
+            pdfDoc.classList.add('pdf-capture-mode');
+
+            // Smart height check: Only put page-break-inside: avoid on blocks that fit within ~65% of an A4 page (< 620px)
+            // This guarantees a large multi-page question NEVER gets pushed off Page 1!
+            const smartAvoidList = ['tr', 'li', 'pre', 'blockquote', '.qa-question-header', '.tp-part-item', 'h1', 'h2', 'h3', 'h4'];
+            pdfDoc.querySelectorAll('table, .formula-card, .tp-diagram-box, figure, svg').forEach(el => {
+                if (el.offsetHeight < 650) {
+                    el.classList.add('pdf-safe-atomic');
+                } else {
+                    el.classList.remove('pdf-safe-atomic');
+                    el.style.pageBreakInside = 'auto';
+                    el.style.breakInside = 'auto';
+                }
+            });
+            if (keepTogether) {
+                smartAvoidList.push('.pdf-safe-atomic');
+            }
+
+            // Explicit pixel dimensions on inline SVGs so html2canvas renders every line & text cleanly
+            const svgs = pdfDoc.querySelectorAll('svg');
+            const svgBackups = [];
+            svgs.forEach(svg => {
+                const rect = svg.getBoundingClientRect();
+                svgBackups.push({
+                    el: svg,
+                    w: svg.getAttribute('width'),
+                    h: svg.getAttribute('height')
+                });
+                if (rect.width > 0 && rect.height > 0) {
+                    svg.setAttribute('width', Math.round(rect.width));
+                    svg.setAttribute('height', Math.round(rect.height));
+                }
+            });
+
+            downloadBtn.disabled = true;
+            showToast('Generating fixed PDF (Starting right on Page 1)...', true);
+
+            const opt = {
+                margin: [10, 10, 10, 10], // top, left, bottom, right in mm
+                filename: `${docTitle}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: {
+                    scale: 2,
+                    useCORS: true,
+                    allowTaint: true,
+                    backgroundColor: '#ffffff',
+                    letterRendering: true,
+                    scrollY: 0,
+                    windowWidth: 780
+                },
+                jsPDF: {
+                    unit: 'mm',
+                    format: 'a4',
+                    orientation: 'portrait'
+                },
+                pagebreak: {
+                    mode: ['css', 'legacy'],
+                    before: '.force-page-break',
+                    avoid: smartAvoidList
+                }
+            };
+
+            try {
+                await html2pdf().set(opt).from(pdfDoc).save();
+                showToast('PDF downloaded! Check Page 1, Diagram & Formulae.');
+            } catch (err) {
+                console.error('PDF generation error:', err);
+                showToast('Error in direct download. Use "Sharp Vector PDF (Print)" button.');
+            } finally {
+                // Restore UI preview state
+                svgBackups.forEach(item => {
+                    if (item.w) item.el.setAttribute('width', item.w);
+                    else item.el.removeAttribute('width');
+                    if (item.h) item.el.setAttribute('height', item.h);
+                    else item.el.removeAttribute('height');
+                });
+                pdfDoc.classList.remove('pdf-capture-mode');
+                indicators.forEach(el => el.style.display = '');
+                downloadBtn.disabled = false;
+            }
+        }
+
+        // Initialize on load
+        window.onload = function () {
+            renderEditorCards();
+            updateDocumentTypography();
+        };
+    </script>
+</body>
+</html>
