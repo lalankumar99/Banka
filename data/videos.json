@@ -1,0 +1,29 @@
+[
+  {
+    "id": "vid_001",
+    "title": "Power Generation - Thermal Power Plant Explained",
+    "branch": "electrical",
+    "semester": 3,
+    "subject": "Power Generation",
+    "videoUrl": "https://www.youtube.com/watch?v=VIDEO_ID_HERE",
+    "duration": "18:20"
+  },
+  {
+    "id": "vid_002",
+    "title": "Star-Delta Transformation Easy Trick",
+    "branch": "electrical",
+    "semester": 3,
+    "subject": "Electrical Circuit & Network",
+    "videoUrl": "https://youtu.be/VIDEO_ID_HERE",
+    "duration": "12:45"
+  },
+  {
+    "id": "vid_003",
+    "title": "DC Machine Working Principle",
+    "branch": "electrical",
+    "semester": 3,
+    "subject": "DC Machine",
+    "videoUrl": "VIDEO_ID_HERE",
+    "duration": "15:10"
+  }
+]
