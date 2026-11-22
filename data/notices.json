@@ -1,0 +1,26 @@
+[
+  {
+    "id": "not_001",
+    "title": "GP Banka Student Learning ऐप में सभी ब्रांच के सेमेस्टर नोट्स, VVI और PYQ जुड़ रहे हैं।",
+    "category": "App Update",
+    "date": "22 Nov 2026",
+    "branch": "all",
+    "isNew": true
+  },
+  {
+    "id": "not_002",
+    "title": "SBTE Bihar सेमेस्टर एग्जाम की तैयारी के लिए PYQ और VVI सेक्शन चेक करें।",
+    "category": "SBTE Exam",
+    "date": "20 Nov 2026",
+    "branch": "all",
+    "isNew": true
+  },
+  {
+    "id": "not_003",
+    "title": "किसी भी सब्जेक्ट या लैब डाउट के लिए Teacher Help Center से अपने ब्रांच के टीचर की टाइमिंग देखें।",
+    "category": "Help Center",
+    "date": "18 Nov 2026",
+    "branch": "all",
+    "isNew": false
+  }
+]
