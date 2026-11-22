@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#ffffff" />
+  <title>Teacher Help Center - GP Banka</title>
+
+  <link rel="stylesheet" href="../css/app.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+</head>
+<body>
+
+  <!-- ========== TOP APP BAR (Back + Title) ========== -->
+  <header class="app-header">
+    <div class="brand-area">
+      <a href="../index.html" class="back-btn" aria-label="Back to Home">
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+      </a>
+      <div class="brand-info">
+        <span class="brand-title">Teacher Help Center</span>
+        <span class="brand-subtitle">GP Banka • Branch & Subject Support</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========== MAIN CONTENT ========== -->
+  <main class="app-main">
+
+    <!-- Search Teacher / Subject / Help Topic -->
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <input
+        type="search"
+        id="teacherSearch"
+        placeholder="टीचर का नाम, सब्जेक्ट या काम (जैसे Lab, Scholarship)..."
+        autocomplete="off"
+      />
+    </div>
+
+    <!-- Branch Filter Chips -->
+    <div class="chip-row" id="branchFilterChips">
+      <button type="button" class="filter-chip active" data-branch="all">All Branches</button>
+      <button type="button" class="filter-chip" data-branch="electrical">Electrical (EE)</button>
+      <button type="button" class="filter-chip" data-branch="civil">Civil (CE)</button>
+      <button type="button" class="filter-chip" data-branch="mechanical">Mechanical (ME)</button>
+      <button type="button" class="filter-chip" data-branch="electronics">Electronics (EC)</button>
+      <button type="button" class="filter-chip" data-branch="cse">CSE (CS)</button>
+    </div>
+
+    <!-- Result Count -->
+    <div class="section-header">
+      <h2 class="section-title">Available Faculty & Desk</h2>
+      <span class="notice-date" id="teacherCount">Loading...</span>
+    </div>
+
+    <!-- Dynamic Teacher Cards -->
+    <div class="list-stack" id="teacherList">
+      <div class="empty-state">टीचर्स की जानकारी लोड हो रही है...</div>
+    </div>
+
+  </main>
+
+  <!-- ========== FIXED BOTTOM NAVIGATION ========== -->
+  <nav class="bottom-nav">
+    <a href="../index.html" class="nav-item">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+      </svg>
+      <span>Home</span>
+    </a>
+
+    <a href="branches.html" class="nav-item">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="7" height="7"></rect>
+        <rect x="14" y="3" width="7" height="7"></rect>
+        <rect x="14" y="14" width="7" height="7"></rect>
+        <rect x="3" y="14" width="7" height="7"></rect>
+      </svg>
+      <span>Branches</span>
+    </a>
+
+    <a href="teachers.html" class="nav-item active">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+        <circle cx="9" cy="7" r="4"></circle>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+      </svg>
+      <span>Teachers</span>
+    </a>
+
+    <a href="tools.html" class="nav-item">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="3"></circle>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+      </svg>
+      <span>Tools</span>
+    </a>
+  </nav>
+
+  <!-- Core + Teacher Module -->
+  <script src="../js/core/firebase-config.js" defer></script>
+  <script src="../js/core/data-service.js" defer></script>
+  <script src="../js/modules/teachers.js" defer></script>
+</body>
+</html>
