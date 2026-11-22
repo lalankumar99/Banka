@@ -44,7 +44,7 @@
       />
     </div>
 
-    <!-- Category Filter (Notes, VVI, PYQ, Syllabus) -->
+    <!-- Category Filter (Notes, VVI, PYQ, Syllabus, Videos) -->
     <div class="filter-label">Category</div>
     <div class="chip-row" id="typeFilterChips">
       <button type="button" class="filter-chip active" data-type="all">All</button>
@@ -52,16 +52,19 @@
       <button type="button" class="filter-chip" data-type="vvi">VVI Questions</button>
       <button type="button" class="filter-chip" data-type="pyq">PYQs</button>
       <button type="button" class="filter-chip" data-type="syllabus">Syllabus</button>
+      <button type="button" class="filter-chip" data-type="videos">Videos</button>
     </div>
 
-    <!-- File Format Filter (PDF, Image, DOC, HTML) -->
-    <div class="filter-label">File Type</div>
-    <div class="chip-row" id="formatFilterChips">
-      <button type="button" class="filter-chip active" data-format="all">All Files</button>
-      <button type="button" class="filter-chip" data-format="pdf">PDF</button>
-      <button type="button" class="filter-chip" data-format="image">Image</button>
-      <button type="button" class="filter-chip" data-format="doc">DOC</button>
-      <button type="button" class="filter-chip" data-format="html">HTML</button>
+    <!-- File Format Filter (Videos/Quiz पर अपने आप छिप जाएगा) -->
+    <div id="fileFormatSection">
+      <div class="filter-label">File Type</div>
+      <div class="chip-row" id="formatFilterChips">
+        <button type="button" class="filter-chip active" data-format="all">All Files</button>
+        <button type="button" class="filter-chip" data-format="pdf">PDF</button>
+        <button type="button" class="filter-chip" data-format="image">Image</button>
+        <button type="button" class="filter-chip" data-format="doc">DOC</button>
+        <button type="button" class="filter-chip" data-format="html">HTML</button>
+      </div>
     </div>
 
     <!-- Result Header -->
@@ -70,7 +73,7 @@
       <span class="notice-date" id="materialCount">Loading...</span>
     </div>
 
-    <!-- Dynamic Material List -->
+    <!-- Dynamic Material / Video List -->
     <div class="list-stack" id="materialList">
       <div class="empty-state">स्टडी मटेरियल लोड हो रहा है...</div>
     </div>
@@ -115,9 +118,10 @@
     </a>
   </nav>
 
-  <!-- Core + Study Module -->
+  <!-- Core + Video + Study Module -->
   <script src="../js/core/firebase-config.js" defer></script>
   <script src="../js/core/data-service.js" defer></script>
+  <script src="../js/modules/videos.js" defer></script>
   <script src="../js/modules/study.js" defer></script>
 </body>
 </html>
