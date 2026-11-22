@@ -132,4 +132,74 @@ document.addEventListener("DOMContentLoaded", async () => {
       }, 180);
     });
   }
+  // ---------- 3. Render Saved / Bookmarked Notes ----------
+  const savedSection = document.getElementById("savedSection");
+  const savedList = document.getElementById("savedList");
+  const clearSavedBtn = document.getElementById("clearSavedBtn");
+  const SAVED_KEY = "gpb_saved_notes";
+
+  function renderSavedNotes() {
+    if (!savedSection || !savedList) return;
+    const saved = JSON.parse(localStorage.getItem(SAVED_KEY) || "[]");
+
+    if (saved.length === 0) {
+      savedSection.classList.add("hidden");
+      return;
+    }
+
+    savedSection.classList.remove("hidden");
+    savedList.innerHTML = saved
+      .map(
+        (m) => `
+        <a href="pages/viewer.html?id=${encodeURIComponent(m.id)}" class="app-card branch-card">
+          <div class="branch-left">
+            <div class="branch-code">${escapeHTML((m.fileFormat || "PDF").toUpperCase())}</div>
+            <div>
+              <div class="branch-name">${escapeHTML(m.title)}</div>
+              <div class="branch-meta">${escapeHTML(m.subject)} • Sem ${escapeHTML(m.semester)}</div>
+            </div>
+          </div>
+          <svg class="chevron-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </a>
+      `
+      )
+      .join("");
+  }
+
+  renderSavedNotes();
+
+  if (clearSavedBtn) {
+    clearSavedBtn.addEventListener("click", () => {
+      localStorage.removeItem(SAVED_KEY);
+      renderSavedNotes();
+    });
+  }
+
+  // ---------- 4. One-Tap PWA Install Prompt ----------
+  let deferredPrompt = null;
+  const installBanner = document.getElementById("installBanner");
+  const installAppBtn = document.getElementById("installAppBtn");
+
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    if (installBanner) installBanner.classList.remove("hidden");
+  });
+
+  if (installAppBtn) {
+    installAppBtn.addEventListener("click", async () => {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      await deferredPrompt.userChoice;
+      deferredPrompt = null;
+      if (installBanner) installBanner.classList.add("hidden");
+    });
+  }
+
+  window.addEventListener("appinstalled", () => {
+    if (installBanner) installBanner.classList.add("hidden");
+  });
+
 });
