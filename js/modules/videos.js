@@ -1,20 +1,13 @@
 /* =========================================================
-   GP Banka Student Learning - Smart Video Lectures Module
-   Auto-detects: Full URL, youtu.be, Shorts, Embed, or raw ID
+   GP Banka Student Learning - Locked Video Lectures Module
+   No YouTube Redirect | Tap to Play/Pause | Custom Landscape
    ========================================================= */
 
 window.VideoModule = (function () {
-  // कोई भी YouTube लिंक या ID डालो -> यह अपने आप 11-अक्षर की Video ID निकाल लेगा
   function extractYouTubeId(input) {
     if (!input) return "";
     const str = String(input).trim();
-
-    // अगर सीधे 11-अक्षर की Video ID डाली हो
-    if (/^[a-zA-Z0-9_-]{11}$/.test(str)) {
-      return str;
-    }
-
-    // किसी भी YouTube URL से ID निकालने के लिए
+    if (/^[a-zA-Z0-9_-]{11}$/.test(str)) return str;
     const regex =
       /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/|live\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
     const match = str.match(regex);
@@ -29,14 +22,20 @@ window.VideoModule = (function () {
       .replace(/"/g, "&quot;");
   }
 
-  // वीडियो प्लेयर और लिस्ट रेंडर करना
+  function sendPlayerCommand(iframe, func) {
+    if (!iframe || !iframe.contentWindow) return;
+    iframe.contentWindow.postMessage(
+      JSON.stringify({ event: "command", func: func, args: [] }),
+      "*"
+    );
+  }
+
   function render(containerEl, videos, activeVideoId = null) {
     if (!videos || videos.length === 0) {
       containerEl.innerHTML = `<div class="empty-state">इस ब्रांच या सेमेस्टर के लिए अभी कोई वीडियो लेक्चर नहीं है।</div>`;
       return;
     }
 
-    // पहला वैध वीडियो चुनें (या जो यूज़र ने क्लिक किया हो)
     const currentVideo =
       videos.find((v) => v.id === activeVideoId) || videos[0];
     const ytId = extractYouTubeId(currentVideo.videoUrl);
@@ -44,14 +43,32 @@ window.VideoModule = (function () {
     const playerHtml = ytId
       ? `
         <div class="video-player-card">
-          <div class="video-frame-wrap">
+          <div class="video-frame-wrap" id="gpbVideoWrap">
             <iframe
-              src="https://www.youtube.com/embed/${ytId}?rel=0&modestbranding=1"
+              id="gpbYtFrame"
+              src="https://www.youtube.com/embed/${ytId}?enablejsapi=1&controls=0&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&playsinline=1"
               title="${escapeHTML(currentVideo.title)}"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen
+              allow="autoplay; encrypted-media; fullscreen"
             ></iframe>
+
+            <!-- पारदर्शी शील्ड (YouTube क्लिक ब्लॉक + Tap to Play/Pause) -->
+            <div class="video-shield" id="gpbVideoShield">
+              <div class="video-play-badge">
+                <svg viewBox="0 0 24 24"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>
+              </div>
+            </div>
+
+            <!-- तुम्हारा कस्टम Landscape / Fullscreen बटन -->
+            <button type="button" class="video-fs-btn" id="gpbLandscapeBtn" aria-label="Landscape Fullscreen">
+              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <polyline points="9 21 3 21 3 15"></polyline>
+                <line x1="21" y1="3" x2="14" y2="10"></line>
+                <line x1="3" y1="21" x2="10" y2="14"></line>
+              </svg>
+            </button>
           </div>
+
           <div class="video-now-playing">
             <div class="material-title">${escapeHTML(currentVideo.title)}</div>
             <div class="material-meta">${escapeHTML(currentVideo.subject)} • Sem ${escapeHTML(currentVideo.semester)}</div>
@@ -87,7 +104,58 @@ window.VideoModule = (function () {
       <div class="list-stack" style="margin-top:14px;">${listHtml}</div>
     `;
 
-    // किसी भी वीडियो पर क्लिक करने पर ऊपर प्लेयर में तुरंत चलेगा
+    // 1. Tap to Play / Pause (बिन YouTube खोले)
+    const wrap = document.getElementById("gpbVideoWrap");
+    const iframe = document.getElementById("gpbYtFrame");
+    const shield = document.getElementById("gpbVideoShield");
+    const fsBtn = document.getElementById("gpbLandscapeBtn");
+
+    let isPlaying = false;
+
+    if (shield && iframe && wrap) {
+      shield.addEventListener("click", () => {
+        if (isPlaying) {
+          sendPlayerCommand(iframe, "pauseVideo");
+          wrap.classList.remove("is-playing");
+          isPlaying = false;
+        } else {
+          sendPlayerCommand(iframe, "playVideo");
+          wrap.classList.add("is-playing");
+          isPlaying = true;
+        }
+      });
+    }
+
+    // 2. कस्टम Landscape Fullscreen बटन
+    if (fsBtn && wrap) {
+      fsBtn.addEventListener("click", async (e) => {
+        e.stopPropagation();
+        try {
+          if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+            if (wrap.requestFullscreen) {
+              await wrap.requestFullscreen();
+            } else if (wrap.webkitRequestFullscreen) {
+              wrap.webkitRequestFullscreen();
+            }
+            // मोबाइल को अपने आप Landscape में घुमाने की कोशिश
+            if (screen.orientation && screen.orientation.lock) {
+              screen.orientation.lock("landscape").catch(() => {});
+            }
+          } else {
+            if (document.exitFullscreen) {
+              await document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) {
+              document.webkitExitFullscreen();
+            }
+            if (screen.orientation && screen.orientation.unlock) {
+              screen.orientation.unlock();
+            }
+          }
+        } catch (_) {}
+      });
+    }
+
+    // 3. लिस्ट से दूसरा वीडियो चुनना
     containerEl.querySelectorAll(".video-item-btn").forEach((btn) => {
       btn.addEventListener("click", () => {
         render(containerEl, videos, btn.dataset.vid);
