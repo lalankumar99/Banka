@@ -7,7 +7,6 @@
   <title>GP Banka Student Learning</title>
   <link rel="manifest" href="manifest.json" />
 
-
   <!-- Core Pure White Stylesheets -->
   <link rel="stylesheet" href="css/app.css" />
   <link rel="stylesheet" href="css/components.css" />
@@ -33,7 +32,6 @@
     </a>
 
     <div class="header-actions">
-      <!-- Notification Button -->
       <button type="button" class="icon-btn" id="notifBtn" aria-label="Notifications">
         <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
           <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
@@ -47,7 +45,18 @@
   <!-- ========== MAIN SCROLLABLE APP SCREEN ========== -->
   <main class="app-main">
 
-    <!-- Search Bar -->
+    <!-- 1. One-Tap PWA Install Banner (Auto-shows on Android Chrome) -->
+    <section class="app-section hidden" id="installBanner">
+      <div class="app-card help-card">
+        <div>
+          <div class="help-title">Install GP Banka App</div>
+          <div class="help-desc">बिना ब्राउज़र के तेज़ और ऑफ़लाइन चलाने के लिए इंस्टॉल करें</div>
+        </div>
+        <button type="button" id="installAppBtn" class="btn-solid">Install</button>
+      </div>
+    </section>
+
+    <!-- 2. Global Search Bar -->
     <div class="search-box">
       <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="11" cy="11" r="8"></circle>
@@ -56,14 +65,13 @@
       <input type="search" id="globalSearch" placeholder="Notes, VVI, PYQ या Teacher खोजें..." autocomplete="off" />
     </div>
 
-  <!-- Live Search Results Container -->
+    <!-- Live Search Results Container -->
     <div id="searchResultsBox" class="list-stack hidden" style="margin-bottom: 18px;"></div>
 
-
-    <!-- Quick Access Section -->
+    <!-- 3. Quick Study Categories (हर कैटेगरी अलग, कोई डुप्लीकेट नहीं) -->
     <section class="app-section">
       <div class="section-header">
-        <h2 class="section-title">Quick Learning</h2>
+        <h2 class="section-title">Study Categories</h2>
       </div>
 
       <div class="grid-3">
@@ -98,18 +106,6 @@
           <span class="tile-label">PYQs</span>
         </a>
 
-        <a href="pages/teachers.html" class="feature-tile">
-          <div class="tile-icon">
-            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-              <circle cx="9" cy="7" r="4"></circle>
-              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-            </svg>
-          </div>
-          <span class="tile-label">Teacher Help</span>
-        </a>
-
         <a href="pages/study-material.html?type=syllabus" class="feature-tile">
           <div class="tile-icon">
             <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
@@ -120,6 +116,16 @@
             </svg>
           </div>
           <span class="tile-label">Syllabus</span>
+        </a>
+
+        <a href="pages/notices.html" class="feature-tile">
+          <div class="tile-icon">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+            </svg>
+          </div>
+          <span class="tile-label">Notices</span>
         </a>
 
         <a href="pages/tools.html" class="feature-tile">
@@ -133,12 +139,21 @@
               <line x1="14" y1="14" x2="16" y2="14"></line>
             </svg>
           </div>
-          <span class="tile-label">Student Tools</span>
+          <span class="tile-label">Calculators</span>
         </a>
       </div>
     </section>
 
-    <!-- Teacher Help Center Highlight -->
+    <!-- 4. Saved / Bookmarked Notes (Auto-shows when student saves a file) -->
+    <section class="app-section hidden" id="savedSection">
+      <div class="section-header">
+        <h2 class="section-title">Saved Notes</h2>
+        <button type="button" class="section-link" id="clearSavedBtn">Clear All</button>
+      </div>
+      <div class="list-stack" id="savedList"></div>
+    </section>
+
+    <!-- 5. Teacher Help Center (अलग सेक्शन) -->
     <section class="app-section">
       <div class="app-card help-card">
         <div>
@@ -149,7 +164,7 @@
       </div>
     </section>
 
-    <!-- Select Branch Section (आगे data-service.js से डायनामिक भी लोड होगा) -->
+    <!-- 6. Select Branch (हर ब्रांच का अलग सेमेस्टर रूट) -->
     <section class="app-section">
       <div class="section-header">
         <h2 class="section-title">Select Branch</h2>
@@ -224,7 +239,7 @@
       </div>
     </section>
 
-    <!-- Latest College / SBTE Notices -->
+    <!-- 7. Latest College / SBTE Notices -->
     <section class="app-section">
       <div class="section-header">
         <h2 class="section-title">Latest Notices</h2>
@@ -258,7 +273,7 @@
             <span class="badge-clean">Welcome</span>
             <span class="notice-date">Just now</span>
           </div>
-          <div class="notice-text">GP Banka Student Learning में आपका स्वागत है। आगे Firebase जुड़ने पर सभी लाइव नोटिस यहीं दिखेंगे।</div>
+          <div class="notice-text">GP Banka Student Learning में आपका स्वागत है।</div>
         </div>
       </div>
     </div>
@@ -302,7 +317,7 @@
     </a>
   </nav>
 
-  <!-- Minimal Inline UI Trigger (Notification Sheet) -->
+  <!-- Notification Sheet Trigger -->
   <script>
     const notifBtn = document.getElementById('notifBtn');
     const notifSheet = document.getElementById('notifSheet');
@@ -323,11 +338,12 @@
     });
   </script>
 
-  <!-- Core App Engine (अगले स्टेप में बनेंगे) -->
+  <!-- Core App Engine -->
   <script src="js/core/firebase-config.js" defer></script>
   <script src="js/core/data-service.js" defer></script>
   <script src="js/modules/home.js" defer></script>
 
+  <!-- PWA Service Worker -->
   <script>
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
