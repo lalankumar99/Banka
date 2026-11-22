@@ -1,0 +1,74 @@
+[
+  {
+    "id": "mat_001",
+    "title": "Electrical Circuit & Network - Unit 1 Notes",
+    "branch": "electrical",
+    "semester": 3,
+    "subject": "Electrical Circuit & Network",
+    "type": "notes",
+    "fileFormat": "pdf",
+    "url": "assets/pdfs/electrical/sem3-ecn-unit1.pdf",
+    "size": "1.8 MB",
+    "updatedAt": "2026-11-20"
+  },
+  {
+    "id": "mat_002",
+    "title": "Star-Delta & Network Theorems Formula Chart",
+    "branch": "electrical",
+    "semester": 3,
+    "subject": "Electrical Circuit & Network",
+    "type": "vvi",
+    "fileFormat": "image",
+    "url": "assets/images/star-delta-chart.png",
+    "size": "420 KB",
+    "updatedAt": "2026-11-21"
+  },
+  {
+    "id": "mat_003",
+    "title": "DC Machine Previous Year Questions (2021-2025)",
+    "branch": "electrical",
+    "semester": 3,
+    "subject": "DC Machine",
+    "type": "pyq",
+    "fileFormat": "doc",
+    "url": "assets/docs/dc-machine-pyq.docx",
+    "size": "650 KB",
+    "updatedAt": "2026-11-18"
+  },
+  {
+    "id": "mat_004",
+    "title": "Python Programming Quick Revision Sheet",
+    "branch": "electrical",
+    "semester": 3,
+    "subject": "Python Programming",
+    "type": "notes",
+    "fileFormat": "html",
+    "url": "assets/html-notes/python-revision.html",
+    "size": "Interactive",
+    "updatedAt": "2026-11-22"
+  },
+  {
+    "id": "mat_005",
+    "title": "SBTE 3rd Semester Electrical Syllabus",
+    "branch": "electrical",
+    "semester": 3,
+    "subject": "All Subjects",
+    "type": "syllabus",
+    "fileFormat": "pdf",
+    "url": "assets/pdfs/electrical/sem3-syllabus.pdf",
+    "size": "1.1 MB",
+    "updatedAt": "2026-11-15"
+  },
+  {
+    "id": "mat_006",
+    "title": "Engineering Mechanics - VVI Questions",
+    "branch": "civil",
+    "semester": 2,
+    "subject": "Engineering Mechanics",
+    "type": "vvi",
+    "fileFormat": "pdf",
+    "url": "assets/pdfs/civil/sem2-mechanics-vvi.pdf",
+    "size": "950 KB",
+    "updatedAt": "2026-11-19"
+  }
+]
