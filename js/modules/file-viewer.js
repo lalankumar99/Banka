@@ -84,15 +84,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     `;
   }
 
-  // ---------- 3. PDF Viewer (Mobile-Safe + Quick Open) ----------
-  function renderPdf(url, external) {
-    const iframeSrc = external
-      ? `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(url)}`
+    // ---------- 3. PDF Viewer (Android Chrome + Vercel Live Ready) ----------
+  function renderPdf(url) {
+    // Relative path ko full live URL (https://gpbanka.vercel.app/...) mein badlo
+    const fullUrl = new URL(url, window.location.href).href;
+    const isLiveHttp = /^https?:\/\//i.test(fullUrl) && !fullUrl.includes("localhost") && !fullUrl.includes("127.0.0.1");
+
+    const iframeSrc = isLiveHttp
+      ? `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(fullUrl)}`
       : url;
 
     stageEl.innerHTML = `
       <div style="padding:10px 16px; border-bottom:1px solid var(--border-light); display:flex; justify-content:space-between; align-items:center; gap:8px;">
-        <span class="notice-date">अगर मोबाइल में PDF न खुले, तो Open दबाएँ</span>
+        <span class="notice-date">PDF लोड हो रहा है... न खुले तो Open दबाएँ</span>
         <a href="${url}" target="_blank" rel="noopener" class="btn-outline">Open PDF</a>
       </div>
       <iframe
