@@ -1,301 +1,324 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Government Polytechnic Banka | राजकीय पॉलिटेक्निक बांका</title>
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800&family=Noto+Sans+Devanagari:wght@500;700&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#ffffff" />
+  <title>GP Banka Student Learning</title>
 
-  <!-- अलग फाइल के लिए: नीचे के स्टाइल को "assets/css/intro.css" में रखें -->
-  <style>
-    :root {
-      --navy-dark: #050b1a;
-      --navy-mid: #0b1938;
-      --electric-blue: #00d2ff;
-      --royal-blue: #1e6bff;
-      --gold: #f5c542;
-      --gold-dark: #c9971c;
-      --white: #ffffff;
-      --text-light: #e2e8f0;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      min-height: 100vh;
-      min-height: 100dvh;
-      width: 100%;
-      overflow-x: hidden;
-      background-color: var(--navy-dark);
-      color: var(--white);
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      position: relative;
-    }
-
-    .campus-bg {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      overflow: hidden;
-    }
-
-    .campus-bg img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center;
-      transform: scale(1.02);
-      animation: slowZoom 18s ease-in-out infinite alternate;
-      filter: brightness(0.85) contrast(1.08);
-    }
-
-    /* Dark Navy Blue, Electric Blue & Gold Overlay */
-    .campus-overlay {
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(circle at 50% 35%, rgba(0, 210, 255, 0.18) 0%, transparent 60%),
-        linear-gradient(180deg, rgba(5, 11, 26, 0.82) 0%, rgba(11, 25, 56, 0.72) 50%, rgba(5, 11, 26, 0.94) 100%);
-    }
-
-    .intro-wrapper {
-      position: relative;
-      z-index: 2;
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1.5rem;
-      text-align: center;
-    }
-
-    .hero-box {
-      max-width: 780px;
-      width: 100%;
-      padding: clamp(1.75rem, 4vw, 3rem) clamp(1.25rem, 3.5vw, 2.75rem);
-      background: rgba(8, 18, 42, 0.62);
-      border: 1px solid rgba(245, 197, 66, 0.35);
-      border-top: 3px solid var(--gold);
-      border-radius: 24px;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      box-shadow: 0 24px 50px rgba(0, 0, 0, 0.65), 0 0 30px rgba(0, 210, 255, 0.15);
-      animation: fadeUp 0.7s ease-out both;
-    }
-
-    .college-logo {
-      width: 92px;
-      height: 92px;
-      margin: 0 auto 1.1rem;
-      border-radius: 50%;
-      background: radial-gradient(circle, var(--navy-mid), var(--navy-dark));
-      border: 2.5px solid var(--gold);
-      box-shadow: 0 0 22px rgba(245, 197, 66, 0.35), 0 0 12px rgba(0, 210, 255, 0.3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0.6rem;
-    }
-
-    .college-logo svg {
-      width: 100%;
-      height: 100%;
-    }
-
-    .govt-tag {
-      display: inline-block;
-      font-size: clamp(0.75rem, 1.6vw, 0.88rem);
-      color: var(--electric-blue);
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      margin-bottom: 0.5rem;
-    }
-
-    .title-en {
-      font-family: 'Cinzel', serif;
-      font-size: clamp(1.6rem, 4.5vw, 2.8rem);
-      font-weight: 800;
-      line-height: 1.18;
-      background: linear-gradient(135deg, #ffffff 20%, #fde68a 60%, var(--gold) 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      margin-bottom: 0.35rem;
-    }
-
-    .title-hi {
-      font-family: 'Noto Sans Devanagari', sans-serif;
-      font-size: clamp(1.2rem, 3vw, 1.7rem);
-      font-weight: 700;
-      color: var(--white);
-      margin-bottom: 1rem;
-    }
-
-    .gold-line {
-      width: 120px;
-      height: 3px;
-      margin: 0 auto 1.1rem;
-      border-radius: 99px;
-      background: linear-gradient(90deg, transparent, var(--electric-blue), var(--gold), var(--electric-blue), transparent);
-    }
-
-    .subtitle {
-      font-size: clamp(0.88rem, 1.8vw, 1.02rem);
-      color: var(--text-light);
-      margin-bottom: 1.8rem;
-      line-height: 1.6;
-    }
-
-    .enter-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.7rem;
-      padding: 0.95rem 2.4rem;
-      border-radius: 999px;
-      background: linear-gradient(135deg, var(--royal-blue), #093894);
-      color: var(--white);
-      font-size: clamp(0.95rem, 2vw, 1.08rem);
-      font-weight: 700;
-      text-decoration: none;
-      border: 1.5px solid var(--gold);
-      box-shadow: 0 10px 25px rgba(0, 210, 255, 0.35);
-      transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
-    }
-
-    .enter-btn:hover,
-    .enter-btn:focus-visible {
-      transform: translateY(-3px);
-      box-shadow: 0 14px 32px rgba(0, 210, 255, 0.55), 0 0 18px rgba(245, 197, 66, 0.45);
-      outline: none;
-    }
-
-    .intro-footer {
-      position: relative;
-      z-index: 2;
-      text-align: center;
-      padding: 0.9rem 1rem;
-      font-size: 0.8rem;
-      color: rgba(255, 255, 255, 0.7);
-      background: rgba(5, 11, 26, 0.65);
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    body.fade-out {
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    @keyframes slowZoom {
-      from { transform: scale(1.02); }
-      to { transform: scale(1.1); }
-    }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(18px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @media (max-width: 576px) {
-      .hero-box {
-        padding: 1.5rem 1.1rem;
-        border-radius: 18px;
-      }
-      .enter-btn {
-        width: 100%;
-        padding: 0.9rem 1.2rem;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation: none !important;
-        transition: none !important;
-      }
-    }
-  </style>
+  <!-- Core Pure White Stylesheets -->
+  <link rel="stylesheet" href="css/app.css" />
+  <link rel="stylesheet" href="css/components.css" />
 </head>
 <body>
 
-  <!-- Full-Screen College Campus Background Image -->
-  <div class="campus-bg" aria-hidden="true">
-    <img
-      src="https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=1920&q=85"
-      alt="Government Polytechnic Banka Campus View"
-      onerror="this.src='https://placehold.co/1920x1080/050b1a/f5c542?text=Government+Polytechnic+Banka'"
-    />
-    <div class="campus-overlay"></div>
-  </div>
+  <!-- ========== TOP APP BAR (Left: GP Banka Logo | Right: Notification) ========== -->
+  <header class="app-header">
+    <a href="index.html" class="brand-area">
+      <img
+        src="assets/images/logo.png"
+        alt="GP Banka Logo"
+        class="college-logo"
+        onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';"
+      />
+      <div id="logoFallback" class="college-logo" style="display:none; align-items:center; justify-content:center; font-size:0.78rem; font-weight:700;">
+        GPB
+      </div>
+      <div class="brand-info">
+        <span class="brand-title">GP Banka</span>
+        <span class="brand-subtitle">Student Learning</span>
+      </div>
+    </a>
 
-  <!-- Main Center Intro Content -->
-  <main class="intro-wrapper">
-    <section class="hero-box" aria-labelledby="college-name">
-      <!-- Official Style Emblem / Logo Placeholder -->
-      <div class="college-logo" role="img" aria-label="Government Polytechnic Banka Logo">
-        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="50" cy="50" r="42" stroke="#f5c542" stroke-width="3" stroke-dasharray="6 3" />
-          <circle cx="50" cy="50" r="34" stroke="#00d2ff" stroke-width="1.5" />
-          <path d="M50 20 L55 32 L50 38 L45 32 Z" fill="#f5c542" />
-          <path d="M32 62 C38 58, 45 59, 50 63 C55 59, 62 58, 68 62 L68 72 C62 68, 55 69, 50 73 C45 69, 38 68, 32 72 Z" fill="rgba(0,210,255,0.25)" stroke="#f5c542" stroke-width="2" />
-          <text x="50" y="54" text-anchor="middle" fill="#ffffff" font-family="Cinzel, serif" font-weight="800" font-size="13">GPB</text>
+    <div class="header-actions">
+      <!-- Notification Button -->
+      <button type="button" class="icon-btn" id="notifBtn" aria-label="Notifications">
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
         </svg>
+        <span class="notif-dot" id="notifDot"></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ========== MAIN SCROLLABLE APP SCREEN ========== -->
+  <main class="app-main">
+
+    <!-- Search Bar -->
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <input type="search" id="globalSearch" placeholder="Notes, VVI, PYQ या Teacher खोजें..." autocomplete="off" />
+    </div>
+
+    <!-- Quick Access Section -->
+    <section class="app-section">
+      <div class="section-header">
+        <h2 class="section-title">Quick Learning</h2>
       </div>
 
-      <span class="govt-tag">Dept. of Science, Technology &amp; Technical Education, Govt. of Bihar</span>
+      <div class="grid-3">
+        <a href="pages/study-material.html?type=notes" class="feature-tile">
+          <div class="tile-icon">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
+          </div>
+          <span class="tile-label">Notes</span>
+        </a>
 
-      <h1 class="title-en" id="college-name">GOVERNMENT POLYTECHNIC BANKA</h1>
-      <h2 class="title-hi" lang="hi">राजकीय पॉलिटेक्निक बांका</h2>
+        <a href="pages/study-material.html?type=vvi" class="feature-tile">
+          <div class="tile-icon">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+          </div>
+          <span class="tile-label">VVI Questions</span>
+        </a>
 
-      <div class="gold-line" aria-hidden="true"></div>
+        <a href="pages/study-material.html?type=pyq" class="feature-tile">
+          <div class="tile-icon">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+            </svg>
+          </div>
+          <span class="tile-label">PYQs</span>
+        </a>
 
-      <p class="subtitle">
-        AICTE Approved &bull; Affiliated to SBTE, Patna (Bihar)<br />
-        <span lang="hi">उत्कृष्ट तकनीकी शिक्षा एवं कौशल विकास के प्रति समर्पित राजकीय संस्थान</span>
-      </p>
+        <a href="pages/teachers.html" class="feature-tile">
+          <div class="tile-icon">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+          </div>
+          <span class="tile-label">Teacher Help</span>
+        </a>
 
-      <a href="home.html" id="enterBtn" class="enter-btn">
-        <span>Enter Website &bull; प्रवेश करें</span>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f5c542" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <line x1="5" y1="12" x2="19" y2="12"></line>
-          <polyline points="12 5 19 12 12 19"></polyline>
-        </svg>
-      </a>
+        <a href="pages/study-material.html?type=syllabus" class="feature-tile">
+          <div class="tile-icon">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+          </div>
+          <span class="tile-label">Syllabus</span>
+        </a>
+
+        <a href="pages/tools.html" class="feature-tile">
+          <div class="tile-icon">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="4" y="2" width="16" height="20" rx="2"></rect>
+              <line x1="8" y1="6" x2="16" y2="6"></line>
+              <line x1="8" y1="10" x2="10" y2="10"></line>
+              <line x1="14" y1="10" x2="16" y2="10"></line>
+              <line x1="8" y1="14" x2="10" y2="14"></line>
+              <line x1="14" y1="14" x2="16" y2="14"></line>
+            </svg>
+          </div>
+          <span class="tile-label">Student Tools</span>
+        </a>
+      </div>
     </section>
+
+    <!-- Teacher Help Center Highlight -->
+    <section class="app-section">
+      <div class="app-card help-card">
+        <div>
+          <div class="help-title">Teacher Help Center</div>
+          <div class="help-desc">ब्रांच और सब्जेक्ट के हिसाब से सही टीचर चुनें</div>
+        </div>
+        <a href="pages/teachers.html" class="btn-outline">खोलें</a>
+      </div>
+    </section>
+
+    <!-- Select Branch Section (आगे data-service.js से डायनामिक भी लोड होगा) -->
+    <section class="app-section">
+      <div class="section-header">
+        <h2 class="section-title">Select Branch</h2>
+        <a href="pages/branches.html" class="section-link">सभी देखें</a>
+      </div>
+
+      <div class="list-stack" id="branchList">
+        <a href="pages/semester.html?branch=electrical" class="app-card branch-card">
+          <div class="branch-left">
+            <div class="branch-code">EE</div>
+            <div>
+              <div class="branch-name">Electrical Engineering</div>
+              <div class="branch-meta">1st - 6th Sem • Notes, VVI, PYQ</div>
+            </div>
+          </div>
+          <svg class="chevron-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </a>
+
+        <a href="pages/semester.html?branch=civil" class="app-card branch-card">
+          <div class="branch-left">
+            <div class="branch-code">CE</div>
+            <div>
+              <div class="branch-name">Civil Engineering</div>
+              <div class="branch-meta">1st - 6th Sem • Notes, VVI, PYQ</div>
+            </div>
+          </div>
+          <svg class="chevron-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </a>
+
+        <a href="pages/semester.html?branch=mechanical" class="app-card branch-card">
+          <div class="branch-left">
+            <div class="branch-code">ME</div>
+            <div>
+              <div class="branch-name">Mechanical Engineering</div>
+              <div class="branch-meta">1st - 6th Sem • Notes, VVI, PYQ</div>
+            </div>
+          </div>
+          <svg class="chevron-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </a>
+
+        <a href="pages/semester.html?branch=electronics" class="app-card branch-card">
+          <div class="branch-left">
+            <div class="branch-code">EC</div>
+            <div>
+              <div class="branch-name">Electronics Engineering</div>
+              <div class="branch-meta">1st - 6th Sem • Notes, VVI, PYQ</div>
+            </div>
+          </div>
+          <svg class="chevron-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </a>
+
+        <a href="pages/semester.html?branch=cse" class="app-card branch-card">
+          <div class="branch-left">
+            <div class="branch-code">CS</div>
+            <div>
+              <div class="branch-name">Computer Science & Engg.</div>
+              <div class="branch-meta">1st - 6th Sem • Notes, VVI, PYQ</div>
+            </div>
+          </div>
+          <svg class="chevron-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </a>
+      </div>
+    </section>
+
+    <!-- Latest College / SBTE Notices -->
+    <section class="app-section">
+      <div class="section-header">
+        <h2 class="section-title">Latest Notices</h2>
+        <a href="pages/notices.html" class="section-link">सभी देखें</a>
+      </div>
+
+      <div class="list-stack" id="homeNoticeList">
+        <div class="app-card notice-row">
+          <div class="notice-top">
+            <span class="badge-clean">SBTE Update</span>
+            <span class="notice-date">New</span>
+          </div>
+          <div class="notice-text">GP Banka Student Learning ऐप में सभी ब्रांच के सेमेस्टर नोट्स और PYQ जुड़ रहे हैं।</div>
+        </div>
+      </div>
+    </section>
+
   </main>
 
-  <footer class="intro-footer">
-    Government Polytechnic Banka, Bihar &bull; Official Portal
-  </footer>
+  <!-- ========== ANDROID-STYLE NOTIFICATION SHEET ========== -->
+  <div class="sheet-backdrop hidden" id="notifSheet">
+    <div class="bottom-sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <h3 class="section-title">Notifications</h3>
+        <button type="button" class="section-link" id="closeNotifBtn">बंद करें</button>
+      </div>
+      <div class="list-stack" id="notifSheetList">
+        <div class="app-card notice-row">
+          <div class="notice-top">
+            <span class="badge-clean">Welcome</span>
+            <span class="notice-date">Just now</span>
+          </div>
+          <div class="notice-text">GP Banka Student Learning में आपका स्वागत है। आगे Firebase जुड़ने पर सभी लाइव नोटिस यहीं दिखेंगे।</div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  <!-- अलग फाइल के लिए: नीचे के स्क्रिप्ट को "assets/js/intro.js" में रखें -->
+  <!-- ========== ANDROID-STYLE FIXED BOTTOM NAVIGATION ========== -->
+  <nav class="bottom-nav">
+    <a href="index.html" class="nav-item active">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+      </svg>
+      <span>Home</span>
+    </a>
+
+    <a href="pages/branches.html" class="nav-item">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="7" height="7"></rect>
+        <rect x="14" y="3" width="7" height="7"></rect>
+        <rect x="14" y="14" width="7" height="7"></rect>
+        <rect x="3" y="14" width="7" height="7"></rect>
+      </svg>
+      <span>Branches</span>
+    </a>
+
+    <a href="pages/teachers.html" class="nav-item">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+        <circle cx="9" cy="7" r="4"></circle>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+      </svg>
+      <span>Teachers</span>
+    </a>
+
+    <a href="pages/tools.html" class="nav-item">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="3"></circle>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+      </svg>
+      <span>Tools</span>
+    </a>
+  </nav>
+
+  <!-- Minimal Inline UI Trigger (Notification Sheet) -->
   <script>
-    (function () {
-      const enterBtn = document.getElementById('enterBtn');
-      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const notifBtn = document.getElementById('notifBtn');
+    const notifSheet = document.getElementById('notifSheet');
+    const closeNotifBtn = document.getElementById('closeNotifBtn');
+    const notifDot = document.getElementById('notifDot');
 
-      if (enterBtn) {
-        enterBtn.addEventListener('click', function (e) {
-          if (prefersReducedMotion) return;
-          e.preventDefault();
-          const target = this.getAttribute('href');
-          document.body.classList.add('fade-out');
-          setTimeout(function () {
-            window.location.href = target;
-          }, 250);
-        });
-      }
-    })();
+    notifBtn.addEventListener('click', () => {
+      notifSheet.classList.remove('hidden');
+      if (notifDot) notifDot.style.display = 'none';
+    });
+
+    closeNotifBtn.addEventListener('click', () => {
+      notifSheet.classList.add('hidden');
+    });
+
+    notifSheet.addEventListener('click', (e) => {
+      if (e.target === notifSheet) notifSheet.classList.add('hidden');
+    });
   </script>
+
+  <!-- Core App Engine (अगले स्टेप में बनेंगे) -->
+  <script src="js/core/firebase-config.js" defer></script>
+  <script src="js/core/data-service.js" defer></script>
 </body>
 </html>
