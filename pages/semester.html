@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#ffffff" />
+  <title>Select Semester - GP Banka</title>
+
+  <link rel="stylesheet" href="../css/app.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+</head>
+<body>
+
+  <!-- ========== TOP APP BAR ========== -->
+  <header class="app-header">
+    <div class="brand-area">
+      <a href="../index.html" class="back-btn" aria-label="Back">
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+      </a>
+      <div class="brand-info">
+        <span class="brand-title" id="branchHeading">Select Semester</span>
+        <span class="brand-subtitle" id="branchSubheading">GP Banka • SBTE Bihar</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========== MAIN CONTENT ========== -->
+  <main class="app-main">
+
+    <!-- Branch Teacher Help Shortcut -->
+    <section class="app-section">
+      <div class="app-card help-card">
+        <div>
+          <div class="help-title">Branch Teacher Help</div>
+          <div class="help-desc" id="teacherShortcutDesc">इस ब्रांच के HOD और सब्जेक्ट टीचर्स देखें</div>
+        </div>
+        <a href="teachers.html" id="branchTeacherLink" class="btn-outline">देखें</a>
+      </div>
+    </section>
+
+    <!-- Semester Grid -->
+    <section class="app-section">
+      <div class="section-header">
+        <h2 class="section-title">Choose Semester</h2>
+        <a href="study-material.html" id="viewAllBranchMaterials" class="section-link">सभी मटेरियल</a>
+      </div>
+
+      <div class="grid-2" id="semesterGrid">
+        <div class="empty-state">सेमेस्टर लोड हो रहे हैं...</div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========== FIXED BOTTOM NAVIGATION ========== -->
+  <nav class="bottom-nav">
+    <a href="../index.html" class="nav-item">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+      </svg>
+      <span>Home</span>
+    </a>
+
+    <a href="branches.html" class="nav-item active">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="7" height="7"></rect>
+        <rect x="14" y="3" width="7" height="7"></rect>
+        <rect x="14" y="14" width="7" height="7"></rect>
+        <rect x="3" y="14" width="7" height="7"></rect>
+      </svg>
+      <span>Branches</span>
+    </a>
+
+    <a href="teachers.html" class="nav-item">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+        <circle cx="9" cy="7" r="4"></circle>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+      </svg>
+      <span>Teachers</span>
+    </a>
+
+    <a href="tools.html" class="nav-item">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="3"></circle>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+      </svg>
+      <span>Tools</span>
+    </a>
+  </nav>
+
+  <script src="../js/core/firebase-config.js" defer></script>
+  <script src="../js/core/data-service.js" defer></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const params = new URLSearchParams(window.location.search);
+      const branchId = (params.get("branch") || "electrical").toLowerCase();
+
+      const branches = await window.DataService.getBranches();
+      const current = branches.find((b) => b.id === branchId) || {
+        id: branchId,
+        name: branchId.toUpperCase(),
+        semesters: [1, 2, 3, 4, 5, 6]
+      };
+
+      document.getElementById("branchHeading").textContent = current.name;
+      document.getElementById("branchTeacherLink").href = `teachers.html?branch=${current.id}`;
+      document.getElementById("viewAllBranchMaterials").href = `study-material.html?branch=${current.id}`;
+
+      const suffix = (n) => (n === 1 ? "1st" : n === 2 ? "2nd" : n === 3 ? "3rd" : `${n}th`);
+      const grid = document.getElementById("semesterGrid");
+
+      grid.innerHTML = (current.semesters || [1, 2, 3, 4, 5, 6])
+        .map(
+          (sem) => `
+          <a href="study-material.html?branch=${current.id}&sem=${sem}" class="app-card sem-card">
+            <div class="sem-num">${suffix(sem)} Semester</div>
+            <div class="sem-sub">Notes • VVI • PYQ • Syllabus</div>
+          </a>
+        `
+        )
+        .join("");
+    });
+  </script>
+</body>
+</html>
