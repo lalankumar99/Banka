@@ -70,5 +70,19 @@
     "url": "assets/pdfs/civil/sem2-mechanics-vvi.pdf",
     "size": "950 KB",
     "updatedAt": "2026-11-19"
+  },
+    ,
+  {
+    "id": "mat_007",
+    "title": "Power Generation Guess Questions (2026)",
+    "branch": "electrical",
+    "semester": 3,
+    "subject": "Power Generation",
+    "type": "vvi",
+    "fileFormat": "pdf",
+    "url": "assets/pdfs/electrical/power-gen-guess-2026.pdf",
+    "size": "1.2 MB",
+    "updatedAt": "2026-11-22"
   }
+
 ]
