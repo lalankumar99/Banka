@@ -1,0 +1,37 @@
+[
+  {
+    "id": "electrical",
+    "code": "EE",
+    "name": "Electrical Engineering",
+    "semesters": [1, 2, 3, 4, 5, 6],
+    "meta": "1st - 6th Sem • Notes, VVI, PYQ"
+  },
+  {
+    "id": "civil",
+    "code": "CE",
+    "name": "Civil Engineering",
+    "semesters": [1, 2, 3, 4, 5, 6],
+    "meta": "1st - 6th Sem • Notes, VVI, PYQ"
+  },
+  {
+    "id": "mechanical",
+    "code": "ME",
+    "name": "Mechanical Engineering",
+    "semesters": [1, 2, 3, 4, 5, 6],
+    "meta": "1st - 6th Sem • Notes, VVI, PYQ"
+  },
+  {
+    "id": "electronics",
+    "code": "EC",
+    "name": "Electronics Engineering",
+    "semesters": [1, 2, 3, 4, 5, 6],
+    "meta": "1st - 6th Sem • Notes, VVI, PYQ"
+  },
+  {
+    "id": "cse",
+    "code": "CS",
+    "name": "Computer Science & Engg.",
+    "semesters": [1, 2, 3, 4, 5, 6],
+    "meta": "1st - 6th Sem • Notes, VVI, PYQ"
+  }
+]
