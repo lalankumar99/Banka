@@ -39,6 +39,29 @@ document.addEventListener("DOMContentLoaded", async () => {
   subjectEl.textContent = `${file.subject || "Study Material"} ${file.size ? "• " + file.size : ""}`;
   formatBadgeEl.textContent = format.toUpperCase();
 
+  // Share बटन एक्टिव करें (Android Native Share + Clipboard Fallback)
+  const shareBtn = document.getElementById("shareBtn");
+  if (shareBtn) {
+    shareBtn.classList.remove("hidden");
+    shareBtn.addEventListener("click", async () => {
+      const shareData = {
+        title: file.title,
+        text: `${file.title} (${(file.branch || "").toUpperCase()} Sem ${file.semester}) - GP Banka Student Learning`,
+        url: window.location.href
+      };
+
+      if (navigator.share) {
+        try {
+          await navigator.share(shareData);
+        } catch (_) {}
+      } else if (navigator.clipboard) {
+        await navigator.clipboard.writeText(window.location.href);
+        alert("लिंक कॉपी हो गया! अब WhatsApp पर पेस्ट करके शेयर करें।");
+      }
+    });
+  }
+
+
   // Download बटन एक्टिव करें
   downloadBtn.href = resolvedUrl;
   downloadBtn.classList.remove("hidden");
