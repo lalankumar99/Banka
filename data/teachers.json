@@ -1,7 +1,7 @@
 [
   {
     "id": "t_ee_01",
-    "name": "HOD - Electrical Dept.",
+    "name": "Rakesh Kumar ",
     "role": "Head of Department",
     "branch": "electrical",
     "subjects": ["Electrical Circuit & Network", "Power Generation"],
@@ -11,7 +11,7 @@
   },
   {
     "id": "t_ee_02",
-    "name": "Faculty - DC Machine & Lab",
+    "name": "Gaurav Kumar ",
     "role": "Lecturer (EE)",
     "branch": "electrical",
     "subjects": ["DC Machine", "Electrical Measurement"],
