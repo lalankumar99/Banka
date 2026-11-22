@@ -86,6 +86,20 @@ window.DataService = (function () {
     async getNotices() {
       return await fetchCollection("notices");
     },
+    // वीडियो लेक्चर (ब्रांच और सेमेस्टर के हिसाब से फ़िल्टर)
+    async getVideos(filters = {}) {
+      const videos = await fetchCollection("videos");
+      return videos.filter((v) => {
+        if (filters.branch && filters.branch !== "all" && v.branch !== filters.branch) {
+          return false;
+        }
+        if (filters.semester && filters.semester !== "all" && String(v.semester) !== String(filters.semester)) {
+          return false;
+        }
+        return true;
+      });
+    },
+
 
     // ग्लोबल सर्च (होम पेज सर्च बार के लिए)
     async searchAll(query) {
