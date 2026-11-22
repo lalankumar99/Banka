@@ -27,7 +27,17 @@
     "subjects": ["Power Generation", "Electrical "],
     "helpFor": "Notes, Plant Diagrams, Numericals, Exam VVI & Doubt Help",
     "timing": "11:00 AM - 03:30 PM",
-    "room": "Electrical Machine Lab"
+    "room": "Staf Room"
+  },
+{
+    "id": "t_ee_04",
+    "name": "Md Asif Raza ",
+    "role": "Lecturer (EE)",
+    "branch": "electrical",
+    "subjects": ["BEE/FOEE", "Electrical Measurement"],
+    "helpFor": "Lab Practicals, Circuit Doubts & VVI Help",
+    "timing": "11:00 AM - 03:30 PM",
+    "room": "Staf Room"
   },
   {
     "id": "t_ce_01",
