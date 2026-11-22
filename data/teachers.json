@@ -39,6 +39,16 @@
     "timing": "11:00 AM - 03:30 PM",
     "room": "Staf Room"
   },
+{
+    "id": "t_ee_05",
+    "name": "Aman Kumar ",
+    "role": "Lecturer (EE)",
+    "branch": "electrical",
+    "subjects": ["Electrical Circuits", "Electrical"],
+    "helpFor": "Lab Practicals, Circuit Doubts & VVI Help",
+    "timing": "11:00 AM - 03:30 PM",
+    "room": "Electrical  Lab"
+  },
   {
     "id": "t_ce_01",
     "name": "HOD - Civil Dept.",
