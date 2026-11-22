@@ -1,0 +1,72 @@
+[
+  {
+    "id": "t_ee_01",
+    "name": "HOD - Electrical Dept.",
+    "role": "Head of Department",
+    "branch": "electrical",
+    "subjects": ["Electrical Circuit & Network", "Power Generation"],
+    "helpFor": "Branch Queries, Attendance & Project Guidance",
+    "timing": "10:30 AM - 04:00 PM",
+    "room": "EE Dept. Room 01"
+  },
+  {
+    "id": "t_ee_02",
+    "name": "Faculty - DC Machine & Lab",
+    "role": "Lecturer (EE)",
+    "branch": "electrical",
+    "subjects": ["DC Machine", "Electrical Measurement"],
+    "helpFor": "Lab Practicals, Circuit Doubts & VVI Help",
+    "timing": "11:00 AM - 03:30 PM",
+    "room": "Electrical Machine Lab"
+  },
+  {
+    "id": "t_ce_01",
+    "name": "HOD - Civil Dept.",
+    "role": "Head of Department",
+    "branch": "civil",
+    "subjects": ["Surveying", "Building Construction"],
+    "helpFor": "Civil Syllabus, Survey Lab & Doubt Support",
+    "timing": "10:30 AM - 04:00 PM",
+    "room": "CE Dept. Room 02"
+  },
+  {
+    "id": "t_me_01",
+    "name": "HOD - Mechanical Dept.",
+    "role": "Head of Department",
+    "branch": "mechanical",
+    "subjects": ["Thermodynamics", "Engineering Mechanics"],
+    "helpFor": "Workshop, Practical & Subject Doubts",
+    "timing": "10:30 AM - 04:00 PM",
+    "room": "ME Dept. Room 01"
+  },
+  {
+    "id": "t_ec_01",
+    "name": "HOD - Electronics Dept.",
+    "role": "Head of Department",
+    "branch": "electronics",
+    "subjects": ["Basic Electronics", "Digital Electronics"],
+    "helpFor": "Electronics Lab & Subject Guidance",
+    "timing": "10:30 AM - 04:00 PM",
+    "room": "EC Dept. Room 03"
+  },
+  {
+    "id": "t_cs_01",
+    "name": "HOD - CSE Dept.",
+    "role": "Head of Department",
+    "branch": "cse",
+    "subjects": ["Python Programming", "Computer Fundamentals"],
+    "helpFor": "Coding Doubts, Computer Lab & Projects",
+    "timing": "10:30 AM - 04:00 PM",
+    "room": "Computer Lab 01"
+  },
+  {
+    "id": "t_all_01",
+    "name": "Academic & Exam Cell",
+    "role": "Student Support Desk",
+    "branch": "all",
+    "subjects": ["SBTE Registration", "Exam Form", "Scholarship"],
+    "helpFor": "Admit Card, Marksheet, Bonafide & PMS Help",
+    "timing": "10:00 AM - 04:30 PM",
+    "room": "Admin Block"
+  }
+]
