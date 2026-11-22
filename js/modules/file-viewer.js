@@ -60,6 +60,45 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     });
   }
+  // Bookmark बटन एक्टिव करें (LocalStorage)
+  const bookmarkBtn = document.getElementById("bookmarkBtn");
+  const bookmarkIcon = document.getElementById("bookmarkIcon");
+  const SAVED_KEY = "gpb_saved_notes";
+
+  if (bookmarkBtn && bookmarkIcon) {
+    bookmarkBtn.classList.remove("hidden");
+
+    const getSaved = () => JSON.parse(localStorage.getItem(SAVED_KEY) || "[]");
+
+    const updateBookmarkUI = () => {
+      const saved = getSaved();
+      const isSaved = saved.some((item) => String(item.id) === String(file.id));
+      bookmarkIcon.style.fill = isSaved ? "var(--text-primary)" : "none";
+    };
+
+    updateBookmarkUI();
+
+    bookmarkBtn.addEventListener("click", () => {
+      let saved = getSaved();
+      const exists = saved.some((item) => String(item.id) === String(file.id));
+
+      if (exists) {
+        saved = saved.filter((item) => String(item.id) !== String(file.id));
+      } else {
+        saved.unshift({
+          id: file.id,
+          title: file.title,
+          subject: file.subject || "",
+          semester: file.semester || "",
+          fileFormat: file.fileFormat || "pdf"
+        });
+      }
+
+      localStorage.setItem(SAVED_KEY, JSON.stringify(saved.slice(0, 20)));
+      updateBookmarkUI();
+    });
+  }
+
 
 
   // Download बटन एक्टिव करें
