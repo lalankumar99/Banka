@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0" />
+  <meta name="theme-color" content="#ffffff" />
+  <title>File Viewer - GP Banka</title>
+
+  <link rel="stylesheet" href="../css/app.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+</head>
+<body>
+
+  <!-- ========== TOP APP BAR ========== -->
+  <header class="app-header">
+    <div class="brand-area">
+      <button type="button" class="back-btn" onclick="history.length > 1 ? history.back() : location.href='study-material.html'" aria-label="Back">
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+      </button>
+      <div class="brand-info">
+        <span class="brand-title" id="viewerTitle">Loading File...</span>
+        <span class="brand-subtitle" id="viewerSubtitle">GP Banka Viewer</span>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <!-- Direct Download Button -->
+      <a href="#" id="downloadBtn" class="icon-btn hidden" download aria-label="Download File">
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+      </a>
+    </div>
+  </header>
+
+  <!-- ========== MAIN VIEWER AREA ========== -->
+  <main class="viewer-main">
+    <div class="viewer-meta-bar" id="viewerMetaBar">
+      <span id="viewerSubject">Preparing...</span>
+      <span class="badge-clean" id="viewerFormatBadge">FILE</span>
+    </div>
+
+    <div class="viewer-stage" id="viewerStage">
+      <div class="viewer-fallback-box">
+        <div class="help-desc">फाइल लोड हो रही है...</div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Core + Viewer Module -->
+  <script src="../js/core/firebase-config.js" defer></script>
+  <script src="../js/core/data-service.js" defer></script>
+  <script src="../js/modules/file-viewer.js" defer></script>
+</body>
+</html>
