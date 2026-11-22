@@ -1,6 +1,6 @@
 /* =========================================================
-   GP Banka Student Learning - Study Material Hub Module
-   Supports: PDF, Image, DOC, HTML | Branch & Semester Filters
+   GP Banka Student Learning - Unified Study Hub Module
+   Supports: Notes, VVI, PYQ, Syllabus + Locked Video Player
    ========================================================= */
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const searchInput = document.getElementById("materialSearch");
   const typeChips = document.getElementById("typeFilterChips");
   const formatChips = document.getElementById("formatFilterChips");
+  const fileFormatSection = document.getElementById("fileFormatSection");
 
   const params = new URLSearchParams(window.location.search);
   const activeBranch = (params.get("branch") || "all").toLowerCase();
@@ -19,12 +20,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   let activeFormat = (params.get("format") || "all").toLowerCase();
 
   let allMaterials = [];
+  let allVideos = [];
 
   const TYPE_LABELS = {
     notes: "Notes",
     vvi: "VVI",
     pyq: "PYQ",
-    syllabus: "Syllabus"
+    syllabus: "Syllabus",
+    videos: "Video Lectures",
+    quiz: "MCQ Quiz"
   };
 
   const FORMAT_SHORT = {
@@ -45,7 +49,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   function updateHeader() {
     const branchText = activeBranch === "all" ? "All Branches" : activeBranch.toUpperCase();
     const semText = activeSem === "all" ? "All Semesters" : `Semester ${activeSem}`;
-    headingEl.textContent = activeType !== "all" ? `${TYPE_LABELS[activeType] || "Study"} Hub` : "Study Material";
+    headingEl.textContent =
+      activeType !== "all" ? (TYPE_LABELS[activeType] || "Study Hub") : "Study Material";
     subheadingEl.textContent = `${branchText} • ${semText}`;
   }
 
@@ -53,14 +58,42 @@ document.addEventListener("DOMContentLoaded", async () => {
     typeChips.querySelectorAll(".filter-chip").forEach((c) => {
       c.classList.toggle("active", c.dataset.type === activeType);
     });
-    formatChips.querySelectorAll(".filter-chip").forEach((c) => {
-      c.classList.toggle("active", c.dataset.format === activeFormat);
-    });
+    if (formatChips) {
+      formatChips.querySelectorAll(".filter-chip").forEach((c) => {
+        c.classList.toggle("active", c.dataset.format === activeFormat);
+      });
+    }
+    if (fileFormatSection) {
+      const hideFormats = activeType === "videos" || activeType === "quiz";
+      fileFormatSection.classList.toggle("hidden", hideFormats);
+    }
   }
 
-  function renderMaterials() {
+  async function renderCurrentView() {
     const query = searchInput.value.trim().toLowerCase();
 
+    // ---------- MODE A: VIDEO LECTURES ----------
+    if (activeType === "videos") {
+      if (allVideos.length === 0) {
+        allVideos = await window.DataService.getVideos();
+      }
+
+      const filteredVideos = allVideos.filter((v) => {
+        if (activeBranch !== "all" && v.branch.toLowerCase() !== activeBranch) return false;
+        if (activeSem !== "all" && String(v.semester) !== String(activeSem)) return false;
+        if (!query) return true;
+        const hay = `${v.title} ${v.subject} ${v.branch}`.toLowerCase();
+        return hay.includes(query);
+      });
+
+      countEl.textContent = `${filteredVideos.length} Videos`;
+      if (window.VideoModule) {
+        window.VideoModule.render(listEl, filteredVideos);
+      }
+      return;
+    }
+
+    // ---------- MODE B: NOTES / VVI / PYQ / SYLLABUS ----------
     const filtered = allMaterials.filter((item) => {
       if (activeBranch !== "all" && item.branch.toLowerCase() !== activeBranch) return false;
       if (activeSem !== "all" && String(item.semester) !== String(activeSem)) return false;
@@ -113,23 +146,25 @@ document.addEventListener("DOMContentLoaded", async () => {
     activeType = btn.dataset.type;
     syncChips();
     updateHeader();
-    renderMaterials();
+    renderCurrentView();
   });
 
   // Format Chips
-  formatChips.addEventListener("click", (e) => {
-    const btn = e.target.closest(".filter-chip");
-    if (!btn) return;
-    activeFormat = btn.dataset.format;
-    syncChips();
-    renderMaterials();
-  });
+  if (formatChips) {
+    formatChips.addEventListener("click", (e) => {
+      const btn = e.target.closest(".filter-chip");
+      if (!btn) return;
+      activeFormat = btn.dataset.format;
+      syncChips();
+      renderCurrentView();
+    });
+  }
 
-  searchInput.addEventListener("input", renderMaterials);
+  searchInput.addEventListener("input", renderCurrentView);
 
   // Initialize
   updateHeader();
   syncChips();
   allMaterials = await window.DataService.getMaterials();
-  renderMaterials();
+  renderCurrentView();
 });
