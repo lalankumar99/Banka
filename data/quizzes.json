@@ -1,0 +1,20 @@
+[
+  {
+    "id": "quiz_001",
+    "title": "Power Generation - Objective Set 1",
+    "branch": "electrical",
+    "semester": 3,
+    "subject": "Power Generation",
+    "questionCount": 3,
+    "file": "data/quiz-sets/power-gen-set1.json"
+  },
+  {
+    "id": "quiz_002",
+    "title": "DC Machine - Basic MCQ Set 1",
+    "branch": "electrical",
+    "semester": 3,
+    "subject": "DC Machine",
+    "questionCount": 2,
+    "file": "data/quiz-sets/dc-machine-set1.json"
+  }
+]
