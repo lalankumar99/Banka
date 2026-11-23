@@ -1,0 +1,32 @@
+[
+  {
+    "id": "int_001",
+    "title": "AICTE National Internship Portal",
+    "org": "AICTE / Govt. of India",
+    "branch": "All Branches",
+    "duration": "4 - 6 Weeks",
+    "mode": "Online / Offline",
+    "status": "Open",
+    "link": "https://internship.aicte-india.org/"
+  },
+  {
+    "id": "int_002",
+    "title": "Industrial Training (Substation & Grid)",
+    "org": "NBPDCL / SBPDCL Bihar",
+    "branch": "Electrical",
+    "duration": "4 Weeks",
+    "mode": "Offline",
+    "status": "Apply via College",
+    "link": "https://www.sbpdcl.co.in/"
+  },
+  {
+    "id": "int_003",
+    "title": "3D Printing & Additive Manufacturing",
+    "org": "C-DAC / Engineering Colleges",
+    "branch": "EE, ME, CE, EC, CS",
+    "duration": "2 - 4 Weeks",
+    "mode": "Offline",
+    "status": "Seasonal",
+    "link": "https://www.cdac.in/"
+  }
+]
