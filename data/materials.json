@@ -37,13 +37,13 @@
   },
   {
     "id": "mat_004",
-    "title": "Python Programming Quick Revision Sheet",
+    "title": "Python Programming Quick Revision Sheet Code Book ",
     "branch": "electrical",
     "semester": 3,
     "subject": "Python Programming",
     "type": "notes",
     "fileFormat": "html",
-    "url": "assets/html-notes/python-revision.html",
+    "url": "assets/html-notes/codebook.html",
     "size": "Interactive",
     "updatedAt": "2026-11-22"
   },
