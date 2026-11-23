@@ -4,14 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="theme-color" content="#ffffff" />
-  <title>Study Material - GP Banka</title>
+  <title>Study Hub - GP Banka</title>
 
+  <!-- Core Stylesheets (Pure White Android UI) -->
   <link rel="stylesheet" href="../css/app.css" />
   <link rel="stylesheet" href="../css/components.css" />
 </head>
 <body>
 
-  <!-- ========== TOP APP BAR ========== -->
+  <!-- =========================================================
+       TOP APP BAR (Back Button + Dynamic Branch/Category Title)
+       ========================================================= -->
   <header class="app-header">
     <div class="brand-area">
       <button type="button" class="back-btn" onclick="history.length > 1 ? history.back() : location.href='../index.html'" aria-label="Back">
@@ -27,10 +30,12 @@
     </div>
   </header>
 
-  <!-- ========== MAIN CONTENT ========== -->
+  <!-- =========================================================
+       MAIN SCROLLABLE STUDY HUB
+       ========================================================= -->
   <main class="app-main">
 
-    <!-- Live Search -->
+    <!-- 1. Instant Search Bar (Subjects, Topics, Videos, Quizzes) -->
     <div class="search-box">
       <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="11" cy="11" r="8"></circle>
@@ -39,12 +44,12 @@
       <input
         type="search"
         id="materialSearch"
-        placeholder="सब्जेक्ट, यूनिट या टॉपिक खोजें..."
+        placeholder="सब्जेक्ट, यूनिट, वीडियो या क्विज़ खोजें..."
         autocomplete="off"
       />
     </div>
 
-    <!-- Category Filter (Notes, VVI, PYQ, Syllabus, Videos) -->
+    <!-- 2. Category Filter Chips (Notes, VVI, PYQ, Syllabus, Videos, Quiz) -->
     <div class="filter-label">Category</div>
     <div class="chip-row" id="typeFilterChips">
       <button type="button" class="filter-chip active" data-type="all">All</button>
@@ -53,9 +58,10 @@
       <button type="button" class="filter-chip" data-type="pyq">PYQs</button>
       <button type="button" class="filter-chip" data-type="syllabus">Syllabus</button>
       <button type="button" class="filter-chip" data-type="videos">Videos</button>
+      <button type="button" class="filter-chip" data-type="quiz">MCQ Quiz</button>
     </div>
 
-    <!-- File Format Filter (Videos/Quiz पर अपने आप छिप जाएगा) -->
+    <!-- 3. File Format Filter (Videos और MCQ Quiz मोड में ऑटो-हाइड) -->
     <div id="fileFormatSection">
       <div class="filter-label">File Type</div>
       <div class="chip-row" id="formatFilterChips">
@@ -67,20 +73,22 @@
       </div>
     </div>
 
-    <!-- Result Header -->
+    <!-- 4. Result Header & Counter -->
     <div class="section-header">
-      <h2 class="section-title">Available Files</h2>
+      <h2 class="section-title">Available Content</h2>
       <span class="notice-date" id="materialCount">Loading...</span>
     </div>
 
-    <!-- Dynamic Material / Video List -->
+    <!-- 5. Dynamic Container (Materials / Video Player / MCQ Quiz) -->
     <div class="list-stack" id="materialList">
       <div class="empty-state">स्टडी मटेरियल लोड हो रहा है...</div>
     </div>
 
   </main>
 
-  <!-- ========== FIXED BOTTOM NAVIGATION ========== -->
+  <!-- =========================================================
+       FIXED BOTTOM NAVIGATION BAR
+       ========================================================= -->
   <nav class="bottom-nav">
     <a href="../index.html" class="nav-item">
       <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
@@ -118,10 +126,14 @@
     </a>
   </nav>
 
-  <!-- Core + Video + Study Module -->
+  <!-- =========================================================
+       CORE DATA & FEATURE MODULES (Load Order Matters)
+       ========================================================= -->
   <script src="../js/core/firebase-config.js" defer></script>
   <script src="../js/core/data-service.js" defer></script>
   <script src="../js/modules/videos.js" defer></script>
+  <script src="../js/modules/quiz.js" defer></script>
   <script src="../js/modules/study.js" defer></script>
+
 </body>
 </html>
