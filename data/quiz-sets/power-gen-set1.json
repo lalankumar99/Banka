@@ -1,0 +1,20 @@
+[
+  {
+    "q": "Thermal Power Plant mein mukhya fuel ke roop mein kya use hota hai?",
+    "options": ["Uranium", "Coal", "Water", "Diesel"],
+    "answer": 1,
+    "explanation": "Thermal Power Plant mein koyla (Coal) jalakar steam banayi jati hai."
+  },
+  {
+    "q": "Hydroelectric Power Plant mein kaun-si energy electrical energy mein badalti hai?",
+    "options": ["Thermal Energy", "Chemical Energy", "Potential Energy of Water", "Nuclear Energy"],
+    "answer": 2,
+    "explanation": "Dam mein jama paani ki Potential Energy turbine ko ghumakar bijli banati hai."
+  },
+  {
+    "q": "Nuclear Power Plant mein Moderator ka kaam kya hota hai?",
+    "options": ["Neutrons ki speed kam karna", "Steam ko thanda karna", "Voltage badhana", "Fuel jalana"],
+    "answer": 0,
+    "explanation": "Moderator (Graphite ya Heavy Water) fast neutrons ki speed slow karta hai."
+  }
+]
