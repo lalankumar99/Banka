@@ -1,9 +1,9 @@
 /* =========================================================
-   GP Banka Student Learning - Zero-Lag Service Worker
+   GP Banka Student Learning - Zero-Lag Service Worker (v6)
    Strategy: Cache-First (UI/CSS/JS) | Network-First (Data)
    ========================================================= */
 
-const CACHE_NAME = "gpb-learning-v1";
+const CACHE_NAME = "gpb-learning-v6";
 
 const CORE_ASSETS = [
   "./",
@@ -13,8 +13,11 @@ const CORE_ASSETS = [
   "./css/components.css",
   "./js/core/firebase-config.js",
   "./js/core/data-service.js",
+  "./js/modules/home.js",
   "./js/modules/teachers.js",
   "./js/modules/study.js",
+  "./js/modules/videos.js",
+  "./js/modules/quiz.js",
   "./js/modules/file-viewer.js",
   "./pages/branches.html",
   "./pages/semester.html",
@@ -25,7 +28,7 @@ const CORE_ASSETS = [
   "./pages/tools.html"
 ];
 
-// Install: कोर फाइलें कैश में सेव करें
+// Install: Core files ko cache mein save karein
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => cache.addAll(CORE_ASSETS))
@@ -33,7 +36,7 @@ self.addEventListener("install", (event) => {
   self.skipWaiting();
 });
 
-// Activate: पुराना कैश साफ करें
+// Activate: Purana cache (v1-v5) apne aap delete karein
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
@@ -47,14 +50,14 @@ self.addEventListener("activate", (event) => {
   self.clients.claim();
 });
 
-// Fetch: डेटा के लिए Network-First, बाकी UI के लिए Cache-First
+// Fetch: Data/Quiz JSON ke liye Network-First, baaki UI ke liye Cache-First
 self.addEventListener("fetch", (event) => {
   const req = event.request;
   if (req.method !== "GET") return;
 
   const url = new URL(req.url);
 
-  // JSON डेटा और भविष्य के Firebase कॉल के लिए Network-First
+  // JSON data (materials, videos, quizzes, quiz-sets) & Firebase -> Network-First
   if (url.pathname.includes("/data/") || url.hostname.includes("firestore")) {
     event.respondWith(
       fetch(req)
@@ -68,7 +71,7 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // CSS, JS, HTML के लिए Cache-First (Zero-Lag)
+  // CSS, JS, HTML -> Cache-First (Zero-Lag)
   event.respondWith(
     caches.match(req).then((cached) => {
       if (cached) return cached;
