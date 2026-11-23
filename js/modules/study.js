@@ -21,6 +21,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   let allMaterials = [];
   let allVideos = [];
+ let allQuizzes = [];
+
 
   const TYPE_LABELS = {
     notes: "Notes",
