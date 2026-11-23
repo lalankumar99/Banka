@@ -6,8 +6,302 @@
   <meta name="theme-color" content="#ffffff" />
   <title>Student Tools - GP Banka</title>
 
+  <!-- Core Pure White Stylesheets -->
   <link rel="stylesheet" href="../css/app.css" />
   <link rel="stylesheet" href="../css/components.css" />
+
+  <style>
+    /* Horizontal Scrollable Tabs (Android Style) */
+    .tools-tabs-scroll {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 2px 0 14px;
+      margin-bottom: 10px;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .tools-tabs-scroll::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tools-tab-btn {
+      flex-shrink: 0;
+      padding: 9px 15px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary, #52525b);
+      background-color: var(--bg-subtle, #f4f4f5);
+      border: 1px solid var(--border-light, #e5e7eb);
+      transition: all 0.18s ease;
+    }
+
+    .tools-tab-btn.active {
+      background-color: #111111;
+      color: #ffffff;
+      border-color: #111111;
+    }
+
+    /* Tool Card & Result Banner */
+    .tool-card {
+      padding: 16px;
+      border-radius: 14px;
+    }
+
+    .tool-card-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .tool-icon-badge {
+      width: 40px;
+      height: 40px;
+      border-radius: 11px;
+      background-color: var(--bg-subtle, #f4f4f5);
+      border: 1px solid var(--border-light, #e5e7eb);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .tool-icon-badge svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--text-primary, #111111);
+      fill: none;
+      stroke-width: 2;
+    }
+
+    .tool-head-title {
+      font-size: 0.96rem;
+      font-weight: 700;
+      color: var(--text-primary, #111111);
+    }
+
+    .tool-head-sub {
+      font-size: 0.78rem;
+      color: var(--text-secondary, #6b7280);
+      margin-top: 2px;
+    }
+
+    .result-banner {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 12px;
+      background-color: #111111;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .result-banner-label {
+      font-size: 0.78rem;
+      color: #d4d4d8;
+    }
+
+    .result-banner-grade {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #ffffff;
+      margin-top: 2px;
+    }
+
+    .result-banner-val {
+      font-size: 1.55rem;
+      font-weight: 700;
+    }
+
+    /* Info Cards (Internship, Result, Scholarship, Routine) */
+    .info-card {
+      padding: 16px;
+      border-radius: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .info-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      background-color: #f0fdf4;
+      color: #15803d;
+      border: 1px solid #bbf7d0;
+    }
+
+    .status-pill.neutral {
+      background-color: var(--bg-subtle, #f4f4f5);
+      color: var(--text-primary, #111111);
+      border-color: var(--border-light, #e5e7eb);
+    }
+
+    .info-title {
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: var(--text-primary, #111111);
+      line-height: 1.35;
+    }
+
+    .info-sub {
+      font-size: 0.82rem;
+      color: var(--text-secondary, #52525b);
+    }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .meta-chip {
+      font-size: 0.74rem;
+      padding: 4px 9px;
+      border-radius: 7px;
+      background-color: var(--bg-subtle, #f4f4f5);
+      color: var(--text-secondary, #3f3f46);
+      font-weight: 500;
+    }
+
+    .action-btn-dark {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 10px;
+      border-radius: 10px;
+      background-color: #111111;
+      color: #ffffff;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    /* Topper Card */
+    .topper-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px;
+      border-radius: 14px;
+    }
+
+    .topper-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .topper-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 999px;
+      object-fit: cover;
+      background-color: var(--bg-subtle, #f4f4f5);
+      border: 1px solid var(--border-light, #e5e7eb);
+      flex-shrink: 0;
+    }
+
+    .topper-score {
+      padding: 6px 10px;
+      border-radius: 10px;
+      background-color: #111111;
+      color: #ffffff;
+      font-size: 0.82rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* Gallery 2-Column Grid */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .gallery-item {
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border-light, #e5e7eb);
+      background-color: #ffffff;
+      cursor: pointer;
+    }
+
+    .gallery-item img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      display: block;
+      background-color: var(--bg-subtle, #f4f4f5);
+    }
+
+    .gallery-caption {
+      padding: 8px 10px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-primary, #111111);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Fullscreen Gallery Lightbox */
+    .lightbox-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background-color: rgba(0, 0, 0, 0.92);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .lightbox-backdrop img {
+      max-width: 100%;
+      max-height: 75vh;
+      border-radius: 10px;
+      object-fit: contain;
+    }
+
+    .lightbox-text {
+      color: #ffffff;
+      font-size: 0.9rem;
+      margin-top: 12px;
+      text-align: center;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background-color: rgba(255, 255, 255, 0.18);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+  </style>
 </head>
 <body>
 
@@ -22,7 +316,7 @@
       </a>
       <div class="brand-info">
         <span class="brand-title">Student Tools</span>
-        <span class="brand-subtitle">SBTE Calculators & Utilities</span>
+        <span class="brand-subtitle">GP Banka All-in-One Hub</span>
       </div>
     </div>
   </header>
@@ -30,56 +324,155 @@
   <!-- ========== MAIN CONTENT ========== -->
   <main class="app-main">
 
-    <!-- Tool 1: SBTE SGPA to Percentage -->
-    <section class="app-section">
-      <div class="section-header">
-        <h2 class="section-title">SGPA / CGPA to Percentage</h2>
-      </div>
+    <!-- Scrollable Tabs -->
+    <div class="tools-tabs-scroll" id="toolsTabBar">
+      <button type="button" class="tools-tab-btn active" data-tab="calculators">Calculators</button>
+      <button type="button" class="tools-tab-btn" data-tab="internships">Internships</button>
+      <button type="button" class="tools-tab-btn" data-tab="results">Result</button>
+      <button type="button" class="tools-tab-btn" data-tab="toppers">Toppers</button>
+      <button type="button" class="tools-tab-btn" data-tab="gallery">Gallery</button>
+      <button type="button" class="tools-tab-btn" data-tab="scholarships">Scholarship</button>
+      <button type="button" class="tools-tab-btn" data-tab="routine">Routine</button>
+    </div>
 
-      <div class="app-card">
-        <div class="input-group">
-          <label class="input-label" for="sgpaInput">Enter SGPA / CGPA (Out of 10)</label>
-          <input type="number" id="sgpaInput" class="app-input" placeholder="उदाहरण: 8.21" step="0.01" min="0" max="10" />
-        </div>
-        <button type="button" class="btn-solid" id="calcSgpaBtn" style="width:100%;">Calculate Percentage</button>
-
-        <div class="result-box hidden" id="sgpaResultBox">
-          <div>
-            <div class="help-title">Estimated Percentage</div>
-            <div class="notice-date">Formula: (SGPA - 0.75) × 10</div>
+    <!-- 1. CALCULATORS -->
+    <div class="tab-panel" id="tab-calculators">
+      <section class="app-section">
+        <div class="app-card tool-card">
+          <div class="tool-card-head">
+            <div class="tool-icon-badge">
+              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="5" x2="5" y2="19"></line>
+                <circle cx="6.5" cy="6.5" r="2.5"></circle>
+                <circle cx="17.5" cy="17.5" r="2.5"></circle>
+              </svg>
+            </div>
+            <div>
+              <div class="tool-head-title">SGPA / CGPA to Percentage</div>
+              <div class="tool-head-sub">SBTE Formula: (SGPA − 0.75) × 10</div>
+            </div>
           </div>
-          <div class="result-value" id="sgpaResultVal">0%</div>
-        </div>
-      </div>
-    </section>
 
-    <!-- Tool 2: Total Marks Percentage -->
-    <section class="app-section">
-      <div class="section-header">
-        <h2 class="section-title">Semester Marks Percentage</h2>
-      </div>
-
-      <div class="app-card">
-        <div class="grid-2">
           <div class="input-group">
-            <label class="input-label" for="obtMarks">Obtained Marks</label>
-            <input type="number" id="obtMarks" class="app-input" placeholder="744" min="0" />
+            <label class="input-label" for="sgpaInput">Enter SGPA / CGPA (0 – 10)</label>
+            <input type="number" id="sgpaInput" class="app-input" placeholder="उदाहरण: 8.21" step="0.01" min="0" max="10" />
           </div>
-          <div class="input-group">
-            <label class="input-label" for="totMarks">Total Marks</label>
-            <input type="number" id="totMarks" class="app-input" value="1000" min="1" />
-          </div>
-        </div>
-        <button type="button" class="btn-outline" id="calcMarksBtn" style="width:100%; padding:10px;">Calculate Marks %</button>
 
-        <div class="result-box hidden" id="marksResultBox">
-          <div class="help-title">Total Percentage</div>
-          <div class="result-value" id="marksResultVal">0%</div>
+          <button type="button" class="btn-solid" id="calcSgpaBtn" style="width:100%;">Calculate Percentage</button>
+
+          <div class="result-banner hidden" id="sgpaResultBox">
+            <div>
+              <div class="result-banner-label">Estimated Percentage</div>
+              <div class="result-banner-grade" id="sgpaGradeVal">First Class</div>
+            </div>
+            <div class="result-banner-val" id="sgpaResultVal">0%</div>
+          </div>
         </div>
+      </section>
+
+      <section class="app-section">
+        <div class="app-card tool-card">
+          <div class="tool-card-head">
+            <div class="tool-icon-badge">
+              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+              </svg>
+            </div>
+            <div>
+              <div class="tool-head-title">Semester Marks Percentage</div>
+              <div class="tool-head-sub">Obtained Marks से सटीक % निकालें</div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="input-group">
+              <label class="input-label" for="obtMarks">Obtained Marks</label>
+              <input type="number" id="obtMarks" class="app-input" placeholder="744" min="0" />
+            </div>
+            <div class="input-group">
+              <label class="input-label" for="totMarks">Total Marks</label>
+              <input type="number" id="totMarks" class="app-input" value="1000" min="1" />
+            </div>
+          </div>
+
+          <button type="button" class="btn-outline" id="calcMarksBtn" style="width:100%; padding:10px;">Calculate Marks %</button>
+
+          <div class="result-banner hidden" id="marksResultBox">
+            <div>
+              <div class="result-banner-label">Total Percentage</div>
+              <div class="result-banner-grade" id="marksGradeVal">First Class</div>
+            </div>
+            <div class="result-banner-val" id="marksResultVal">0%</div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- 2. INTERNSHIPS -->
+    <div class="tab-panel hidden" id="tab-internships">
+      <div class="section-header">
+        <h2 class="section-title">Internship & Training</h2>
+        <span class="notice-date" id="count-internships">Loading...</span>
       </div>
-    </section>
+      <div class="list-stack" id="list-internships"></div>
+    </div>
+
+    <!-- 3. RESULTS -->
+    <div class="tab-panel hidden" id="tab-results">
+      <div class="section-header">
+        <h2 class="section-title">SBTE Results & Links</h2>
+        <span class="notice-date" id="count-results">Loading...</span>
+      </div>
+      <div class="list-stack" id="list-results"></div>
+    </div>
+
+    <!-- 4. TOPPERS -->
+    <div class="tab-panel hidden" id="tab-toppers">
+      <div class="section-header">
+        <h2 class="section-title">GP Banka Toppers</h2>
+        <span class="notice-date" id="count-toppers">Loading...</span>
+      </div>
+      <div class="list-stack" id="list-toppers"></div>
+    </div>
+
+    <!-- 5. GALLERY -->
+    <div class="tab-panel hidden" id="tab-gallery">
+      <div class="section-header">
+        <h2 class="section-title">Campus Gallery</h2>
+        <span class="notice-date" id="count-gallery">Loading...</span>
+      </div>
+      <div class="gallery-grid" id="list-gallery"></div>
+    </div>
+
+    <!-- 6. SCHOLARSHIP -->
+    <div class="tab-panel hidden" id="tab-scholarships">
+      <div class="section-header">
+        <h2 class="section-title">Scholarships</h2>
+        <span class="notice-date" id="count-scholarships">Loading...</span>
+      </div>
+      <div class="list-stack" id="list-scholarships"></div>
+    </div>
+
+    <!-- 7. ROUTINE -->
+    <div class="tab-panel hidden" id="tab-routine">
+      <div class="section-header">
+        <h2 class="section-title">Class & Exam Routine</h2>
+        <span class="notice-date" id="count-routine">Loading...</span>
+      </div>
+      <div class="list-stack" id="list-routine"></div>
+    </div>
 
   </main>
+
+  <!-- Fullscreen Lightbox for Gallery -->
+  <div class="lightbox-backdrop hidden" id="galleryModal">
+    <button type="button" class="lightbox-close" id="closeLightbox">Close ✕</button>
+    <img id="lightboxImg" src="" alt="Campus Photo" />
+    <div class="lightbox-text" id="lightboxCaption"></div>
+  </div>
 
   <!-- ========== FIXED BOTTOM NAVIGATION ========== -->
   <nav class="bottom-nav">
@@ -117,23 +510,198 @@
   </nav>
 
   <script>
-    // 1. SGPA to Percentage
+    function escapeHTML(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function getDivision(pct) {
+      if (pct >= 75) return "First Class with Distinction";
+      if (pct >= 60) return "First Class";
+      if (pct >= 45) return "Second Class";
+      return "Pass / Needs Improvement";
+    }
+
+    // ---------- 1. CALCULATORS ----------
     document.getElementById("calcSgpaBtn").addEventListener("click", () => {
       const val = parseFloat(document.getElementById("sgpaInput").value);
       if (isNaN(val) || val < 0 || val > 10) return;
-      const pct = Math.max(0, (val - 0.75) * 10).toFixed(2);
-      document.getElementById("sgpaResultVal").textContent = `${pct}%`;
+      const pct = Math.max(0, (val - 0.75) * 10);
+      document.getElementById("sgpaResultVal").textContent = `${pct.toFixed(2)}%`;
+      document.getElementById("sgpaGradeVal").textContent = getDivision(pct);
       document.getElementById("sgpaResultBox").classList.remove("hidden");
     });
 
-    // 2. Marks to Percentage
     document.getElementById("calcMarksBtn").addEventListener("click", () => {
       const obt = parseFloat(document.getElementById("obtMarks").value);
       const tot = parseFloat(document.getElementById("totMarks").value);
       if (isNaN(obt) || isNaN(tot) || tot <= 0) return;
-      const pct = ((obt / tot) * 100).toFixed(2);
-      document.getElementById("marksResultVal").textContent = `${pct}%`;
+      const pct = (obt / tot) * 100;
+      document.getElementById("marksResultVal").textContent = `${pct.toFixed(2)}%`;
+      document.getElementById("marksGradeVal").textContent = getDivision(pct);
       document.getElementById("marksResultBox").classList.remove("hidden");
+    });
+
+    // ---------- 2. TAB SWITCHER + LAZY LOADER ----------
+    const loadedTabs = {};
+    const tabBtns = document.querySelectorAll(".tools-tab-btn");
+    const tabPanels = document.querySelectorAll(".tab-panel");
+
+    tabBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const target = btn.dataset.tab;
+        tabBtns.forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        tabPanels.forEach((p) => {
+          p.classList.toggle("hidden", p.id !== `tab-${target}`);
+        });
+
+        if (target !== "calculators" && !loadedTabs[target]) {
+          loadTabData(target);
+        }
+      });
+    });
+
+    async function loadTabData(tab) {
+      loadedTabs[tab] = true;
+      const listEl = document.getElementById(`list-${tab}`);
+      const countEl = document.getElementById(`count-${tab}`);
+      listEl.innerHTML = `<div class="empty-state">लोड हो रहा है...</div>`;
+
+      try {
+        const res = await fetch(`../data/${tab}.json`);
+        if (!res.ok) throw new Error("Not found");
+        const data = await res.json();
+
+        countEl.textContent = `${data.length} Items`;
+        if (!data.length) {
+          listEl.innerHTML = `<div class="empty-state">अभी कोई डेटा उपलब्ध नहीं है।</div>`;
+          return;
+        }
+
+        if (tab === "internships") renderInternships(listEl, data);
+        else if (tab === "results") renderResults(listEl, data);
+        else if (tab === "toppers") renderToppers(listEl, data);
+        else if (tab === "gallery") renderGallery(listEl, data);
+        else if (tab === "scholarships") renderScholarships(listEl, data);
+        else if (tab === "routine") renderRoutine(listEl, data);
+      } catch (err) {
+        countEl.textContent = "0";
+        listEl.innerHTML = `<div class="empty-state">डेटा फाइल (data/${tab}.json) नहीं मिली।</div>`;
+      }
+    }
+
+    // ---------- 3. RENDERERS ----------
+    function renderInternships(el, data) {
+      el.innerHTML = data.map((i) => `
+        <div class="app-card info-card">
+          <div class="info-top">
+            <span class="status-pill ${String(i.status).toLowerCase() === "open" ? "" : "neutral"}">${escapeHTML(i.status)}</span>
+            <span class="notice-date">${escapeHTML(i.mode)}</span>
+          </div>
+          <div>
+            <div class="info-title">${escapeHTML(i.title)}</div>
+            <div class="info-sub">${escapeHTML(i.org)}</div>
+          </div>
+          <div class="meta-row">
+            <span class="meta-chip">Branch: ${escapeHTML(i.branch)}</span>
+            <span class="meta-chip">Duration: ${escapeHTML(i.duration)}</span>
+          </div>
+          <a href="${escapeHTML(i.link)}" target="_blank" rel="noopener noreferrer" class="action-btn-dark">Details / Apply →</a>
+        </div>
+      `).join("");
+    }
+
+    function renderResults(el, data) {
+      el.innerHTML = data.map((r) => `
+        <div class="app-card info-card">
+          <div class="info-top">
+            <span class="status-pill">${escapeHTML(r.session || "SBTE")}</span>
+            <span class="notice-date">${escapeHTML(r.date || "")}</span>
+          </div>
+          <div>
+            <div class="info-title">${escapeHTML(r.title)}</div>
+            <div class="info-sub">${escapeHTML(r.desc || "")}</div>
+          </div>
+          <a href="${escapeHTML(r.link)}" target="_blank" rel="noopener noreferrer" class="action-btn-dark">Check Result →</a>
+        </div>
+      `).join("");
+    }
+
+    function renderToppers(el, data) {
+      el.innerHTML = data.map((t) => `
+        <div class="app-card topper-card">
+          <div class="topper-left">
+            <img class="topper-avatar" src="${escapeHTML(t.photo || "../assets/images/logo.png")}" alt="${escapeHTML(t.name)}" onerror="this.src='../assets/images/logo.png'" />
+            <div>
+              <div class="info-title">${escapeHTML(t.name)}</div>
+              <div class="info-sub">${escapeHTML(t.branch)} • Sem ${escapeHTML(t.semester)} (${escapeHTML(t.session || "")})</div>
+            </div>
+          </div>
+          <div class="topper-score">${escapeHTML(t.score)}</div>
+        </div>
+      `).join("");
+    }
+
+    function renderGallery(el, data) {
+      el.innerHTML = data.map((g, idx) => `
+        <div class="gallery-item" data-gidx="${idx}">
+          <img src="${escapeHTML(g.image)}" alt="${escapeHTML(g.title)}" loading="lazy" />
+          <div class="gallery-caption">${escapeHTML(g.title)}</div>
+        </div>
+      `).join("");
+
+      el.querySelectorAll(".gallery-item").forEach((card) => {
+        card.addEventListener("click", () => {
+          const item = data[Number(card.dataset.gidx)];
+          document.getElementById("lightboxImg").src = item.image;
+          document.getElementById("lightboxCaption").textContent = `${item.title}${item.date ? " • " + item.date : ""}`;
+          document.getElementById("galleryModal").classList.remove("hidden");
+        });
+      });
+    }
+
+    function renderScholarships(el, data) {
+      el.innerHTML = data.map((s) => `
+        <div class="app-card info-card">
+          <div class="info-top">
+            <span class="status-pill ${String(s.status).toLowerCase() === "open" ? "" : "neutral"}">${escapeHTML(s.status)}</span>
+            <span class="notice-date">Last Date: ${escapeHTML(s.lastDate || "Check Portal")}</span>
+          </div>
+          <div>
+            <div class="info-title">${escapeHTML(s.title)}</div>
+            <div class="info-sub">${escapeHTML(s.eligibility || "")}</div>
+          </div>
+          <a href="${escapeHTML(s.link)}" target="_blank" rel="noopener noreferrer" class="action-btn-dark">Official Portal →</a>
+        </div>
+      `).join("");
+    }
+
+    function renderRoutine(el, data) {
+      el.innerHTML = data.map((rt) => `
+        <div class="app-card info-card">
+          <div class="info-top">
+            <span class="status-pill neutral">${escapeHTML(rt.branch)}</span>
+            <span class="notice-date">Sem ${escapeHTML(rt.semester)}</span>
+          </div>
+          <div>
+            <div class="info-title">${escapeHTML(rt.title)}</div>
+            <div class="info-sub">Updated: ${escapeHTML(rt.updated || "")}</div>
+          </div>
+          <a href="${escapeHTML(rt.file)}" target="_blank" rel="noopener noreferrer" class="action-btn-dark">View / Download Routine →</a>
+        </div>
+      `).join("");
+    }
+
+    // Lightbox Close
+    const modal = document.getElementById("galleryModal");
+    document.getElementById("closeLightbox").addEventListener("click", () => modal.classList.add("hidden"));
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) modal.classList.add("hidden");
     });
   </script>
 </body>
