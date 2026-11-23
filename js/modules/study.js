@@ -1,6 +1,6 @@
 /* =========================================================
    GP Banka Student Learning - Unified Study Hub Module
-   Supports: Notes, VVI, PYQ, Syllabus + Locked Video Player
+   Supports: Notes, VVI, PYQ, Syllabus + Videos + MCQ Quiz
    ========================================================= */
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -21,8 +21,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   let allMaterials = [];
   let allVideos = [];
- let allQuizzes = [];
-
+  let allQuizzes = [];
 
   const TYPE_LABELS = {
     notes: "Notes",
@@ -95,7 +94,28 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
-    // ---------- MODE B: NOTES / VVI / PYQ / SYLLABUS ----------
+    // ---------- MODE B: MCQ QUIZ ----------
+    if (activeType === "quiz") {
+      if (allQuizzes.length === 0) {
+        allQuizzes = await window.DataService.getQuizzes();
+      }
+
+      const filteredQuizzes = allQuizzes.filter((q) => {
+        if (activeBranch !== "all" && q.branch.toLowerCase() !== activeBranch) return false;
+        if (activeSem !== "all" && String(q.semester) !== String(activeSem)) return false;
+        if (!query) return true;
+        const hay = `${q.title} ${q.subject} ${q.branch}`.toLowerCase();
+        return hay.includes(query);
+      });
+
+      countEl.textContent = `${filteredQuizzes.length} Quizzes`;
+      if (window.QuizModule) {
+        window.QuizModule.render(listEl, filteredQuizzes);
+      }
+      return;
+    }
+
+    // ---------- MODE C: NOTES / VVI / PYQ / SYLLABUS ----------
     const filtered = allMaterials.filter((item) => {
       if (activeBranch !== "all" && item.branch.toLowerCase() !== activeBranch) return false;
       if (activeSem !== "all" && String(item.semester) !== String(activeSem)) return false;
