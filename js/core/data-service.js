@@ -99,6 +99,20 @@ window.DataService = (function () {
         return true;
       });
     },
+    // MCQ Quizzes (branch aur semester ke hisaab se filter)
+    async getQuizzes(filters = {}) {
+      const quizzes = await fetchCollection("quizzes");
+      return quizzes.filter((q) => {
+        if (filters.branch && filters.branch !== "all" && q.branch !== filters.branch) {
+          return false;
+        }
+        if (filters.semester && filters.semester !== "all" && String(q.semester) !== String(filters.semester)) {
+          return false;
+        }
+        return true;
+      });
+    },
+
 
 
     // ग्लोबल सर्च (होम पेज सर्च बार के लिए)
