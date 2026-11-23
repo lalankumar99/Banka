@@ -1,0 +1,10 @@
+[
+  {
+    "name": "Student Name",
+    "branch": "Electrical Engg.",
+    "semester": "2",
+    "session": "2025-28",
+    "score": "8.90 SGPA",
+    "photo": "../assets/images/logo.png"
+  }
+]
