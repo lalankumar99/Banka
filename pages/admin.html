@@ -75,7 +75,7 @@
       </a>
       <div class="brand-info">
         <span class="brand-title">GP Banka Admin</span>
-        <span class="brand-subtitle">Data & Content Manager</span>
+        <span class="brand-subtitle">All-in-One Data Manager</span>
       </div>
     </div>
     <button type="button" class="section-link hidden" id="logoutBtn">Logout</button>
@@ -100,15 +100,20 @@
     <!-- ==================== 2. ADMIN DASHBOARD ==================== -->
     <section id="adminDashboard" class="hidden">
 
-      <!-- Category Selector -->
+      <!-- Category Selector (All 10 Data Modules) -->
       <div class="app-card admin-box" style="margin-bottom: 16px;">
         <label class="input-label" for="dataTypeSelect">Kya add karna hai?</label>
         <select id="dataTypeSelect" class="admin-select">
-          <option value="materials">Study Material / Google Drive PDF (materials.json)</option>
+          <option value="materials">Study Material / Drive PDF (materials.json)</option>
           <option value="teachers">Teacher Profile (teachers.json)</option>
           <option value="videos">Video Lecture (videos.json)</option>
           <option value="notices">College / SBTE Notice (notices.json)</option>
           <option value="internships">Internship (internships.json)</option>
+          <option value="results">SBTE Result Link (results.json)</option>
+          <option value="toppers">GP Banka Topper (toppers.json)</option>
+          <option value="gallery">Campus Gallery Photo (gallery.json)</option>
+          <option value="scholarships">Scholarship (scholarships.json)</option>
+          <option value="routine">Class / Exam Routine (routine.json)</option>
         </select>
 
         <!-- Dynamic Form Container -->
@@ -178,9 +183,9 @@
     });
 
     // =========================================================
-    // GOOGLE DRIVE LINK AUTO-CONVERTER
+    // GOOGLE DRIVE LINK AUTO-CONVERTERS (PDF & IMAGE)
     // =========================================================
-    function formatDriveLink(url) {
+    function formatDriveFile(url) {
       const str = String(url || "").trim();
       const match = str.match(/\/d\/([a-zA-Z0-9_-]+)/);
       if (match && match[1]) {
@@ -189,8 +194,17 @@
       return str;
     }
 
+    function formatDriveImage(url) {
+      const str = String(url || "").trim();
+      const match = str.match(/\/d\/([a-zA-Z0-9_-]+)/);
+      if (match && match[1]) {
+        return `https://lh3.googleusercontent.com/d/${match[1]}`;
+      }
+      return str;
+    }
+
     // =========================================================
-    // DYNAMIC FORM BUILDER
+    // DYNAMIC FORM BUILDER (ALL 10 MODULES)
     // =========================================================
     const typeSelect = document.getElementById("dataTypeSelect");
     const fieldsWrap = document.getElementById("dynamicFields");
@@ -251,7 +265,7 @@
         </div>
         <div class="input-group">
           <label class="input-label">Google Drive Link (ya File Path)</label>
-          <input type="url" name="fileUrl" class="app-input" placeholder="https://drive.google.com/file/d/..." required />
+          <input type="text" name="fileUrl" class="app-input" placeholder="https://drive.google.com/file/d/..." required />
         </div>
         <div class="input-group">
           <label class="input-label">File Size (Optional)</label>
@@ -361,6 +375,122 @@
           <label class="input-label">Apply Link</label>
           <input type="url" name="link" class="app-input" placeholder="https://..." required />
         </div>
+      `,
+      results: `
+        <div class="input-group">
+          <label class="input-label">Result Title</label>
+          <input type="text" name="title" class="app-input" placeholder="SBTE 3rd Semester Result 2026" required />
+        </div>
+        <div class="grid-2">
+          <div class="input-group">
+            <label class="input-label">Session / Tag</label>
+            <input type="text" name="session" class="app-input" placeholder="2026 Exam" required />
+          </div>
+          <div class="input-group">
+            <label class="input-label">Date / Status</label>
+            <input type="text" name="date" class="app-input" placeholder="Live / 24 Nov" required />
+          </div>
+        </div>
+        <div class="input-group">
+          <label class="input-label">Short Description</label>
+          <input type="text" name="desc" class="app-input" placeholder="Roll Number daalkar result check karein." />
+        </div>
+        <div class="input-group">
+          <label class="input-label">Official Result Link</label>
+          <input type="url" name="link" class="app-input" placeholder="https://sbteonline.in/" required />
+        </div>
+      `,
+      toppers: `
+        <div class="input-group">
+          <label class="input-label">Student Name</label>
+          <input type="text" name="name" class="app-input" placeholder="Lalan Kumar" required />
+        </div>
+        <div class="grid-2">
+          <div class="input-group">
+            <label class="input-label">Branch</label>
+            <input type="text" name="branch" class="app-input" placeholder="Electrical Engg." required />
+          </div>
+          <div class="input-group">
+            <label class="input-label">Semester</label>
+            <input type="text" name="semester" class="app-input" placeholder="2" required />
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="input-group">
+            <label class="input-label">Session</label>
+            <input type="text" name="session" class="app-input" placeholder="2025-28" />
+          </div>
+          <div class="input-group">
+            <label class="input-label">Score (SGPA / %)</label>
+            <input type="text" name="score" class="app-input" placeholder="8.21 SGPA" required />
+          </div>
+        </div>
+        <div class="input-group">
+          <label class="input-label">Photo URL (Google Drive ya Path)</label>
+          <input type="text" name="photo" class="app-input" placeholder="../assets/images/logo.png ya Drive link" />
+        </div>
+      `,
+      gallery: `
+        <div class="input-group">
+          <label class="input-label">Photo Title / Event Name</label>
+          <input type="text" name="title" class="app-input" placeholder="GP Banka Main Campus" required />
+        </div>
+        <div class="input-group">
+          <label class="input-label">Date / Year</label>
+          <input type="text" name="date" class="app-input" placeholder="Nov 2026" />
+        </div>
+        <div class="input-group">
+          <label class="input-label">Image Link (Google Drive ya Path)</label>
+          <input type="text" name="image" class="app-input" placeholder="https://drive.google.com/file/d/..." required />
+        </div>
+      `,
+      scholarships: `
+        <div class="input-group">
+          <label class="input-label">Scholarship Name</label>
+          <input type="text" name="title" class="app-input" placeholder="Bihar Post Matric Scholarship (PMS)" required />
+        </div>
+        <div class="grid-2">
+          <div class="input-group">
+            <label class="input-label">Status</label>
+            <input type="text" name="status" class="app-input" value="Open" required />
+          </div>
+          <div class="input-group">
+            <label class="input-label">Last Date</label>
+            <input type="text" name="lastDate" class="app-input" placeholder="30 Dec 2026" />
+          </div>
+        </div>
+        <div class="input-group">
+          <label class="input-label">Eligibility</label>
+          <input type="text" name="eligibility" class="app-input" placeholder="BC / EBC / SC / ST Students" />
+        </div>
+        <div class="input-group">
+          <label class="input-label">Official Portal Link</label>
+          <input type="url" name="link" class="app-input" placeholder="https://www.pmsonline.bih.nic.in/" required />
+        </div>
+      `,
+      routine: `
+        <div class="input-group">
+          <label class="input-label">Routine Title</label>
+          <input type="text" name="title" class="app-input" placeholder="3rd Semester Regular Class Routine" required />
+        </div>
+        <div class="grid-2">
+          <div class="input-group">
+            <label class="input-label">Branch</label>
+            <input type="text" name="branch" class="app-input" placeholder="Electrical" required />
+          </div>
+          <div class="input-group">
+            <label class="input-label">Semester</label>
+            <input type="text" name="semester" class="app-input" placeholder="3" required />
+          </div>
+        </div>
+        <div class="input-group">
+          <label class="input-label">Updated Date</label>
+          <input type="text" name="updated" class="app-input" placeholder="Nov 2026" />
+        </div>
+        <div class="input-group">
+          <label class="input-label">Routine PDF / Image Link (Drive ya Path)</label>
+          <input type="text" name="file" class="app-input" placeholder="https://drive.google.com/file/d/..." required />
+        </div>
       `
     };
 
@@ -382,10 +512,12 @@
       const newItem = { id: `${category.slice(0, 3)}_${Date.now()}` };
 
       for (const [key, value] of formData.entries()) {
-        if (key === "semester") {
+        if (key === "semester" && (category === "materials" || category === "videos")) {
           newItem[key] = Number(value);
-        } else if (key === "fileUrl") {
-          newItem[key] = formatDriveLink(value);
+        } else if (key === "fileUrl" || key === "file") {
+          newItem[key] = formatDriveFile(value);
+        } else if (key === "photo" || key === "image") {
+          newItem[key] = formatDriveImage(value);
         } else {
           newItem[key] = value.trim();
         }
@@ -401,7 +533,7 @@
         }
       } catch (_) {}
 
-      existingData.unshift(newItem); // Naya item sabse upar aayega
+      existingData.unshift(newItem);
 
       latestFileName = `${category}.json`;
       latestJsonText = JSON.stringify(existingData, null, 2);
