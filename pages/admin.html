@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#ffffff" />
+  <title>Admin Panel - GP Banka</title>
+
+  <link rel="stylesheet" href="../css/app.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+
+  <style>
+    .admin-box {
+      padding: 16px;
+      border-radius: 14px;
+    }
+
+    .login-wrap {
+      max-width: 380px;
+      margin: 40px auto;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .admin-select {
+      width: 100%;
+      padding: 11px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border-light, #e5e7eb);
+      background-color: #ffffff;
+      font-size: 0.9rem;
+      color: var(--text-primary, #111111);
+      margin-bottom: 12px;
+    }
+
+    .json-output {
+      width: 100%;
+      min-height: 180px;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border-light, #e5e7eb);
+      background-color: #111111;
+      color: #4ade80;
+      font-family: monospace;
+      font-size: 0.78rem;
+      resize: vertical;
+      margin-top: 10px;
+    }
+
+    .btn-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .status-msg {
+      margin-top: 10px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #15803d;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========== TOP APP BAR ========== -->
+  <header class="app-header">
+    <div class="brand-area">
+      <a href="../index.html" class="back-btn" aria-label="Back">
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+      </a>
+      <div class="brand-info">
+        <span class="brand-title">GP Banka Admin</span>
+        <span class="brand-subtitle">Data & Content Manager</span>
+      </div>
+    </div>
+    <button type="button" class="section-link hidden" id="logoutBtn">Logout</button>
+  </header>
+
+  <main class="app-main">
+
+    <!-- ==================== 1. TEMPORARY PASSWORD LOGIN ==================== -->
+    <section id="loginSection" class="app-card login-wrap">
+      <h2 class="section-title" style="margin-bottom: 6px;">Admin Login</h2>
+      <p class="notice-date" style="margin-bottom: 16px;">Filhal HTML password lock (baad mein Firebase Auth judega)</p>
+
+      <div class="input-group" style="text-align:left;">
+        <label class="input-label" for="adminPassInput">Admin Password</label>
+        <input type="password" id="adminPassInput" class="app-input" placeholder="Password daalein..." />
+      </div>
+
+      <button type="button" class="btn-solid" id="loginBtn" style="width:100%;">Unlock Admin Panel</button>
+      <div id="loginError" class="notice-date hidden" style="color:#dc2626; margin-top:10px;">Galat password hai!</div>
+    </section>
+
+    <!-- ==================== 2. ADMIN DASHBOARD ==================== -->
+    <section id="adminDashboard" class="hidden">
+
+      <!-- Category Selector -->
+      <div class="app-card admin-box" style="margin-bottom: 16px;">
+        <label class="input-label" for="dataTypeSelect">Kya add karna hai?</label>
+        <select id="dataTypeSelect" class="admin-select">
+          <option value="materials">Study Material / Google Drive PDF (materials.json)</option>
+          <option value="teachers">Teacher Profile (teachers.json)</option>
+          <option value="videos">Video Lecture (videos.json)</option>
+          <option value="notices">College / SBTE Notice (notices.json)</option>
+          <option value="internships">Internship (internships.json)</option>
+        </select>
+
+        <!-- Dynamic Form Container -->
+        <form id="adminForm">
+          <div id="dynamicFields"></div>
+          <button type="submit" class="btn-solid" style="width:100%; margin-top:6px;">
+            + Add to Data & Generate JSON
+          </button>
+        </form>
+
+        <div id="saveStatus" class="status-msg hidden"></div>
+      </div>
+
+      <!-- Output Box (Copy / Download JSON for GitHub/Vercel) -->
+      <div class="app-card admin-box hidden" id="outputSection">
+        <div class="section-header" style="margin-bottom:4px;">
+          <h3 class="section-title" id="outputFileName">Updated JSON</h3>
+          <span class="notice-date">Ready for GitHub</span>
+        </div>
+        <textarea id="jsonOutput" class="json-output" readonly></textarea>
+        <div class="btn-row">
+          <button type="button" class="btn-outline" id="copyJsonBtn">Copy JSON</button>
+          <button type="button" class="btn-solid" id="downloadJsonBtn">Download File</button>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <script>
+    // =========================================================
+    // TEMPORARY PASSWORD (Baad mein Firebase Auth se replace hoga)
+    // =========================================================
+    const ADMIN_PASS = "gpb2026";
+
+    const loginSection = document.getElementById("loginSection");
+    const adminDashboard = document.getElementById("adminDashboard");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const passInput = document.getElementById("adminPassInput");
+    const loginError = document.getElementById("loginError");
+
+    function unlockPanel() {
+      loginSection.classList.add("hidden");
+      adminDashboard.classList.remove("hidden");
+      logoutBtn.classList.remove("hidden");
+      renderFormFields();
+    }
+
+    if (sessionStorage.getItem("gpb_admin_auth") === "true") {
+      unlockPanel();
+    }
+
+    document.getElementById("loginBtn").addEventListener("click", () => {
+      if (passInput.value.trim() === ADMIN_PASS) {
+        sessionStorage.setItem("gpb_admin_auth", "true");
+        loginError.classList.add("hidden");
+        unlockPanel();
+      } else {
+        loginError.classList.remove("hidden");
+      }
+    });
+
+    logoutBtn.addEventListener("click", () => {
+      sessionStorage.removeItem("gpb_admin_auth");
+      location.reload();
+    });
+
+    // =========================================================
+    // GOOGLE DRIVE LINK AUTO-CONVERTER
+    // =========================================================
+    function formatDriveLink(url) {
+      const str = String(url || "").trim();
+      const match = str.match(/\/d\/([a-zA-Z0-9_-]+)/);
+      if (match && match[1]) {
+        return `https://drive.google.com/file/d/${match[1]}/preview`;
+      }
+      return str;
+    }
+
+    // =========================================================
+    // DYNAMIC FORM BUILDER
+    // =========================================================
+    const typeSelect = document.getElementById("dataTypeSelect");
+    const fieldsWrap = document.getElementById("dynamicFields");
+    const adminForm = document.getElementById("adminForm");
+    const outputSection = document.getElementById("outputSection");
+    const jsonOutput = document.getElementById("jsonOutput");
+    const outputFileName = document.getElementById("outputFileName");
+    const saveStatus = document.getElementById("saveStatus");
+
+    let latestFileName = "materials.json";
+    let latestJsonText = "";
+
+    const FORM_TEMPLATES = {
+      materials: `
+        <div class="input-group">
+          <label class="input-label">Title</label>
+          <input type="text" name="title" class="app-input" placeholder="Unit 1 - Power Generation Notes" required />
+        </div>
+        <div class="grid-2">
+          <div class="input-group">
+            <label class="input-label">Branch</label>
+            <select name="branch" class="admin-select">
+              <option value="electrical">Electrical</option>
+              <option value="civil">Civil</option>
+              <option value="mechanical">Mechanical</option>
+              <option value="electronics">Electronics</option>
+              <option value="cse">CSE</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label class="input-label">Semester</label>
+            <input type="number" name="semester" class="app-input" value="3" min="1" max="6" required />
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="input-group">
+            <label class="input-label">Category</label>
+            <select name="type" class="admin-select">
+              <option value="notes">Notes</option>
+              <option value="vvi">VVI Questions</option>
+              <option value="pyq">PYQ</option>
+              <option value="syllabus">Syllabus</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label class="input-label">File Format</label>
+            <select name="fileFormat" class="admin-select">
+              <option value="pdf">PDF</option>
+              <option value="image">Image</option>
+              <option value="doc">DOC</option>
+              <option value="html">HTML</option>
+            </select>
+          </div>
+        </div>
+        <div class="input-group">
+          <label class="input-label">Subject Name</label>
+          <input type="text" name="subject" class="app-input" placeholder="Power Generation" required />
+        </div>
+        <div class="input-group">
+          <label class="input-label">Google Drive Link (ya File Path)</label>
+          <input type="url" name="fileUrl" class="app-input" placeholder="https://drive.google.com/file/d/..." required />
+        </div>
+        <div class="input-group">
+          <label class="input-label">File Size (Optional)</label>
+          <input type="text" name="size" class="app-input" placeholder="2.4 MB" />
+        </div>
+      `,
+      teachers: `
+        <div class="input-group">
+          <label class="input-label">Teacher Name</label>
+          <input type="text" name="name" class="app-input" placeholder="Prof. Rajesh Kumar" required />
+        </div>
+        <div class="input-group">
+          <label class="input-label">Department / Branch</label>
+          <input type="text" name="department" class="app-input" placeholder="Electrical Engineering" required />
+        </div>
+        <div class="input-group">
+          <label class="input-label">Designation</label>
+          <input type="text" name="designation" class="app-input" placeholder="Lecturer / HOD" required />
+        </div>
+        <div class="input-group">
+          <label class="input-label">Subjects Taught</label>
+          <input type="text" name="subjects" class="app-input" placeholder="DC Machine, Power System" />
+        </div>
+        <div class="input-group">
+          <label class="input-label">Phone / WhatsApp (Optional)</label>
+          <input type="text" name="phone" class="app-input" placeholder="+91 ..." />
+        </div>
+      `,
+      videos: `
+        <div class="input-group">
+          <label class="input-label">Video Title</label>
+          <input type="text" name="title" class="app-input" placeholder="Star-Delta Transformation Easy Trick" required />
+        </div>
+        <div class="grid-2">
+          <div class="input-group">
+            <label class="input-label">Branch</label>
+            <select name="branch" class="admin-select">
+              <option value="electrical">Electrical</option>
+              <option value="civil">Civil</option>
+              <option value="mechanical">Mechanical</option>
+              <option value="electronics">Electronics</option>
+              <option value="cse">CSE</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label class="input-label">Semester</label>
+            <input type="number" name="semester" class="app-input" value="3" min="1" max="6" required />
+          </div>
+        </div>
+        <div class="input-group">
+          <label class="input-label">Subject</label>
+          <input type="text" name="subject" class="app-input" placeholder="Electrical Circuit" required />
+        </div>
+        <div class="input-group">
+          <label class="input-label">YouTube Link ya Video ID</label>
+          <input type="text" name="videoUrl" class="app-input" placeholder="https://youtu.be/..." required />
+        </div>
+        <div class="input-group">
+          <label class="input-label">Duration</label>
+          <input type="text" name="duration" class="app-input" placeholder="14:30" />
+        </div>
+      `,
+      notices: `
+        <div class="input-group">
+          <label class="input-label">Notice Category</label>
+          <input type="text" name="tag" class="app-input" placeholder="SBTE Exam / College Notice" required />
+        </div>
+        <div class="input-group">
+          <label class="input-label">Date</label>
+          <input type="text" name="date" class="app-input" placeholder="24 Nov 2026" required />
+        </div>
+        <div class="input-group">
+          <label class="input-label">Notice Text</label>
+          <input type="text" name="text" class="app-input" placeholder="3rd Semester exam form date..." required />
+        </div>
+      `,
+      internships: `
+        <div class="input-group">
+          <label class="input-label">Internship Title</label>
+          <input type="text" name="title" class="app-input" placeholder="Substation Industrial Training" required />
+        </div>
+        <div class="input-group">
+          <label class="input-label">Organization</label>
+          <input type="text" name="org" class="app-input" placeholder="SBPDCL / AICTE" required />
+        </div>
+        <div class="grid-2">
+          <div class="input-group">
+            <label class="input-label">Branch</label>
+            <input type="text" name="branch" class="app-input" placeholder="All / Electrical" required />
+          </div>
+          <div class="input-group">
+            <label class="input-label">Duration</label>
+            <input type="text" name="duration" class="app-input" placeholder="4 Weeks" required />
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="input-group">
+            <label class="input-label">Mode</label>
+            <input type="text" name="mode" class="app-input" placeholder="Offline / Online" required />
+          </div>
+          <div class="input-group">
+            <label class="input-label">Status</label>
+            <input type="text" name="status" class="app-input" value="Open" required />
+          </div>
+        </div>
+        <div class="input-group">
+          <label class="input-label">Apply Link</label>
+          <input type="url" name="link" class="app-input" placeholder="https://..." required />
+        </div>
+      `
+    };
+
+    function renderFormFields() {
+      const selected = typeSelect.value;
+      fieldsWrap.innerHTML = FORM_TEMPLATES[selected] || "";
+      saveStatus.classList.add("hidden");
+    }
+
+    typeSelect.addEventListener("change", renderFormFields);
+
+    // =========================================================
+    // FORM SUBMIT -> FETCH EXISTING JSON + APPEND NEW ITEM
+    // =========================================================
+    adminForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const category = typeSelect.value;
+      const formData = new FormData(adminForm);
+      const newItem = { id: `${category.slice(0, 3)}_${Date.now()}` };
+
+      for (const [key, value] of formData.entries()) {
+        if (key === "semester") {
+          newItem[key] = Number(value);
+        } else if (key === "fileUrl") {
+          newItem[key] = formatDriveLink(value);
+        } else {
+          newItem[key] = value.trim();
+        }
+      }
+
+      // Purana data fetch karke usmein naya item jodo
+      let existingData = [];
+      try {
+        const res = await fetch(`../data/${category}.json`);
+        if (res.ok) {
+          const parsed = await res.json();
+          if (Array.isArray(parsed)) existingData = parsed;
+        }
+      } catch (_) {}
+
+      existingData.unshift(newItem); // Naya item sabse upar aayega
+
+      latestFileName = `${category}.json`;
+      latestJsonText = JSON.stringify(existingData, null, 2);
+
+      outputFileName.textContent = `data/${latestFileName}`;
+      jsonOutput.value = latestJsonText;
+      outputSection.classList.remove("hidden");
+
+      saveStatus.textContent = `✓ Item add ho gaya! Ab neeche se '${latestFileName}' copy ya download karke data/ folder mein replace kar do.`;
+      saveStatus.classList.remove("hidden");
+      adminForm.reset();
+    });
+
+    // Copy JSON
+    document.getElementById("copyJsonBtn").addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(latestJsonText);
+        saveStatus.textContent = "✓ JSON Clipboard mein copy ho gaya!";
+      } catch (_) {
+        jsonOutput.select();
+        document.execCommand("copy");
+        saveStatus.textContent = "✓ JSON Copy ho gaya!";
+      }
+    });
+
+    // Download JSON File
+    document.getElementById("downloadJsonBtn").addEventListener("click", () => {
+      const blob = new Blob([latestJsonText], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = latestFileName;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+  </script>
+</body>
+</html>
