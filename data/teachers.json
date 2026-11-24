@@ -1,10 +1,21 @@
 [
   {
+    "id": "tea_1795508770572",
+    "name": "DINKAR KUMAR BHARTI",
+    "department": "Civil Engineering",
+    "designation": "HOD",
+    "subjects": "",
+    "phone": "8743918891"
+  },
+  {
     "id": "t_ee_01",
     "name": "Rakesh Kumar ",
     "role": "Head of Department",
     "branch": "electrical",
-    "subjects": ["Electrical Machine 2", "Power Generation"],
+    "subjects": [
+      "Electrical Machine 2",
+      "Power Generation"
+    ],
     "helpFor": "Branch Queries, Attendance & Project Guidance",
     "timing": "10:30 AM - 04:00 PM",
     "room": "EE Dept. Room 01"
@@ -14,37 +25,49 @@
     "name": "Gaurav Kumar ",
     "role": "Lecturer (EE)",
     "branch": "electrical",
-    "subjects": ["DC Machine", "Electrical Measurement"],
+    "subjects": [
+      "DC Machine",
+      "Electrical Measurement"
+    ],
     "helpFor": "Lab Practicals, Circuit Doubts & VVI Help",
     "timing": "11:00 AM - 03:30 PM",
     "room": "Electrical Machine Lab"
   },
-{
+  {
     "id": "t_ee_03",
     "name": "NEELMANI SAROJ ",
     "role": "Lecturer (EE)",
     "branch": "electrical",
-    "subjects": ["Power Generation", "Electrical "],
+    "subjects": [
+      "Power Generation",
+      "Electrical "
+    ],
     "helpFor": "Notes, Plant Diagrams, Numericals, Exam VVI & Doubt Help",
     "timing": "11:00 AM - 03:30 PM",
     "room": "Staf Room"
   },
-{
+  {
     "id": "t_ee_04",
     "name": "Md Asif Raza ",
     "role": "Lecturer (EE)",
     "branch": "electrical",
-    "subjects": ["BEE/FOEE", "Electrical Measurement"],
+    "subjects": [
+      "BEE/FOEE",
+      "Electrical Measurement"
+    ],
     "helpFor": "Lab Practicals, Circuit Doubts & VVI Help",
     "timing": "11:00 AM - 03:30 PM",
     "room": "Staf Room"
   },
-{
+  {
     "id": "t_ee_05",
     "name": "Aman Kumar ",
     "role": "Lecturer (EE)",
     "branch": "electrical",
-    "subjects": ["Electrical Circuits", "Electrical"],
+    "subjects": [
+      "Electrical Circuits",
+      "Electrical"
+    ],
     "helpFor": "Lab Practicals, Circuit Doubts & VVI Help",
     "timing": "11:00 AM - 03:30 PM",
     "room": "Electrical  Lab"
@@ -54,7 +77,10 @@
     "name": "HOD - Civil Dept.",
     "role": "Head of Department",
     "branch": "civil",
-    "subjects": ["Surveying", "Building Construction"],
+    "subjects": [
+      "Surveying",
+      "Building Construction"
+    ],
     "helpFor": "Civil Syllabus, Survey Lab & Doubt Support",
     "timing": "10:30 AM - 04:00 PM",
     "room": "CE Dept. Room 02"
@@ -64,7 +90,10 @@
     "name": "HOD - Mechanical Dept.",
     "role": "Head of Department",
     "branch": "mechanical",
-    "subjects": ["Thermodynamics", "Engineering Mechanics"],
+    "subjects": [
+      "Thermodynamics",
+      "Engineering Mechanics"
+    ],
     "helpFor": "Workshop, Practical & Subject Doubts",
     "timing": "10:30 AM - 04:00 PM",
     "room": "ME Dept. Room 01"
@@ -74,7 +103,10 @@
     "name": "HOD - Electronics Dept.",
     "role": "Head of Department",
     "branch": "electronics",
-    "subjects": ["Basic Electronics", "Digital Electronics"],
+    "subjects": [
+      "Basic Electronics",
+      "Digital Electronics"
+    ],
     "helpFor": "Electronics Lab & Subject Guidance",
     "timing": "10:30 AM - 04:00 PM",
     "room": "EC Dept. Room 03"
@@ -84,7 +116,10 @@
     "name": "HOD - CSE Dept.",
     "role": "Head of Department",
     "branch": "cse",
-    "subjects": ["Python Programming", "Computer Fundamentals"],
+    "subjects": [
+      "Python Programming",
+      "Computer Fundamentals"
+    ],
     "helpFor": "Coding Doubts, Computer Lab & Projects",
     "timing": "10:30 AM - 04:00 PM",
     "room": "Computer Lab 01"
@@ -94,7 +129,11 @@
     "name": "Academic & Exam Cell",
     "role": "Student Support Desk",
     "branch": "all",
-    "subjects": ["SBTE Registration", "Exam Form", "Scholarship"],
+    "subjects": [
+      "SBTE Registration",
+      "Exam Form",
+      "Scholarship"
+    ],
     "helpFor": "Admit Card, Marksheet, Bonafide & PMS Help",
     "timing": "10:00 AM - 04:30 PM",
     "room": "Admin Block"
