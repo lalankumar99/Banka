@@ -2,10 +2,15 @@
   {
     "id": "tea_1795508770572",
     "name": "DINKAR KUMAR BHARTI",
-    "department": "Civil Engineering",
-    "designation": "HOD",
-    "subjects": "",
-    "phone": "8743918891"
+    "role": "Head of Department",
+    "branch": "civil",
+    "subjects": [
+      "Surveying, Civil Engineer ",
+      "Power Generation"
+    ],
+    "helpFor": "Branch Queries, Attendance & Project Guidance",
+    "timing": "10:30 AM - 04:00 PM",
+    "room": "CE Dept. Room 0"
   },
   {
     "id": "t_ee_01",
